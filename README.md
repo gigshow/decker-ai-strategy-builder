@@ -57,7 +57,7 @@
 
 ## Features
 
-- **시그널·진행도 기반 전략**: 오퍼레이션 룰북 (progress 33~95%, timeframe, risk)
+- **시그널·진행도 기반 전략**: 덱커가 시그널과 전략을 하나로 제공. 오퍼레이션 룰북 (progress 33~95%, timeframe, risk) — [RULES.yaml](operation_rules/RULES.yaml) 17개 규칙 공개
 - **에이전트**: Telegram @deckerclawbot — 시그널, 포지션, 주문, 자동주문, 뉴스
 - **API**: 시그널, 전략, 시세, 시장 상태 (공개 엔드포인트)
 - **로드맵**: AI 시그널 모델 → 시그널 LLM 토큰 베이스 서비스
@@ -66,6 +66,15 @@
 
 ## Architecture
 
+"말만 하면" 응답이 오는 이유 — **서비스 뒷단 구조**
+
+```
+Market Data + Signal Source → Label Engine → State Engine → Signal Engine
+       → (User Context + Operation Rules) → LLM Reasoner → Web/Telegram/API
+```
+
+시세·시그널 → 진행도 계산 → 오퍼레이션 룰북 매칭 → 전략. [상세](docs/architecture.md)
+
 ```
 [웹] decker-ai.com
 [Telegram] @deckerclawbot
@@ -73,7 +82,8 @@
         │
         ▼
 ┌─────────────────────────────────────┐
-│  Decker API (api.decker-ai.com)     │
+│  Decker (api.decker-ai.com)         │
+│  시그널·시세·전략 — 하나로 제공        │
 │  • /signals/{symbol}/state           │
 │  • /signals/{symbol}/strategy        │
 │  • /judgment/signals/public          │
@@ -81,7 +91,7 @@
 └─────────────────────────────────────┘
         │
         ▼
-[오퍼레이션 룰북] RULES.yaml → progress_min, timeframe, risk_appetite
+[오퍼레이션 룰북] RULES.yaml → progress_min, timeframe, risk_appetite (17개 규칙)
 ```
 
 ---
@@ -91,10 +101,11 @@
 | 문서 | 용도 |
 |------|------|
 | [Quick Start](docs/quickstart.md) | 3단계 가이드, 체험 시나리오 |
-| [API Guide](docs/api-guide.md) | 공개 API 엔드포인트 |
-| [Architecture](docs/architecture.md) | 서비스 구조, 데이터 흐름 |
+| [API Guide](docs/api-guide.md) | 공개 API (개발자·연동용) |
+| [Architecture](docs/architecture.md) | 서비스 뒷단 구조, 핵심 파이프라인 |
 | [Roadmap](docs/roadmap.md) | 로드맵 |
-| [Operation Rules](operation_rules/RULES.yaml) | 오퍼레이션 룰북 (진행도 기반 전략) |
+| [Operation Rules](operation_rules/RULES.yaml) | 오퍼레이션 룰북 (17개 규칙, 진행도 기반) |
+| [Samples](samples/README.md) | API 연동 예제 (개발자용) |
 
 ---
 
@@ -111,4 +122,4 @@
 
 > ⚠️ 이 리포는 문서·샘플·커뮤니티 허브입니다. 실제 프로덕션 코드는 비공개 리포지토리에서 운영됩니다.
 >
-> **API 사용**: 시그널·시세 푸시(POST /signals/push, /market/prices) 후 /state, /strategy 사용 가능. 푸시 없으면 폴백 응답.
+> **서비스 사용자**: 덱커가 시그널·시세·전략을 하나로 제공합니다. 가입·연동 후 Telegram·웹에서 바로 사용 가능.

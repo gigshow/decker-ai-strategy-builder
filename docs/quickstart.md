@@ -52,8 +52,20 @@
 
 ---
 
+## API 연동 (개발자용)
+
+API로 시그널·전략을 연동하는 경우 [API Guide](api-guide.md) 참고. 덱커는 시그널과 전략을 하나의 서비스로 제공합니다.
+
+---
+
 ## 에이전트 vs 대시보드
 
 | 채팅에서 가능 | 대시보드에서만 |
 |---------------|----------------|
 | 시그널·시세·포지션·주문·청산·자동주문·뉴스 | 가입·연동·설정·API 키·알림 켜기·포트폴리오 리셋·전략 빌더 |
+
+---
+
+## AI 서비스 구조가 궁금하면?
+
+[Architecture](architecture.md) — 서비스 뒷단 구조, 핵심 파이프라인 (Market Data → Label → State → Signal → LLM Reasoner → Web/Telegram/API)
