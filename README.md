@@ -123,3 +123,5 @@ Market Data + Signal Source → Label Engine → State Engine → Signal Engine
 > ⚠️ 이 리포는 문서·샘플·커뮤니티 허브입니다. 실제 프로덕션 코드는 비공개 리포지토리에서 운영됩니다.
 >
 > **서비스 사용자**: 덱커가 시그널·시세·전략을 하나로 제공합니다. 가입·연동 후 Telegram·웹에서 바로 사용 가능.
+>
+> **사용 가능한 것**: API 호출 (api.decker-ai.com), samples/signal-push-strategy.sh 실행, RULES.yaml 참조, docs/architecture.md 아키텍처 이해.

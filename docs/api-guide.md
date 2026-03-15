@@ -3,7 +3,10 @@
 **API 연동·개발자용.** 서비스 사용자 관점에서는 덱커가 시그널·시세·전략을 하나로 제공합니다.
 
 Base URL: `https://api.decker-ai.com`  
+경로 prefix: `/api/v1/` (예: `/api/v1/signals/BTCUSDT/state`)  
 전체 문서: [api.decker-ai.com/docs](https://api.decker-ai.com/docs)
+
+**인증**: 아래 엔드포인트는 인증 불필요 (공개 API). POST /signals/push 포함.
 
 ---
 
@@ -18,7 +21,7 @@ Base URL: `https://api.decker-ai.com`
 
 ## 시그널 등록 (POST) — API 연동용
 
-시그널·시세 제공이 API로 연동되는 경우 사용. 서비스 사용자는 덱커가 이를 하나로 제공한다고 이해하면 됩니다.
+시그널·시세 제공이 API로 연동되는 경우 사용. 서비스 사용자는 덱커가 이를 하나로 제공한다고 이해하면 됩니다. **용어**: judgment_signals = 시그널 소스(DB). /signals/ = API 경로.
 
 ```
 POST /api/v1/signals/push

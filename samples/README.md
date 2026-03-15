@@ -13,6 +13,8 @@ chmod +x samples/signal-push-strategy.sh
 
 인자: `[symbol] [entry_price] [target_price] [stop_loss]` (기본값 있음)
 
+**예상 출력**: 1단계 200 + JSON (등록 결과), 2단계 200 + JSON (strategy 필드 포함). jq 없으면 `| jq .` 제거해도 동작. **로컬 테스트**: `DECKER_API_URL=http://localhost:8000 ./samples/signal-push-strategy.sh ...`
+
 ---
 
 ## strategy-demo (예정)
