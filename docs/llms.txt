@@ -1,0 +1,19 @@
+# Decker AI Strategy Builder — Documentation Index
+
+Use this file to discover available pages before exploring further.
+
+## Documentation
+
+- README.md — Project overview, Story, Quick Start, Achievements
+- docs/quickstart.md — 3-step guide, Telegram/Slack setup, usage
+- docs/api-guide.md — Public API endpoints, signals/strategy
+- docs/architecture.md — Service structure, signal→strategy flow
+- docs/roadmap.md — Completed, in progress, planned
+- operation_rules/RULES.yaml — Operation rules (progress_min, timeframe, risk)
+- operation_rules/PATCHNOTES.md — Version history
+
+## Links
+
+- Website: https://decker-ai.com
+- Telegram: https://t.me/deckerclawbot
+- API Docs: https://api.decker-ai.com/docs

@@ -1,20 +1,110 @@
-# Decker AI Strategy Builder (Open Repo)
+# Decker AI Strategy Builder
 
-Decker AI Strategy Builder는 AI 기반 전략 설계와 가상 거래를 위한 공개 문서·샘플·커뮤니티 허브입니다.  
-본 리포는 소개/문서/예제를 제공하며, 실제 프로덕션 코드는 비공개 리포에서 관리됩니다.
+> **AI 트레이딩. 시그널·진행도 기반 전략. Telegram에서 말만 하면 시그널·포지션·주문. 토큰 $0.**
 
-- 📘 **Docs**: 제품 개요, 아키텍처, Quickstart, 로드맵
-- 💡 **Samples**: Mock 전략 데모, API 클라이언트 예제
-- 🤝 **Community**: 기여 가이드, Discussions, Discord/Slack
+[Website](https://decker-ai.com) · [Telegram](https://t.me/deckerclawbot) · [API Docs](https://api.decker-ai.com/docs) · [Quick Start](docs/quickstart.md) · [Roadmap](docs/roadmap.md)
 
-## Quickstart
-1. `docs/quickstart.md`를 참고해 Mock 앱을 실행
-2. `samples/strategy-demo/` → `npm install && npm run dev`
-3. `samples/api-client-python/` → REST 호출 예제
+---
 
-## Roadmap & Community
-- 로드맵: `docs/roadmap.md` (GitHub Projects와 연동 예정)
-- 커뮤니티: Discussions, Issue 템플릿, Discord/Slack 링크(추가 예정)
+## Story
 
-> ⚠️ 이 리포는 홍보/문서/샘플용입니다. 실제 백엔드/인프라 코드는 비공개 리포지토리에서 운영됩니다.
+**"시장은 게임이다. 오르면 매도, 내리면 매수 — 그 수를 AI가 둔다."**
 
+| 기존 시도 | 한계 |
+|-----------|------|
+| 수식으로 시장 상태 구현 | 게임 룰은 수식으로 만들기 어려움 |
+| AI 없이 규칙 기반 | 시장 심리·상태 전이 포착 불가 |
+
+| Decker 접근 | 가능성 |
+|-------------|--------|
+| 시장 상태를 AI에게 알려주고 | 상태 데이터 기반 예측 |
+| 외부 시그널로 시장 라벨화 | 어떤 종목이 찬스인지 |
+| 사용자와 상의 (리스크·리워드) | 투자전문가처럼 상담 |
+| **알파고처럼** 마켓 플레이 | 최적의 매수·매도 포인트 |
+
+---
+
+## Why Now
+
+- **에이전트 시대**: Telegram·Slack에서 "말만 하면" 시그널·포지션·주문
+- **시그널 상태 차별화**: 진행도(progress_pct)·status — 경쟁사 없음
+- **토큰 $0**: 룰북 기반 전략 → LLM 미사용 → 무료 제공 가능
+
+---
+
+## Quick Start (3단계)
+
+1. **가입** — [decker-ai.com](https://decker-ai.com) 회원가입 (무료)
+2. **연동** — [decker-link-telegram](https://decker-ai.com/decker-link-telegram)에서 코드 발급 → [@deckerclawbot](https://t.me/deckerclawbot)에 `/start {코드}`
+3. **사용** — "비트코인 시그널 알려줘", "포지션 보여줘", "ETH 0.01 매수해줘" 등 **말만 하면** 됩니다.
+
+---
+
+## Achievements
+
+| Phase | 내용 |
+|-------|------|
+| **Phase 2** | Slack 연동, /decker-link — "Slack에서 말만 하면" |
+| **Phase 3** | 주문 승인 플로우 — "BTC 0.01 매수해줘 → 승인 → 실행" |
+| **Phase 4** | 좋은 시그널 알림, 시그널 제안 → "응" → order — "프로액티브 투자 비서" |
+| **Phase 5** | 사용자 여정, member_joined 환영 |
+| **오퍼레이션** | RULES.yaml v1.3.0, progress 33~95 규칙 — "진행도 기반 전략, 토큰 $0" |
+| **에이전트** | Telegram·Slack, HL·Polymarket — "말만 하면 HL·PM 주문" |
+
+---
+
+## Features
+
+- **시그널·진행도 기반 전략**: 오퍼레이션 룰북 (progress 33~95%, timeframe, risk)
+- **에이전트**: Telegram @deckerclawbot — 시그널, 포지션, 주문, 자동주문, 뉴스
+- **API**: 시그널, 전략, 시세, 시장 상태 (공개 엔드포인트)
+- **토큰 $0**: 룰북 기반 전략은 LLM 미사용
+
+---
+
+## Architecture
+
+```
+[웹] decker-ai.com
+[Telegram] @deckerclawbot
+[Slack] @deckerclaw
+        │
+        ▼
+┌─────────────────────────────────────┐
+│  Decker API (api.decker-ai.com)     │
+│  • /signals/{symbol}/state           │
+│  • /signals/{symbol}/strategy        │
+│  • /judgment/signals/public          │
+│  • /assistant/message                │
+└─────────────────────────────────────┘
+        │
+        ▼
+[오퍼레이션 룰북] RULES.yaml → progress_min, timeframe, risk_appetite
+```
+
+---
+
+## Docs
+
+| 문서 | 용도 |
+|------|------|
+| [Quick Start](docs/quickstart.md) | 3단계 가이드, 체험 시나리오 |
+| [API Guide](docs/api-guide.md) | 공개 API 엔드포인트 |
+| [Architecture](docs/architecture.md) | 서비스 구조, 데이터 흐름 |
+| [Roadmap](docs/roadmap.md) | 로드맵 |
+| [Operation Rules](operation_rules/RULES.yaml) | 오퍼레이션 룰북 (진행도 기반 전략) |
+
+---
+
+## Links
+
+| 용도 | URL |
+|------|-----|
+| **서비스** | https://decker-ai.com |
+| **Telegram 봇** | https://t.me/deckerclawbot |
+| **Telegram 연동** | https://decker-ai.com/decker-link-telegram |
+| **API 문서** | https://api.decker-ai.com/docs |
+
+---
+
+> ⚠️ 이 리포는 문서·샘플·커뮤니티 허브입니다. 실제 프로덕션 코드는 비공개 리포지토리에서 운영됩니다.
