@@ -1,6 +1,6 @@
 # Decker AI Strategy Builder
 
-> **AI 트레이딩. 시그널·진행도 기반 전략. Telegram에서 말만 하면 시그널·포지션·주문. 토큰 $0.**
+> **AI 트레이딩. 시그널·진행도 기반 전략. Telegram에서 말만 하면 시그널·포지션·주문. 룰북 경로 AI 토큰 $0.**
 
 [Website](https://decker-ai.com) · [Telegram](https://t.me/deckerclawbot) · [API Docs](https://api.decker-ai.com/docs) · [Quick Start](docs/quickstart.md) · [Roadmap](docs/roadmap.md)
 
@@ -28,7 +28,7 @@
 
 - **에이전트 시대**: Telegram·Slack에서 "말만 하면" 시그널·포지션·주문
 - **시그널 상태 차별화**: 진행도(progress_pct)·status — 경쟁사 없음
-- **토큰 $0**: 룰북 기반 전략 → LLM 미사용 → 무료 제공 가능
+- **룰북 경로 AI 토큰 $0**: 룰북 기반 전략 → LLM 미사용 → AI 토큰 비용 없음
 
 ---
 
@@ -48,7 +48,7 @@
 | **Phase 3** | 주문 승인 플로우 — "BTC 0.01 매수해줘 → 승인 → 실행" |
 | **Phase 4** | 좋은 시그널 알림, 시그널 제안 → "응" → order — "프로액티브 투자 비서" |
 | **Phase 5** | 사용자 여정, member_joined 환영 |
-| **오퍼레이션** | RULES.yaml v1.3.0, progress 33~95 규칙 — "진행도 기반 전략, 토큰 $0" |
+| **오퍼레이션** | RULES.yaml v1.3.0, progress 33~95 규칙 — "진행도 기반 전략, 룰북 경로 AI 토큰 $0" |
 | **에이전트** | Telegram·Slack, HL·Polymarket — "말만 하면 HL·PM 주문" |
 
 ---
@@ -58,7 +58,7 @@
 - **시그널·진행도 기반 전략**: 오퍼레이션 룰북 (progress 33~95%, timeframe, risk)
 - **에이전트**: Telegram @deckerclawbot — 시그널, 포지션, 주문, 자동주문, 뉴스
 - **API**: 시그널, 전략, 시세, 시장 상태 (공개 엔드포인트)
-- **토큰 $0**: 룰북 기반 전략은 LLM 미사용
+- **룰북 경로 AI 토큰 $0**: 룰북 기반 전략은 LLM 미사용
 
 ---
 
@@ -108,3 +108,5 @@
 ---
 
 > ⚠️ 이 리포는 문서·샘플·커뮤니티 허브입니다. 실제 프로덕션 코드는 비공개 리포지토리에서 운영됩니다.
+>
+> **API 사용**: 시그널·시세 푸시(POST /signals/push, /market/prices) 후 /state, /strategy 사용 가능. 푸시 없으면 폴백 응답.
