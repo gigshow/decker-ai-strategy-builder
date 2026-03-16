@@ -1,16 +1,52 @@
 # Decker Architecture
 
----
-
-## 서비스 뒷단 구조
-
-"비트코인 시그널 알려줘", "이 시그널 지금 어떻게 할까?" — 말만 하면 응답이 오는 이유는 **뒷단에 아래 구조**가 있기 때문입니다.
-
-시세와 시그널이 모여 → 진행도(상태)로 계산되고 → 오퍼레이션 룰북이 매칭되어 → 전략이 나옵니다. **AI 서비스가 이렇게 동작**합니다.
+**AI Market State Engine — 시장 구조 기반 시그널 인텔리전스**
 
 ---
 
-## 핵심 파이프라인
+## State Engine, not LLM
+
+DECKER는 LLM이 가격을 예측하는 서비스가 아닙니다.
+
+시계열 데이터에서 시장 구조(Object, Swing)를 분석하고, 진행도(progress_pct)와 상태(status)를 **결정론적으로 계산**하는 엔진입니다. LLM은 그 결과를 자연어로 전달하는 인터페이스입니다.
+
+| 구분 | 일반 AI 트레이딩 | DECKER |
+|------|------------------|--------|
+| 시그널 생성 | LLM/ML 가격 예측 | **시장 상태 엔진** |
+| 핵심 출력 | "매수/매도" | progress_pct, status, 전략 |
+| LLM 역할 | 예측·판단 | **인터페이스·설명** |
+| 토큰 비용 | 시그널마다 호출 | **룰북 경로 $0** |
+
+---
+
+## 핵심 철학: Target → Signal → Entry
+
+대부분의 전략은 `signal → entry` 순서입니다.
+
+DECKER는 **`target → signal → entry`** 순서입니다.
+
+- 목표가 없는 진입은 유효하지 않습니다.
+- 시그널 없는 움직임은 무시합니다.
+- 시장은 항상 유동성을 청산하는 방향으로 움직입니다.
+
+따라서 모든 움직임은 **수익 기회** 또는 **리버스 기회**가 됩니다.
+
+```
+Market State → Signal Touch → Target Formation
+→ Entry Decision → Target Execution → Exit / Reverse
+```
+
+---
+
+## 파이프라인
+
+```
+시계열 데이터
+    → [라벨링 알고리즘] → 오브젝트 평가, 라벨 (S, T, 1)
+    → [State Engine] → progress_pct, status, regime
+    → [오퍼레이션 룰북] → 전략 (RULES.yaml 첫 매칭)
+    → Web / Telegram / API
+```
 
 ```
 ┌─────────────┐     ┌─────────────────┐
@@ -20,30 +56,30 @@
        │                     │
        └──────────┬──────────┘
                   │
-           ┌──────▼──────┐
-           │ Label Engine│
-           └──────┬──────┘
+        ┌─────────▼──────────┐
+        │  Labeling Algorithm│   오브젝트 평가, 스윙 분석
+        └─────────┬──────────┘
                   │
-           ┌──────▼──────┐
-           │ State Engine│   progress_pct, status
-           └──────┬──────┘
+        ┌─────────▼──────────┐
+        │    State Engine    │   progress_pct, status
+        └─────────┬──────────┘
                   │
-           ┌──────▼──────┐
-           │Signal Engine│
-           └──────┬──────┘
+        ┌─────────▼──────────┐
+        │   Signal Engine    │   시그널·상태 통합
+        └─────────┬──────────┘
                   │
      ┌────────────┼────────────┐
      │            │            │
-     ▼            ▼            │
-┌─────────┐ ┌─────────────┐    │
-│  User   │ │  Operation  │    │
-│ Context │ │   Rules     │    │  RULES.yaml
-└────┬────┘ └──────┬──────┘    │
-     │             │            │
-     └──────┬──────┘            │
-            │                   │
-     ┌──────▼────────┐          │
-     │ LLM Reasoner  │◄─────────┘
+     ▼            ▼            ▼
+┌─────────┐ ┌─────────────┐ ┌──────────┐
+│  User   │ │  Operation  │ │   LLM    │
+│ Context │ │   Rules     │ │ Reasoner │
+└────┬────┘ └──────┬──────┘ └────┬─────┘
+     │             │              │
+     └──────┬──────┘              │
+            │                     │
+     ┌──────▼────────┐            │
+     │   전략 반환    │◄───────────┘
      └──────┬────────┘
             │
  ┌──────────▼─────────────┐
@@ -51,22 +87,161 @@
  └────────────────────────┘
 ```
 
-### 단계별 설명
+---
 
-| 단계 | 역할 |
+## 라벨링 알고리즘
+
+시계열 데이터를 **오브젝트(대상)**로 평가하여 라벨을 부착합니다.
+
+### 라벨
+
+| 라벨 | 의미 |
 |------|------|
-| **Market Data** | 실시간 시세 (현재가) |
-| **Signal Source** | 시그널 (진입가·목표가·손절가, 20종목×6시간대) |
-| **Label Engine** | REST 단 — 라벨된 시그널 데이터 |
-| **State Engine** | 입력: 시그널 + 현재가. 출력: progress_pct, status. API: /api/v1/signals/{symbol}/state |
-| **Signal Engine** | REST 단 — 시그널·상태 통합 |
-| **User Context + Operation Rules** | 사용자 설정(리스크·시간대) + RULES.yaml 17개 규칙 |
-| **LLM Reasoner** | 규칙 매칭 → 전략 생성 (룰북 경로는 LLM 미사용) |
-| **Web / Telegram / API** | 사용자에게 전달 |
+| **1/2 대상 + 1/2 프라임** | 평가 대상과 평가 기준(프라임)의 조합 |
+| **S** | 시그널 — 진입 조건 충족 |
+| **T** | 터치 — 향후 시그널 진입점, 중첩 |
+
+### 오브젝트와 스윙
+
+오브젝트는 시점에 따라 멀티스윙으로 구성됩니다.
+
+| 스윙 | 의미 |
+|------|------|
+| **A** | 메인스윙 — 트렌드 키 방향. 평가 대상이 현재가 위/아래에 위치할 때 방향 평가 |
+| **B** | 서브스윙 — 메인스윙의 반대 방향 조정 |
+| **C** | 연결스윙 — 청산·진입·리버스가 일어나는 구간 |
+
+### 시그널 발생
+
+- ab, ac, bb, bc 등 스윙 조합으로 계산
+- 각 스윙의 **평가봉(2프라임)**을 현재가가 브레이크할 때 **시그널 발생**
+
+상세: [라벨링 알고리즘](../concept/labeling_algorithm.md)
 
 ---
 
-## 개요
+## State Engine
+
+시그널(진입가·목표가·손절가) + 현재가 → **progress_pct**, **status**
+
+### progress_pct 공식
+
+- **Long**: `(current - entry) / (target - entry) × 100`
+- **Short**: `(entry - current) / (entry - target) × 100`
+
+### status 판정
+
+| 조건 | 결과 |
+|------|------|
+| Long: current ≥ target | target_reached |
+| Long: current ≤ stop_loss | stop_hit |
+| Short: current ≤ target | target_reached |
+| Short: current ≥ stop_loss | stop_hit |
+| 그 외 | in_progress |
+
+### status 의미
+
+| status | 의미 |
+|--------|------|
+| in_progress | 진행 중 |
+| target_reached | 목표 도달 |
+| stop_hit | 손절 구간 |
+| expired | 만료 |
+| unknown | 미판정 |
+
+### 차별점
+
+기존 봇은 "상승/하락/횡보" 같은 **현재 상태**만 알려줍니다.
+
+DECKER는 해당 상태가 **몇 % 진행되었는지**까지 계산합니다. 이 정보가 진입/청산 타이밍 결정에 직접 사용됩니다.
+
+---
+
+## 오퍼레이션 룰북
+
+progress_pct, status, timeframe, risk_appetite 조합으로 전략을 매칭합니다.
+
+### 조건
+
+| 조건 | 타입 | 유효값 | 예시 |
+|------|------|--------|------|
+| progress_min | number | 0~100 | 66 |
+| status | string | in_progress, target_reached, stop_hit, expired, unknown | target_reached |
+| timeframe | string | 15m, 1h, 4h, 8h, 1d, 1w | 4h |
+| risk_appetite | list | low, medium, high | [low, medium] |
+| weight_diff_min/max | number | 포트폴리오 비중 | — |
+
+### 매칭 로직
+
+- RULES.yaml 위→아래 순서로 검사
+- **첫 매칭 규칙** 반환
+- `state.progress_pct ≥ rule.progress_min`이면 progress_min 충족
+- **룰북 경로 LLM 미사용** → AI 토큰 비용 $0
+
+### 예시
+
+```
+BTCUSDT long, entry=96000, target=100000, current=98640
+→ progress_pct = 66%
+→ RULES.yaml progress_min: 66 매칭
+→ "66% 진행. 30% 부분 익절 제안. 나머지는 목표까지 홀드."
+```
+
+상세: [RULES.yaml](../operation_rules/RULES.yaml)
+
+---
+
+## Performance
+
+### 전략 특성
+
+시그널 모델은 예측이 아닌 **오브젝트 스윙 평가** 기반입니다. 목표 구조가 확인된 경우에만 포지션을 열어, 랜덤 진입을 회피합니다.
+
+- 시그널 확인 후 진입
+- 사전 정의된 목표 구조
+- 리버스 유동성 인식
+- 멀티타임프레임 스윙 평가
+
+### 지표 정의
+
+| 지표 | 설명 |
+|------|------|
+| **win_rate** | 수익 거래 수 / 전체 거래 수 |
+| **sharpe_ratio** | 수익률 평균 / 표준편차 (위험 대비 수익) |
+| **max_drawdown** | 누적 수익 곡선에서 고점 대비 최대 하락폭 |
+| **profit_factor** | 총 수익 / 총 손실 |
+
+### 거래 흐름 예시
+
+```
+A state swing → T signal touched → Target defined (+7%)
+→ Entry triggered → Position closed at target → Reverse opportunity evaluated
+```
+
+### 검증
+
+- 오퍼레이션 룰북(progress 33~95%)은 백테스트·실거래 기반으로 튜닝됩니다.
+- 실거래 결과는 과거 데이터·백테스트와 다를 수 있습니다.
+- 시장 변동성, 슬리피지, 수수료 등이 실제 수익에 영향을 줍니다.
+
+---
+
+## API
+
+| Method | Path | 용도 |
+|--------|------|------|
+| GET | `/signals/{symbol}/state` | progress_pct, status |
+| GET | `/signals/{symbol}/strategy` | 오퍼레이션 룰북 전략 |
+| GET | `/judgment/signals/public` | 시그널 (entry, target, stop) |
+| GET | `/judgment/coverage` | 20종목×6시간대 현황 |
+| GET | `/market/prices` | 실시간 시세 |
+| POST | `/signals/push` | 시그널 등록 |
+
+상세: [API Guide](api-guide.md)
+
+---
+
+## 서비스 개요
 
 ```
 [진입점]
@@ -77,11 +252,10 @@
         ▼
 [Backend] api.decker-ai.com (Railway, FastAPI)
         │
-        ├── /assistant/message     → chat_system_orchestrator
-        ├── /signals/{symbol}/state → build_signal_state
-        ├── /signals/{symbol}/strategy → reason_signal_state (오퍼레이션 룰북)
+        ├── /signals/{symbol}/state    → build_signal_state
+        ├── /signals/{symbol}/strategy → reason_signal_state
         ├── /judgment/signals/public
-        └── ...
+        └── /assistant/message         → chat_system_orchestrator
         │
         ▼
 [PostgreSQL] judgment_signals, market_data, ...
@@ -89,53 +263,11 @@
 
 ---
 
-## 시그널 → 전략 흐름
-
-```
-1. judgment_signals + current_price
-        ↓
-2. build_signal_state → progress_pct, status
-        ↓
-3. (state, user_context) → operation_rules_loader
-        ↓
-4. RULES.yaml 첫 매칭 규칙 → strategy 반환
-        ↓
-5. LLM 미사용 → 룰북 경로 AI 토큰 $0
-```
-
----
-
-## 오퍼레이션 룰북 조건
-
-| 조건 | 타입 | 유효값 | 예시 |
-|------|------|--------|------|
-| progress_min | number | 0~100 | 66 |
-| status | string | in_progress, target_reached, stop_hit, expired, unknown | target_reached |
-| timeframe | string | 15m, 1h, 4h, 8h, 1d, 1w | 4h |
-| risk_appetite | list | low, medium, high | [low, medium] |
-| weight_diff_min/max | number | 포트폴리오 비중 | — |
-
-**규칙 매칭**: RULES.yaml 위→아래 순서로 검사. **첫 매칭 규칙** 반환. `state.progress_pct ≥ rule.progress_min`이면 progress_min 조건 충족.
-
-**status 의미**: `in_progress`=진행 중, `target_reached`=목표 도달, `stop_hit`=손절 구간, `expired`=만료, `unknown`=미판정.
-
----
-
-## progress_pct 계산
-
-시그널(진입·목표·손절) + 현재가 → progress_pct. long일 때 `(current - entry) / (target - entry) * 100`. short일 때 `(entry - current) / (entry - target) * 100`. State Engine이 build_signal_state로 계산.
-
----
-
-## 오퍼레이션 룰북 핵심 개념
-
-오퍼레이션 룰북은 "진행 단계"가 아니라 **상태·시간프레임·현재가격에 따라 행동이 달라진다**는 개념이 우선입니다. status, timeframe, current_price(→progress_pct) 등 조건이 조합되면 그에 맞는 전략(행동)이 매칭됩니다.
-
----
-
 ## 참고
 
-- **Label·State** — REST API가 제공하는 정보 (라벨된 시그널, progress_pct, status)
-- `operation_rules/RULES.yaml` — 규칙 정의
-- `operation_rules/PATCHNOTES.md` — 버전별 변경
-- **학술 트렌드** — 아키텍처는 LLM Agent + 시장 상태 기반 연구(TradingAgents arXiv 2412.20138, LLM Quant Strategy 등)와 방향을 같이 합니다.
+- [Signal LLM 개념](../concept/signal_llm_concept.md) — State Engine, not LLM
+- [시장 상태 이론](../concept/market_state_theory.md) — progress_pct 개념
+- [라벨링 알고리즘](../concept/labeling_algorithm.md) — 오브젝트·스윙·시그널
+- [모델·알고리즘·성과](model.md) — 알고리즘 스토리, 구조, 성과
+- [오퍼레이션 룰북](../operation_rules/RULES.yaml) — 17개 규칙
+- [시그널 예시](../examples/signal_example.md) — progress_pct 계산 예시

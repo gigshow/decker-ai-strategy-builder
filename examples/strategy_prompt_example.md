@@ -32,15 +32,29 @@ progress_pct: 66
 status: in_progress
 entry_price: 96000
 target_price: 100000
-current_price: 99200
+current_price: 98640
 
 [Strategy] (RULES.yaml 매칭 결과)
-"4시간봉 66% 진행. 40% 부분 익절 제안. 큰 TF는 보수적 익절."
+"4시간봉 66% 진행. 30% 부분 익절 제안. 나머지는 목표까지 홀드."
 ```
 
 ### 예시 응답
 
-"BTC 4시간봉이 목표까지 66% 진행 중입니다. 보수적 운영을 위해 40% 부분 익절을 제안드립니다. 나머지는 목표가(100,000)까지 홀드하시는 것을 권장합니다."
+"BTC 4시간봉이 목표까지 66% 진행 중입니다. 30% 부분 익절을 제안드립니다. 나머지는 목표가(100,000)까지 홀드하시는 것을 권장합니다."
+
+---
+
+## Target → Signal → Entry 적용
+
+이 응답의 기반은 **Target → Signal → Entry** 철학입니다:
+
+| 단계 | 이 예시에서 |
+|------|------------|
+| Target | 100,000 (이전 고점 기반 목표 구조 확인) |
+| Signal | A 스윙 + 2프라임 브레이크 → S 시그널 |
+| Entry | 96,000 (기대값 +4.2%, 손절 -4.2%) |
+
+목표 구조가 먼저 정의되었기 때문에, 66% 진행 시점에서 **정량적 익절 판단**이 가능합니다.
 
 ---
 
@@ -58,3 +72,4 @@ current_price: 99200
 - [Quick Start](../docs/quickstart.md)
 - [Signal LLM 개념](../concept/signal_llm_concept.md)
 - [시그널 예시](signal_example.md)
+- [Strategy DSL](../docs/strategy-dsl.md)

@@ -1,55 +1,109 @@
-# Decker AI Strategy Builder
+# DECKER — AI Market State Engine
 
-> **DECKER: 디지털 자산 시장을 지능적으로 해석하는 AI 마켓 스테이트 엔진.**  
-> 시그널·진행도(progress_pct) 기반 전략. Telegram에서 말만 하면 시그널·포지션·주문.
+> **가격·시간 시계열에서 시장 구조(Object, Swing)를 분석하고, 진행도(progress_pct)와 상태(status)를 계산하여 고정밀 거래 시그널을 생성하는 AI 마켓 스테이트 엔진.**
 
 [Website](https://decker-ai.com) · [Telegram](https://t.me/deckerclawbot) · [API Docs](https://api.decker-ai.com/docs) · [Quick Start](docs/quickstart.md) · [Roadmap](docs/roadmap.md)
 
 ---
 
-## Signal LLM 정의
+## State Engine, not LLM
 
-DECKER does not use traditional ML prediction for signals.
+DECKER는 LLM이 가격을 예측하는 서비스가 아닙니다.
 
-Instead it uses:
+시계열 데이터에서 시장 구조를 분석하고, **진행도(progress_pct)**와 **상태(status)**를 결정론적으로 계산하는 엔진입니다. LLM은 결과를 자연어로 전달하는 인터페이스입니다.
 
-- **Price** (진입가·목표가·손절가·현재가)
-- **Time** (시간프레임)
-- **Market structure** (시그널 → 진행도 → 상태)
-
-to build a deterministic market state engine.
-
-The LLM layer is used to interpret market state signals into actionable strategies.
-
-> AI 트레이딩 = LLM 예측 ❌ / 시장 상태 엔진 + LLM 인터페이스 ✅
+| 구분 | 일반 AI 트레이딩 | DECKER |
+|------|------------------|--------|
+| 시그널 생성 | LLM/ML 가격 예측 | **시장 상태 엔진** |
+| 핵심 출력 | "매수/매도" | progress_pct, status, 전략 |
+| LLM 역할 | 예측·판단 | **인터페이스·설명** |
+| 토큰 비용 | 시그널마다 호출 | **룰북 경로 $0** |
 
 ---
 
-## Story
+## Core Philosophy: Target → Signal → Entry
 
-**"시장은 게임이다. 오르면 매도, 내리면 매수 — 그 수를 AI가 둔다."**
+대부분의 전략은 `signal → entry` 순서입니다.
 
-바둑에서 사람이 AI를 이길 수 없듯, **트레이딩도 사람이 기계를 이길 수 없습니다.** 좋은 AI 모델을 선택하는 것이 중요합니다.
+DECKER는 **`target → signal → entry`** 순서입니다.
 
-| 기존 시도 | 한계 |
-|-----------|------|
-| 수식으로 시장 상태 구현 | 게임 룰은 수식으로 만들기 어려움 |
-| AI 없이 규칙 기반 | 시장 심리·상태 전이 포착 불가 |
+| 원칙 | 설명 |
+|------|------|
+| **Entry without target → invalid** | 목표가 없는 진입은 유효하지 않음 |
+| **Movement without signal → ignored** | 시그널 없는 움직임은 무시 |
+| **Market clears liquidity** | 시장은 항상 유동성을 청산하는 방향으로 이동 |
 
-| Decker 접근 | 가능성 |
-|-------------|--------|
-| 시장 상태를 AI에게 알려주고 | 상태 데이터 기반 예측 |
-| 외부 시그널로 시장 라벨화 | 어떤 종목이 찬스인지 |
-| 사용자와 상의 (리스크·리워드) | 투자전문가처럼 상담 |
-| **알파고처럼** 마켓 플레이 | 최적의 매수·매도 포인트 |
+따라서 모든 움직임은 **수익 기회** 또는 **리버스 기회**가 됩니다.
+
+```
+Target defined → Signal confirmed → Entry triggered
+→ Target executed → Exit / Reverse opportunity
+```
 
 ---
 
-## Why Now
+## Performance
 
-- **에이전트 시대**: Telegram·Slack에서 "말만 하면" 시그널·포지션·주문
-- **시그널 상태 차별화**: 진행도(progress_pct)·status — 경쟁사 없음
-- **AI 시그널 모델**: 시계열 데이터 기반 시장상태 학습 → 정제된 데이터 제공 → 시그널 LLM 로드맵
+### Signal-Driven Strategy Results
+
+시그널 모델은 예측이 아닌 **오브젝트 스윙 평가** 기반입니다. 목표 구조가 확인된 경우에만 포지션을 열어, 랜덤 진입을 회피합니다.
+
+- Signal confirmation before entry
+- Pre-defined target structure
+- Reverse-liquidity awareness
+- Multi-timeframe swing evaluation
+
+### Strategy Metrics
+
+| Metric | Result |
+|--------|--------|
+| Win Rate | 61–68% |
+| Avg Profit | 5–12% |
+| Max Drawdown | < 9% |
+| Signal Frequency | 1–3 / day |
+| Avg Holding Time | 4h – 2d |
+
+### Trade Flow
+
+```
+A state swing → T signal touched → Target defined (+7%)
+→ Entry triggered → Position closed at target
+→ Reverse opportunity evaluated
+```
+
+상세: [모델·알고리즘·성과](docs/model.md)
+
+---
+
+## Architecture
+
+```
+시계열 데이터
+    → [라벨링 알고리즘] → 오브젝트 평가, 라벨 (S, T, 1)
+    → [State Engine] → progress_pct, status
+    → [오퍼레이션 룰북] → 전략 (RULES.yaml)
+    → Web / Telegram / API
+```
+
+| 모듈 | 역할 |
+|------|------|
+| **Labeling Algorithm** | 시계열 → 오브젝트(대상) 평가, 스윙(A/B/C) 분석 |
+| **State Engine** | 시그널 + 현재가 → progress_pct, status |
+| **Operation Rules** | RULES.yaml 17개 규칙 매칭 → 전략 반환 |
+| **LLM Reasoner** | 결과를 자연어로 설명 (선택) |
+
+```
+┌─────────────────────────────────────┐
+│  Decker (api.decker-ai.com)         │
+│  시그널·시세·전략 — 하나로 제공        │
+│  • /signals/{symbol}/state           │
+│  • /signals/{symbol}/strategy        │
+│  • /judgment/signals/public          │
+│  • /assistant/message                │
+└─────────────────────────────────────┘
+```
+
+상세: [Architecture](docs/architecture.md)
 
 ---
 
@@ -61,57 +115,19 @@ The LLM layer is used to interpret market state signals into actionable strategi
 
 ---
 
-## Achievements
+## Key Insight
 
-| Phase | 내용 |
-|-------|------|
-| **Phase 2** | Slack 연동, /decker-link — "Slack에서 말만 하면" |
-| **Phase 3** | 주문 승인 플로우 — "BTC 0.01 매수해줘 → 승인 → 실행" |
-| **Phase 4** | 좋은 시그널 알림, 시그널 제안 → "응" → order — "프로액티브 투자 비서" |
-| **Phase 5** | 사용자 여정, member_joined 환영 |
-| **오퍼레이션** | RULES.yaml v1.3.0, progress 33~95 규칙 — 진행도 기반 전략 |
-| **에이전트** | Telegram·Slack, HL·Polymarket — "말만 하면 HL·PM 주문" |
+> 대부분 전략은 entry → target 순서로 실패합니다.
+>
+> DECKER는 **target → signal → entry** 순서입니다.
+>
+> 모든 거래에 사전 정의된 기대값과 리스크 구조가 존재합니다.
 
----
-
-## Features
-
-- **시그널·진행도 기반 전략**: 덱커가 시그널과 전략을 하나로 제공. 오퍼레이션 룰북 (progress 33~95%, timeframe, risk) — [RULES.yaml](operation_rules/RULES.yaml) 17개 규칙 공개
-- **에이전트**: Telegram @deckerclawbot — 시그널, 포지션, 주문, 자동주문, 뉴스
-- **API**: 시그널, 전략, 시세, 시장 상태 (공개 엔드포인트)
-- **로드맵**: AI 시그널 모델 → 시그널 LLM 토큰 베이스 서비스
-
----
-
-## Architecture
-
-"말만 하면" 응답이 오는 이유 — **서비스 뒷단 구조**
-
-```
-Market Data + Signal Source → Label Engine → State Engine → Signal Engine
-       → (User Context + Operation Rules) → LLM Reasoner → Web/Telegram/API
-```
-
-시세·시그널 → 진행도 계산 → 오퍼레이션 룰북 매칭 → 전략. [상세](docs/architecture.md)
-
-```
-[웹] decker-ai.com
-[Telegram] @deckerclawbot
-[Slack] @deckerclaw
-        │
-        ▼
-┌─────────────────────────────────────┐
-│  Decker (api.decker-ai.com)         │
-│  시그널·시세·전략 — 하나로 제공        │
-│  • /signals/{symbol}/state           │
-│  • /signals/{symbol}/strategy        │
-│  • /judgment/signals/public          │
-│  • /assistant/message                │
-└─────────────────────────────────────┘
-        │
-        ▼
-[오퍼레이션 룰북] RULES.yaml → progress_min, timeframe, risk_appetite (17개 규칙)
-```
+| 상황 | 결과 |
+|------|------|
+| 목표가 없이 움직임 | → 반대로 찬스 |
+| 물림 또는 수익 | → 반대 청산 기회 |
+| 모든 움직임 | → profit opportunity 또는 reverse opportunity |
 
 ---
 
@@ -120,14 +136,30 @@ Market Data + Signal Source → Label Engine → State Engine → Signal Engine
 | 문서 | 용도 |
 |------|------|
 | [Quick Start](docs/quickstart.md) | 3단계 가이드, 체험 시나리오 |
-| [모델·알고리즘·성과](docs/model.md) | 심층: 알고리즘 스토리, 구조, 성과 |
-| [Architecture](docs/architecture.md) | 파이프라인·모듈 |
+| [Architecture](docs/architecture.md) | 파이프라인·모듈·State Engine·성과 |
+| [모델·알고리즘·성과](docs/model.md) | 알고리즘 스토리, 구조, 성과 지표 |
 | [API Guide](docs/api-guide.md) | 공개 API (개발자·연동용) |
+| [Strategy DSL](docs/strategy-dsl.md) | YAML 전략 사양 |
 | [Roadmap](docs/roadmap.md) | 로드맵 |
-| [Operation Rules](operation_rules/RULES.yaml) | 오퍼레이션 룰북 (17개 규칙, 진행도 기반) |
-| [Concept](concept/signal_llm_concept.md) | Signal LLM, 시장 상태, 라벨링 알고리즘 |
-| [Examples](examples/signal_example.md) | 시그널→state→strategy 예시 |
+| [Operation Rules](operation_rules/RULES.yaml) | 오퍼레이션 룰북 (17개 규칙) |
+| [Signal LLM 개념](concept/signal_llm_concept.md) | State Engine, 시장 상태, 라벨링 |
+| [시장 상태 이론](concept/market_state_theory.md) | progress_pct 개념 |
+| [라벨링 알고리즘](concept/labeling_algorithm.md) | 오브젝트·스윙·시그널 발생 |
+| [시그널 예시](examples/signal_example.md) | 시그널→state→strategy 예시 |
 | [Samples](samples/README.md) | API 연동 예제 (개발자용) |
+
+---
+
+## Achievements
+
+| Phase | 내용 |
+|-------|------|
+| **Phase 2** | Slack 연동 — "Slack에서 말만 하면" |
+| **Phase 3** | 주문 승인 플로우 — "BTC 0.01 매수해줘 → 승인 → 실행" |
+| **Phase 4** | 좋은 시그널 알림, 프로액티브 투자 비서 |
+| **Phase 5** | 사용자 여정, member_joined 환영 |
+| **오퍼레이션** | RULES.yaml v1.3.0, progress 33~95 규칙 |
+| **에이전트** | Telegram·Slack, HL·Polymarket 주문 |
 
 ---
 
@@ -144,6 +176,4 @@ Market Data + Signal Source → Label Engine → State Engine → Signal Engine
 
 > ⚠️ 이 리포는 문서·샘플·커뮤니티 허브입니다. 실제 프로덕션 코드는 비공개 리포지토리에서 운영됩니다.
 >
-> **서비스 사용자**: 덱커가 시그널·시세·전략을 하나로 제공합니다. 가입·연동 후 Telegram·웹에서 바로 사용 가능.
->
-> **사용 가능한 것**: API 호출 (api.decker-ai.com), samples/signal-push-strategy.sh 실행, RULES.yaml 참조, docs/architecture.md 아키텍처 이해.
+> **사용 가능한 것**: API 호출, samples/ 실행, RULES.yaml 참조, docs/ 아키텍처 이해.
