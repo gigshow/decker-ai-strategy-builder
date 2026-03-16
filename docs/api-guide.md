@@ -67,7 +67,7 @@ curl -X POST "https://api.decker-ai.com/api/v1/signals/push" \
 ## 시그널 전략 API (핵심)
 
 ```
-GET /api/v1/signals/{symbol}/strategy?timeframe=1h&risk_appetite=medium
+GET /api/v1/signals/{symbol}/strategy?timeframe=1h&risk_appetite=medium&tier=premium
 ```
 
 **파라미터**
@@ -77,6 +77,7 @@ GET /api/v1/signals/{symbol}/strategy?timeframe=1h&risk_appetite=medium
 | symbol | path | BTCUSDT, ETHUSDT 등 |
 | timeframe | query | 15m, 1h, 4h, 8h, 1d, 1w (기본 1h) |
 | risk_appetite | query | low, medium, high (선택) |
+| tier | query | basic, standard, premium (선택, Phase 5) |
 
 **응답 예시**
 

@@ -17,10 +17,26 @@ chmod +x samples/signal-push-strategy.sh
 
 ---
 
-## strategy-demo (예정)
+## strategy-demo.py
 
-Mock 전략 데모. `npm install && npm run dev`
+시그널 등록 → State → Strategy 전체 플로우 (Python).
 
-## api-client-python (예정)
+```bash
+pip install requests
+python samples/strategy-demo.py BTCUSDT 96000 100000 92000
+```
 
-REST API 호출 예제.
+인자: `[symbol] [entry] [target] [stop]` (기본값: BTCUSDT 96000 100000 92000)
+
+---
+
+## api-client-python.py
+
+REST API 호출 예제 (state, strategy, signals, prices).
+
+```bash
+pip install requests
+python samples/api-client-python.py BTCUSDT
+```
+
+인자: `[symbol]` (기본 BTCUSDT)
