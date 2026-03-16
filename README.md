@@ -7,11 +7,12 @@
 
 [![GitHub Stars](https://img.shields.io/github/stars/gigshow/decker-ai-strategy-builder?style=flat-square&color=DAA520)](https://github.com/gigshow/decker-ai-strategy-builder/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/gigshow/decker-ai-strategy-builder?style=flat-square)](https://github.com/gigshow/decker-ai-strategy-builder/network)
+[![Win Rate 30d](https://img.shields.io/badge/WinRate_30d-20~30%25-brightgreen?style=flat-square)](docs/signal-performance.md)
 [![Telegram](https://img.shields.io/badge/Telegram-Bot-26A5E4?style=flat-square&logo=telegram&logoColor=white)](https://t.me/deckerclawbot)
 [![API Docs](https://img.shields.io/badge/API-Docs-00C853?style=flat-square)](https://api.decker-ai.com/docs)
 [![Website](https://img.shields.io/badge/Website-decker--ai.com-6C47FF?style=flat-square)](https://decker-ai.com)
 
-[🌐 Website](https://decker-ai.com) · [🤖 Telegram Bot](https://t.me/deckerclawbot) · [📖 API Docs](https://api.decker-ai.com/docs) · [🚀 Quick Start](docs/quickstart.md) · [🗺 Roadmap](docs/roadmap.md)
+[🌐 Website](https://decker-ai.com) · [🤖 Telegram Bot](https://t.me/deckerclawbot) · [📖 API Docs](https://api.decker-ai.com/docs) · [🚀 Quick Start](docs/quickstart.md) · [📊 Signal Performance](docs/signal-performance.md) · [🛡 Risk Management](docs/risk-management.md) · [🗺 Roadmap](docs/roadmap.md)
 
 </div>
 

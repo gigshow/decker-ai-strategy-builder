@@ -56,7 +56,7 @@ curl -X POST "https://api.decker-ai.com/api/v1/signals/push" \
 | GET | /api/v1/system/health | 헬스체크 |
 | GET | /api/v1/judgment/coverage | 20종목×6시간대 신호 현황 |
 | GET | /api/v1/judgment/signals/public?symbol=BTCUSDT&timeframe=1h | 시그널 (direction, confidence, entry/target/stop) |
-| GET | /api/v1/signals/{symbol}/state | 종목별 시그널 상태 (progress_pct, status) |
+| GET | /api/v1/signals/{symbol}/state | 종목별 시그널 상태 (progress_pct, status, risk_reward_ratio, market_state) |
 | GET | /api/v1/signals/{symbol}/strategy?timeframe=1h&risk_appetite=medium | 진행도 기반 전략 (오퍼레이션 룰북) |
 | GET | /api/v1/market/prices?symbols=BTCUSDT,ETHUSDT | 실시간 시세 |
 | GET | /api/v1/judgment/compare?symbols=BTCUSDT,ETHUSDT&timeframe=1h | 다중 자산 비교 |
@@ -88,6 +88,48 @@ GET /api/v1/signals/{symbol}/strategy?timeframe=1h&risk_appetite=medium&tier=pre
   "strategy": "66% 진행. 30% 부분 익절 제안. 나머지는 목표까지 홀드."
 }
 ```
+
+---
+
+## status 값 정의
+
+`GET /signals/{symbol}/state` 응답의 `signals[].state.status`:
+
+| status | 의미 |
+|--------|------|
+| **in_progress** | 진행 중 (목표·손절 미도달) |
+| **target_reached** | 목표 도달 |
+| **stop_hit** | 손절 구간 |
+| **expired** | 만료 |
+| **unknown** | 미판정 (시세·진입가 없음) |
+
+---
+
+## progress_pct 해석
+
+| progress 구간 | 의미 | 룰북 전략 |
+|---------------|------|----------|
+| 0~33% | 초기 | default (목표까지 홀드) |
+| 33~50% | 진입·초기 익절 | risk=low 시 5% 초기 익절 |
+| 50~66% | 중반 | 20% 부분 익절 또는 홀드 |
+| 66~80% | 후반 | 30~50% 부분 익절 |
+| 80~95% | 목표 근접 | 50~80% 부분 익절 |
+| 95%+ | 직전 | 80% 부분 또는 전량 청산 |
+
+---
+
+## state 응답 확장 (v1.4)
+
+`GET /signals/{symbol}/state` 응답:
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| progress_pct | number | 0~100 진행도 |
+| status | string | in_progress, target_reached, stop_hit 등 |
+| risk_reward_ratio | number? | (target-entry)/(entry-stop). stop_loss 있을 때만 |
+| market_state | string? | 시장 국면: trend, trend_down, range (liquidation/funding 기반) |
+
+`market_state`는 오퍼레이션 룰북의 `market_state` 조건과 연동. (breakout_early, pullback, range, trend 등 향후 확장)
 
 ---
 

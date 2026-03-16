@@ -1,9 +1,11 @@
-# Decker 오퍼레이션 룰북
-# progress_min, timeframe, risk_appetite 기반 전략 매칭
+# Decker 오퍼레이션 룰북 (머신 파싱용)
+# progress_min, timeframe, risk_appetite, market_state 기반 전략 매칭
 # API: GET /signals/{symbol}/strategy
 
-version: "1.3.0"
-updated: "2025-03-15"
+version: "1.4.0"
+updated: "2025-03-17"
+# v1.4.0: market_state 조건 추가 (breakout_early, pullback, range, trend)
+# v1.3.1: portfolio_default에 portfolio_context_required 추가
 
 rules:
   - id: target_reached
@@ -45,6 +47,12 @@ rules:
     progress_min: 80
     strategy: "비중 적정. 80% 진행. 50% 부분 익절 제안."
 
+  - id: progress_80_trend
+    tier: standard
+    progress_min: 80
+    market_state: [trend]
+    strategy: "추세 구간 80%+. 50% 부분 익절. 나머지 목표까지 홀드."
+
   - id: progress_80
     tier: standard
     progress_min: 80
@@ -68,6 +76,13 @@ rules:
     progress_min: 80
     timeframe: "1d"
     strategy: "일봉 80% 진행. 30% 보수적 부분 익절. 장기 TF는 홀드 선호."
+
+  - id: progress_66_range
+    tier: premium
+    progress_min: 60
+    progress_max: 75
+    market_state: [range]
+    strategy: "레인지 구간 66% 근처. 40% 부분 익절 강화. 스캘핑 대응."
 
   - id: progress_66
     tier: standard
@@ -99,6 +114,7 @@ rules:
 
   - id: portfolio_default
     tier: standard
+    portfolio_context_required: true
     strategy: "현 비중 유지. 시그널별 전략 따름."
 
   - id: default

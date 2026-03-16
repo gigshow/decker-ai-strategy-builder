@@ -40,3 +40,38 @@ python samples/api-client-python.py BTCUSDT
 ```
 
 인자: `[symbol]` (기본 BTCUSDT)
+
+---
+
+## python/get_signal.py
+
+시그널 상태 조회 최소 예제 (~30줄).
+
+```bash
+pip install requests
+python samples/python/get_signal.py BTCUSDT 1h
+```
+
+---
+
+## python/strategy_bot.py
+
+시그널 → 전략 → 주문 연결 플로우 (~50줄). 주문 실행은 decker-ai.com 또는 Telegram.
+
+```bash
+pip install requests
+python samples/python/strategy_bot.py BTCUSDT
+```
+
+---
+
+## curl/examples.sh
+
+API 빠른 테스트용 curl 모음.
+
+```bash
+chmod +x samples/curl/examples.sh
+./samples/curl/examples.sh BTCUSDT
+```
+
+로컬: `DECKER_API_URL=http://localhost:8000 ./samples/curl/examples.sh`
