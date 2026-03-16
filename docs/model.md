@@ -126,6 +126,8 @@ RULES.yaml 위→아래 순서로 검사. **첫 매칭 규칙** 반환. `state.p
 | **Signal Frequency** | 1–3 / day |
 | **Avg Holding Time** | 4h – 2d |
 
+*출처: 오퍼레이션 룰북(progress 33~95%) 기반 백테스트·실거래 튜닝. 기간·종목·시장 환경에 따라 상이할 수 있습니다.*
+
 ### 4.3 지표 정의
 
 | 지표 | 설명 |
@@ -155,13 +157,15 @@ A state swing → T signal touched → Target defined (+7%)
 ### 4.5 Backtest Example
 
 ```
-BTCUSDT 2023–2025
+BTCUSDT 2023–2025 (예시)
 
 Trades: 312
 Win Rate: 64.2%
 Average R:R: 1 : 2.3
 Max DD: 8.1%
 ```
+
+*검증: 백테스트 엔진·실거래 결과는 전략·기간·종목별로 상이합니다. 과거 성과가 미래 수익을 보장하지 않습니다.*
 
 ### 4.6 핵심 거래 로직
 

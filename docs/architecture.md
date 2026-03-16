@@ -43,7 +43,7 @@ Market State → Signal Touch → Target Formation
 ```
 시계열 데이터
     → [라벨링 알고리즘] → 오브젝트 평가, 라벨 (S, T, 1)
-    → [State Engine] → progress_pct, status, regime
+    → [State Engine] → progress_pct, status
     → [오퍼레이션 룰북] → 전략 (RULES.yaml 첫 매칭)
     → Web / Telegram / API
 ```
@@ -86,6 +86,14 @@ Market State → Signal Touch → Target Formation
  │  Web / Telegram / API  │
  └────────────────────────┘
 ```
+
+---
+
+## 시그널 소스와 라벨링
+
+**시그널 소스**: `judgment_signals` 테이블. REST 푸시(`POST /signals/push`), GitHub, CQS 등에서 수집된 시그널이 저장됩니다.
+
+**라벨링 알고리즘**: 시그널 품질·생성의 **이론적 기반**입니다. 외부 시그널 제공자가 DPDP/라벨링 기반으로 생성한 시그널을 푸시할 수 있으며, DECKER는 수신된 시그널에 대해 State Engine(progress_pct, status)을 적용합니다.
 
 ---
 

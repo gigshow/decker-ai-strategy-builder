@@ -1,16 +1,35 @@
+<div align="center">
+
 # DECKER — AI Market State Engine
 
-> **가격·시간 시계열에서 시장 구조(Object, Swing)를 분석하고, 진행도(progress_pct)와 상태(status)를 계산하여 고정밀 거래 시그널을 생성하는 AI 마켓 스테이트 엔진.**
+**디지털 자산 시장 구조를 읽고, 시그널·진행도·전략을 하나로.**  
+*Signal Intelligence Engine for Digital Assets — not prediction, but state.*
 
-[Website](https://decker-ai.com) · [Telegram](https://t.me/deckerclawbot) · [API Docs](https://api.decker-ai.com/docs) · [Quick Start](docs/quickstart.md) · [Roadmap](docs/roadmap.md)
+[![GitHub Stars](https://img.shields.io/github/stars/gigshow/decker-ai-strategy-builder?style=flat-square&color=DAA520)](https://github.com/gigshow/decker-ai-strategy-builder/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/gigshow/decker-ai-strategy-builder?style=flat-square)](https://github.com/gigshow/decker-ai-strategy-builder/network)
+[![Telegram](https://img.shields.io/badge/Telegram-Bot-26A5E4?style=flat-square&logo=telegram&logoColor=white)](https://t.me/deckerclawbot)
+[![API Docs](https://img.shields.io/badge/API-Docs-00C853?style=flat-square)](https://api.decker-ai.com/docs)
+[![Website](https://img.shields.io/badge/Website-decker--ai.com-6C47FF?style=flat-square)](https://decker-ai.com)
+
+[🌐 Website](https://decker-ai.com) · [🤖 Telegram Bot](https://t.me/deckerclawbot) · [📖 API Docs](https://api.decker-ai.com/docs) · [🚀 Quick Start](docs/quickstart.md) · [🗺 Roadmap](docs/roadmap.md)
+
+</div>
 
 ---
 
-## State Engine, not LLM
+## ⚡ Overview
 
-DECKER는 LLM이 가격을 예측하는 서비스가 아닙니다.
+**DECKER**는 가격·시간 시계열에서 시장 구조(Object, Swing)를 분석하고, **진행도(progress_pct)**와 **상태(status)**를 결정론적으로 계산하여 고정밀 거래 시그널을 생성하는 **AI 마켓 스테이트 엔진**입니다.
 
-시계열 데이터에서 시장 구조를 분석하고, **진행도(progress_pct)**와 **상태(status)**를 결정론적으로 계산하는 엔진입니다. LLM은 결과를 자연어로 전달하는 인터페이스입니다.
+> **You say:** "비트코인 시그널 알려줘" / "이 시그널 지금 어떻게 할까?" / "ETH 0.01 매수해줘"
+>
+> **DECKER returns:** 시그널·진행도(progress_pct)·전략·주문 실행 — 말만 하면
+
+LLM은 가격을 예측하지 않습니다. DECKER는 시장 구조를 **계산**합니다.
+
+---
+
+## 🎯 State Engine, not LLM
 
 | 구분 | 일반 AI 트레이딩 | DECKER |
 |------|------------------|--------|
@@ -21,49 +40,47 @@ DECKER는 LLM이 가격을 예측하는 서비스가 아닙니다.
 
 ---
 
-## Core Philosophy: Target → Signal → Entry
+## 🔄 How It Works
 
-대부분의 전략은 `signal → entry` 순서입니다.
+사용자의 한 마디가 처리되는 5단계:
+
+1. **You say** — "비트코인 시그널 알려줘"
+2. **Signal fetch** — judgment_signals + 실시간 현재가 조회
+3. **State Engine** — progress_pct, status 결정론적 계산
+4. **Operation Rules** — RULES.yaml 매칭 → 전략 반환 (LLM 없이)
+5. **You get** — "66% 진행. 30% 부분 익절 제안. 나머지는 목표까지 홀드."
+
+---
+
+## 💡 Core Philosophy: Target → Signal → Entry
+
+대부분의 전략은 `signal → entry` 순서로, **목표 없이 진입**합니다.
 
 DECKER는 **`target → signal → entry`** 순서입니다.
 
 | 원칙 | 설명 |
 |------|------|
-| **Entry without target → invalid** | 목표가 없는 진입은 유효하지 않음 |
-| **Movement without signal → ignored** | 시그널 없는 움직임은 무시 |
+| **Entry without target → invalid** | 목표 구조가 먼저 확인되어야 진입이 유효 |
+| **Movement without signal → ignored** | 시그널 없는 움직임은 노이즈 |
 | **Market clears liquidity** | 시장은 항상 유동성을 청산하는 방향으로 이동 |
 
-따라서 모든 움직임은 **수익 기회** 또는 **리버스 기회**가 됩니다.
-
-```
-Target defined → Signal confirmed → Entry triggered
-→ Target executed → Exit / Reverse opportunity
-```
+> 목표가 없이 움직이면 → 반대로 찬스  
+> 물렸거나 수익이면 → 반대 청산 기회  
+> **모든 움직임은 profit opportunity 또는 reverse opportunity**
 
 ---
 
-## Performance
+## 📊 Performance
 
-### Signal-Driven Strategy Results
-
-시그널 모델은 예측이 아닌 **오브젝트 스윙 평가** 기반입니다. 목표 구조가 확인된 경우에만 포지션을 열어, 랜덤 진입을 회피합니다.
-
-- Signal confirmation before entry
-- Pre-defined target structure
-- Reverse-liquidity awareness
-- Multi-timeframe swing evaluation
-
-### Strategy Metrics
+시그널 모델은 예측이 아닌 **오브젝트 스윙 평가** 기반입니다.
 
 | Metric | Result |
 |--------|--------|
-| Win Rate | 61–68% |
-| Avg Profit | 5–12% |
-| Max Drawdown | < 9% |
-| Signal Frequency | 1–3 / day |
-| Avg Holding Time | 4h – 2d |
-
-### Trade Flow
+| **Win Rate** | 61–68% |
+| **Avg Profit** | 5–12% |
+| **Max Drawdown** | < 9% |
+| **Signal Frequency** | 1–3 / day |
+| **Avg Holding Time** | 4h – 2d |
 
 ```
 A state swing → T signal touched → Target defined (+7%)
@@ -75,12 +92,12 @@ A state swing → T signal touched → Target defined (+7%)
 
 ---
 
-## Architecture
+## 🏗 Architecture
 
 ```
 시계열 데이터
     → [라벨링 알고리즘] → 오브젝트 평가, 라벨 (S, T, 1)
-    → [State Engine] → progress_pct, status
+    → [State Engine]    → progress_pct, status
     → [오퍼레이션 룰북] → 전략 (RULES.yaml)
     → Web / Telegram / API
 ```
@@ -92,51 +109,33 @@ A state swing → T signal touched → Target defined (+7%)
 | **Operation Rules** | RULES.yaml 17개 규칙 매칭 → 전략 반환 |
 | **LLM Reasoner** | 결과를 자연어로 설명 (선택) |
 
-```
-┌─────────────────────────────────────┐
-│  Decker (api.decker-ai.com)         │
-│  시그널·시세·전략 — 하나로 제공        │
-│  • /signals/{symbol}/state           │
-│  • /signals/{symbol}/strategy        │
-│  • /judgment/signals/public          │
-│  • /assistant/message                │
-└─────────────────────────────────────┘
-```
-
 상세: [Architecture](docs/architecture.md)
 
 ---
 
-## Quick Start (3단계)
+## 🚀 Quick Start
+
+| 필요한 것 | 설명 |
+|-----------|------|
+| 계정 | [decker-ai.com](https://decker-ai.com) 무료 가입 |
+| Telegram | [@deckerclawbot](https://t.me/deckerclawbot) |
+
+**3단계로 시작:**
 
 1. **가입** — [decker-ai.com](https://decker-ai.com) 회원가입 (무료)
 2. **연동** — [decker-link-telegram](https://decker-ai.com/decker-link-telegram)에서 코드 발급 → [@deckerclawbot](https://t.me/deckerclawbot)에 `/start {코드}`
 3. **사용** — "비트코인 시그널 알려줘", "포지션 보여줘", "ETH 0.01 매수해줘" 등 **말만 하면** 됩니다.
 
----
-
-## Key Insight
-
-> 대부분 전략은 entry → target 순서로 실패합니다.
->
-> DECKER는 **target → signal → entry** 순서입니다.
->
-> 모든 거래에 사전 정의된 기대값과 리스크 구조가 존재합니다.
-
-| 상황 | 결과 |
-|------|------|
-| 목표가 없이 움직임 | → 반대로 찬스 |
-| 물림 또는 수익 | → 반대 청산 기회 |
-| 모든 움직임 | → profit opportunity 또는 reverse opportunity |
+**[🤖 지금 Telegram에서 체험하기](https://t.me/deckerclawbot)**
 
 ---
 
-## Docs
+## 📚 Docs
 
 | 문서 | 용도 |
 |------|------|
 | [Quick Start](docs/quickstart.md) | 3단계 가이드, 체험 시나리오 |
-| [Architecture](docs/architecture.md) | 파이프라인·모듈·State Engine·성과 |
+| [Architecture](docs/architecture.md) | 파이프라인·모듈·State Engine |
 | [모델·알고리즘·성과](docs/model.md) | 알고리즘 스토리, 구조, 성과 지표 |
 | [API Guide](docs/api-guide.md) | 공개 API (개발자·연동용) |
 | [Strategy DSL](docs/strategy-dsl.md) | YAML 전략 사양 |
@@ -150,7 +149,7 @@ A state swing → T signal touched → Target defined (+7%)
 
 ---
 
-## Achievements
+## 🏆 Achievements
 
 | Phase | 내용 |
 |-------|------|
@@ -163,7 +162,7 @@ A state swing → T signal touched → Target defined (+7%)
 
 ---
 
-## Links
+## 🔗 Links
 
 | 용도 | URL |
 |------|-----|
