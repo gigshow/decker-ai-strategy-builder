@@ -1,8 +1,27 @@
 # Decker AI Strategy Builder
 
-> **AI 트레이딩. 시그널·진행도 기반 전략. Telegram에서 말만 하면 시그널·포지션·주문.**
+> **DECKER: 디지털 자산 시장을 지능적으로 해석하는 AI 마켓 스테이트 엔진.**  
+> 시그널·진행도(progress_pct) 기반 전략. Telegram에서 말만 하면 시그널·포지션·주문.
 
 [Website](https://decker-ai.com) · [Telegram](https://t.me/deckerclawbot) · [API Docs](https://api.decker-ai.com/docs) · [Quick Start](docs/quickstart.md) · [Roadmap](docs/roadmap.md)
+
+---
+
+## Signal LLM 정의
+
+DECKER does not use traditional ML prediction for signals.
+
+Instead it uses:
+
+- **Price** (진입가·목표가·손절가·현재가)
+- **Time** (시간프레임)
+- **Market structure** (시그널 → 진행도 → 상태)
+
+to build a deterministic market state engine.
+
+The LLM layer is used to interpret market state signals into actionable strategies.
+
+> AI 트레이딩 = LLM 예측 ❌ / 시장 상태 엔진 + LLM 인터페이스 ✅
 
 ---
 
@@ -101,10 +120,13 @@ Market Data + Signal Source → Label Engine → State Engine → Signal Engine
 | 문서 | 용도 |
 |------|------|
 | [Quick Start](docs/quickstart.md) | 3단계 가이드, 체험 시나리오 |
+| [모델·알고리즘·성과](docs/model.md) | 심층: 알고리즘 스토리, 구조, 성과 |
+| [Architecture](docs/architecture.md) | 파이프라인·모듈 |
 | [API Guide](docs/api-guide.md) | 공개 API (개발자·연동용) |
-| [Architecture](docs/architecture.md) | 서비스 뒷단 구조, 핵심 파이프라인 |
 | [Roadmap](docs/roadmap.md) | 로드맵 |
 | [Operation Rules](operation_rules/RULES.yaml) | 오퍼레이션 룰북 (17개 규칙, 진행도 기반) |
+| [Concept](concept/signal_llm_concept.md) | Signal LLM, 시장 상태, 라벨링 알고리즘 |
+| [Examples](examples/signal_example.md) | 시그널→state→strategy 예시 |
 | [Samples](samples/README.md) | API 연동 예제 (개발자용) |
 
 ---
