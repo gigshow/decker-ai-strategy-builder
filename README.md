@@ -70,6 +70,29 @@ DECKER는 **`target → signal → entry`** 순서입니다.
 
 ---
 
+## 📐 What is progress_pct?
+
+시그널은 생성(0%)부터 목표 도달(100%)까지 **수명 주기**를 가집니다. DECKER는 이 진행도를 실시간으로 계산합니다.
+
+**공식:**
+
+- Long: `(현재가 - 진입가) / (목표가 - 진입가) × 100`
+- Short: `(진입가 - 현재가) / (진입가 - 목표가) × 100`
+
+| progress_pct | 의미 | 전략 |
+|--------------|------|------|
+| 0–32% | 시그널 초기 | 관망 또는 진입 준비 |
+| 33–66% | 시그널 활성 | 진입 적기, 리스크 관리 시작 |
+| 67–89% | 시그널 후반 | 부분 익절, 포지션 축소 |
+| 90–100% | 목표 직전 | 청산 준비 |
+
+> 경쟁사 시그널: **BUY / SELL** 이진값만 제공  
+> DECKER: **BUY + progress 67%** = "기회는 있지만 타이밍 주의"
+
+상세: [시장 상태 이론](concept/market_state_theory.md) · [Architecture](docs/architecture.md)
+
+---
+
 ## 📊 Performance
 
 시그널 모델은 예측이 아닌 **오브젝트 스윙 평가** 기반입니다.
@@ -87,6 +110,8 @@ A state swing → T signal touched → Target defined (+7%)
 → Entry triggered → Position closed at target
 → Reverse opportunity evaluated
 ```
+
+*출처: 오퍼레이션 룰북(progress 33~95%) 기반 백테스트·실거래 튜닝. 과거 성과가 미래 수익을 보장하지 않습니다.*
 
 상세: [모델·알고리즘·성과](docs/model.md)
 
@@ -149,16 +174,18 @@ A state swing → T signal touched → Target defined (+7%)
 
 ---
 
-## 🏆 Achievements
+## 🏆 Achievements & Roadmap
 
-| Phase | 내용 |
-|-------|------|
-| **Phase 2** | Slack 연동 — "Slack에서 말만 하면" |
-| **Phase 3** | 주문 승인 플로우 — "BTC 0.01 매수해줘 → 승인 → 실행" |
-| **Phase 4** | 좋은 시그널 알림, 프로액티브 투자 비서 |
-| **Phase 5** | 사용자 여정, member_joined 환영 |
-| **오퍼레이션** | RULES.yaml v1.3.0, progress 33~95 규칙 |
-| **에이전트** | Telegram·Slack, HL·Polymarket 주문 |
+| 상태 | Phase | 내용 |
+|------|-------|------|
+| ✅ | **Phase 2** | Slack 연동 — "Slack에서 말만 하면" |
+| ✅ | **Phase 3** | 주문 승인 플로우 — "BTC 0.01 매수해줘 → 승인 → 실행" |
+| ✅ | **Phase 4** | 좋은 시그널 알림, 프로액티브 투자 비서 |
+| ✅ | **Phase 5** | 사용자 여정, member_joined 환영 |
+| ✅ | **오퍼레이션** | RULES.yaml v1.3.0, progress 33~95 규칙 17개 |
+| ✅ | **에이전트** | Telegram·Slack, HL·Polymarket 주문 |
+| 🔜 | **시그널 모델** | AI 시그널 모델 → 시그널 LLM 토큰 기반 서비스 |
+| 🔜 | **백테스트** | progress 구간별 수익률 검증·리포트 공개 |
 
 ---
 
