@@ -38,6 +38,33 @@ Market State → Signal Touch → Target Formation
 
 ---
 
+## 에이전트 레이어 — 선택에 따른 분기
+
+사용자가 **에이전트 모델을 선택**하면, 제공되는 아키텍처가 달라집니다.
+
+```
+[Decker 공통 백엔드]
+  State Engine | RULES.yaml v1.4.0 | API
+        │
+        ├── [선택 A: 자체 에이전트 모델]
+        │     intent_engine → Telegram @deckerclawbot / Web
+        │     (호스팅, LLM $0)
+        │
+        ├── [선택 B: OpenClaw 협업]
+        │     사용자 OpenClaw + Decker 스킬 → web_fetch → API
+        │     (Slack 제한 시 Telegram 우선, Discord 등 — OpenClaw 생태계)
+        │
+        ├── [선택 C: API 직접]
+        │     REST API 호출
+        │
+        └── [선택 D: 턴키]
+              Railway 원클릭 → 경량 Telegram 봇 (turnkey/) → API
+```
+
+Decker는 OpenClaw 생태계에 스킬로 참여합니다. OpenClaw 사용자는 Decker 스킬을 추가해 시그널·전략을 연동할 수 있습니다.
+
+---
+
 ## 파이프라인
 
 ```
@@ -45,7 +72,7 @@ Market State → Signal Touch → Target Formation
     → [라벨링 알고리즘] → 오브젝트 평가, 라벨 (S, T, 1)
     → [State Engine] → progress_pct, status
     → [오퍼레이션 룰북] → 전략 (RULES.yaml 첫 매칭)
-    → Web / Telegram / API
+    → Web / Telegram(자체) / OpenClaw 스킬 / API
 ```
 
 ```
@@ -82,9 +109,9 @@ Market State → Signal Touch → Target Formation
      │   전략 반환    │◄───────────┘
      └──────┬────────┘
             │
- ┌──────────▼─────────────┐
- │  Web / Telegram / API  │
- └────────────────────────┘
+ ┌──────────▼─────────────────────────────┐
+ │  Web·Telegram(자체) / OpenClaw 스킬 / API │
+ └─────────────────────────────────────────┘
 ```
 
 ---
@@ -252,10 +279,10 @@ A state swing → T signal touched → Target defined (+7%)
 ## 서비스 개요
 
 ```
-[진입점]
-  • 웹: decker-ai.com (Vercel)
-  • Telegram: @deckerclawbot
-  • Slack: @deckerclaw
+[진입점 — 선택에 따라]
+  • 선택 A (자체): 웹 decker-ai.com, Telegram @deckerclawbot
+  • 선택 B (OpenClaw): Slack (제한 시 Telegram)·Discord — 사용자 OpenClaw + Decker 스킬
+  • 선택 C (API): REST 직접 호출
         │
         ▼
 [Backend] api.decker-ai.com (Railway, FastAPI)

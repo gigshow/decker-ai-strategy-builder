@@ -176,7 +176,7 @@ Building in public means sharing mistakes:
 | Status | What | Why |
 |--------|------|-----|
 | ✅ | Telegram bot | Natural language trading assistant |
-| ✅ | Slack integration | Team workflow support |
+| ✅ | OpenClaw skill (Slack, Discord) | Team workflow, OpenClaw ecosystem. Slack 제한 시 Telegram 우선 |
 | ✅ | Order execution (Binance, HL) | One-command trades |
 | ✅ | RULES.yaml v1.4 | Market state awareness |
 | ✅ | Public API | Developer ecosystem |

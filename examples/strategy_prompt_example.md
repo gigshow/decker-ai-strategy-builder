@@ -4,7 +4,7 @@
 
 ## "이 시그널 지금 어떻게 할까?"
 
-Telegram·Slack·웹에서 사용자가 이렇게 물으면, DECKER는 다음 흐름으로 응답합니다.
+Telegram·웹(또는 OpenClaw 스킬)에서 사용자가 이렇게 물으면, DECKER는 다음 흐름으로 응답합니다.
 
 1. 사용자 컨텍스트(종목, 포지션, 리스크 선호) 수집
 2. `/signals/{symbol}/state` → progress_pct, status

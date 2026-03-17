@@ -21,11 +21,15 @@
 4. `/start {발급받은코드}` 전송
 5. 연동 완료
 
-### Slack
+### OpenClaw 스킬 연동 (선택 B)
 
-1. [decker-ai.com/decker-link](https://decker-ai.com/decker-link) 접속
-2. Slack 사용자 ID 입력 (프로필 → 더보기 → 멤버 ID 복사, U로 시작)
-3. Slack에서 @deckerclaw 봇이 있는 채널 또는 DM으로 이동
+**에이전트 모델 선택 B** — 자신의 OpenClaw에 Decker 스킬을 추가해 시그널·전략을 연동합니다. Slack (제한 시 Telegram 우선)·Discord 등 OpenClaw 지원 채널에서 사용 가능.
+
+1. [Decker SKILL.md](openclaw_skills/decker/SKILL.md) 다운로드
+2. 자신의 OpenClaw `skills/decker/` 폴더에 추가
+3. "시그널 알려줘" 등 트리거 → web_fetch → Decker API 호출
+
+상세: [OpenClaw 스킬 가이드](openclaw_skills/README.md) · [Brand Guide — 선택 B](BRAND_GUIDE.md)
 
 ---
 

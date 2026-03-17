@@ -34,10 +34,11 @@
 | **30 sec** | API | `curl -s "https://api.decker-ai.com/api/v1/signals/BTCUSDT/state"` |
 | **3 min** | Samples | `./samples/signal-push-strategy.sh BTCUSDT 96000 100000 92000` |
 | **5 min** | Telegram | [@deckerclawbot](https://t.me/deckerclawbot) — "비트코인 시그널 알려줘" |
+| **5 min** | 턴키 | [turnkey/](turnkey/) — Railway 원클릭 경량 봇 (자체 배포) |
 
 **Decker AI Strategy Builder**는 시그널의 **진행도(progress_pct)**를 계산하고, YAML 룰북으로 전략을 반환합니다. LLM 없이 동작합니다.
 
-> **DeckerClaw** — Decker와 협업하는 가재 에이전트. DeckerClaw를 **입양**해서 자신의 트레이딩 에이전트에서 사용할 수 있습니다.
+> **DeckerClaw** — Decker 자체 에이전트 + OpenClaw 스킬 생태계. DeckerClaw를 **입양**할 수 있습니다: (A) [@deckerclawbot](https://t.me/deckerclawbot) Telegram 사용 (B) 자신의 OpenClaw에 Decker 스킬 추가 → web_fetch → API 연동 (C) REST API 직접 호출
 
 ---
 
@@ -151,14 +152,34 @@ A state swing → T signal touched → Target defined (+7%)
 
 ---
 
+## 🤝 DeckerClaw — 선택 기반 에이전트
+
+에이전트 모델을 **선택**하면, 제공되는 아키텍처가 달라집니다.
+
+| 선택 | 사용자 | 채널 | 설명 |
+|------|--------|------|------|
+| **A. 자체 에이전트** | 일반 사용자·비개발자 | Telegram @deckerclawbot, Web | Decker **자체 에이전트** (LLM $0) |
+| **B. OpenClaw 협업** | OpenClaw 개발자 | Slack (제한 시 Telegram)·Discord 등 | 자신의 OpenClaw에 **Decker 스킬 추가** → web_fetch → API |
+| **C. API 직접** | 개발자 | REST API | API 직접 연동 |
+| **D. 턴키** | OpenClaw 미사용자 | Railway 원클릭 | [turnkey/](turnkey/) — 경량 Telegram 봇 (시그널·전략 조회) |
+
+Decker는 OpenClaw 생태계에 스킬로 참여합니다. OpenClaw 사용자는 Decker 스킬을 추가해 시그널·전략을 연동할 수 있습니다.
+
+**선택 B 흐름:**
+```
+개발자 OpenClaw → Decker SKILL.md 트리거 → web_fetch → Decker API → Claude 자연어 응답
+```
+
+---
+
 ## 🏗 Architecture
 
 ```
 시계열 데이터
     → [라벨링 알고리즘] → 오브젝트 평가, 라벨 (S, T, 1)
     → [State Engine]    → progress_pct, status
-    → [오퍼레이션 룰북] → 전략 (RULES.yaml)
-    → Web / Telegram / API
+    → [오퍼레이션 룰북] → 전략 (RULES.yaml v1.4.0)
+    → Web / Telegram(Way 1) / OpenClaw 스킬(Way 2) / API(Way 3)
 ```
 
 | 모듈 | 역할 |
@@ -215,13 +236,15 @@ A state swing → T signal touched → Target defined (+7%)
 
 | 상태 | Phase | 내용 |
 |------|-------|------|
-| ✅ | **Phase 2** | Slack 연동 — "Slack에서 말만 하면" |
+| ✅ | **Phase 2** | Slack 연동 (OpenClaw 스킬, Way 2), /decker-link — *Slack: 워크스페이스 제한 이슈로 일시 비활성 가능. Telegram 권장* |
 | ✅ | **Phase 3** | 주문 승인 플로우 — "BTC 0.01 매수해줘 → 승인 → 실행" |
 | ✅ | **Phase 4** | 좋은 시그널 알림, 프로액티브 투자 비서 |
 | ✅ | **Phase 5** | 사용자 여정, member_joined 환영 |
 | ✅ | **오퍼레이션** | RULES.yaml v1.4.0, progress·market_state 룰북 |
-| ✅ | **에이전트** | Telegram·Slack, HL·Polymarket 주문 |
-| 🔜 | **시그널 모델** | AI 시그널 모델 → 시그널 LLM 토큰 기반 서비스 |
+| ✅ | **에이전트** | Telegram 자체(선택 A) + OpenClaw 스킬(선택 B) + 턴키(선택 D), HL·PM 주문 |
+| ✅ | **턴키** | turnkey/ Railway 원클릭 경량 봇 |
+| 🔜 | **시그널 LLM v3.0** | 시그널 상태 → LLM 인사이트 API (`/llm/opportunities`) — API 존재, v3.0 토큰 레이어 예정 |
+| 🔜 | **시그널 엔진 + LLM 통합** | State Engine + Signal LLM = 통합 서비스 |
 | 🔜 | **백테스트** | progress 구간별 수익률 검증·리포트 공개 |
 
 ---

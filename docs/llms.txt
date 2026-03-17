@@ -7,7 +7,7 @@ Use this file to discover available pages before exploring further.
 ## Documentation
 
 - README.md — Project overview, Story, Quick Start, Achievements, **서비스 뒷단 구조(핵심 파이프라인)**
-- docs/quickstart.md — 3-step guide, Telegram/Slack setup, usage
+- docs/quickstart.md — 3-step guide, Telegram 권장·Slack 보조, usage
 - docs/api-guide.md — **Public API (실제 사용 가능)**: GET /signals, /strategy, POST /signals/push — api.decker-ai.com 호출
 - docs/architecture.md — **서비스 뒷단 구조**, 핵심 파이프라인 (Market Data→Label→State→Signal→LLM Reasoner)
 - docs/roadmap.md — Completed, in progress, planned

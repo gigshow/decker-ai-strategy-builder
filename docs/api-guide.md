@@ -8,6 +8,8 @@ Base URL: `https://api.decker-ai.com`
 
 **인증**: 아래 엔드포인트는 인증 불필요 (공개 API). POST /signals/push 포함.
 
+> **베타**: API·에이전트는 베타 테스트 중. 한도·과금 미적용. 시그널·전략·룰북 모델만 제공.
+
 ---
 
 ## 비용 구분
@@ -15,7 +17,7 @@ Base URL: `https://api.decker-ai.com`
 | 구간 | 설명 |
 |------|------|
 | **룰북 기반** | /state, /strategy, /llm/opportunities — LLM 미사용, **AI 토큰 비용 없음** |
-| **호출 수·서버** | 정책은 별도. (Free 500/월 등 예정) |
+| **호출 수·티어** | Free 500/월, Pro 10k, Trader 50k, API 무제한 (베타: 미적용) |
 
 ---
 
@@ -61,6 +63,52 @@ curl -X POST "https://api.decker-ai.com/api/v1/signals/push" \
 | GET | /api/v1/market/prices?symbols=BTCUSDT,ETHUSDT | 실시간 시세 |
 | GET | /api/v1/judgment/compare?symbols=BTCUSDT,ETHUSDT&timeframe=1h | 다중 자산 비교 |
 | GET | /api/v1/judgment/market-status?interval=24h | 시장 상태 (바이낸스 청산, HL 펀딩) |
+| GET | /api/v1/llm/opportunities?symbol=BTC&minConfidence=0.6&limit=5 | LLM용 인사이트 피드 (conviction, progress_pct, strategy) |
+
+---
+
+## LLM 인사이트 API (v3.0 시그널 LLM)
+
+```
+GET /api/v1/llm/opportunities?symbol=BTC&minConfidence=0.6&limit=5
+```
+
+**용도**: 에이전트·대화형 서비스용. conviction, progress_pct, strategy 등 LLM에 넣기 좋은 JSON.
+
+**파라미터**
+
+| 파라미터 | 타입 | 설명 |
+|----------|------|------|
+| symbol | query | 종목 필터 (BTC, BTCUSDT 등, 생략 시 BTC·ETH·SOL) |
+| minConfidence | query | 최소 신뢰도 0~1 (선택) |
+| limit | query | 결과 수 1~50 (기본 10) |
+
+**응답 예시**
+
+```json
+{
+  "opportunities": [
+    {
+      "symbol": "BTCUSDT",
+      "timeframe": "4h",
+      "direction": "long",
+      "conviction": 0.72,
+      "risk_reward": 1.8,
+      "progress_pct": 66,
+      "status": "in_progress",
+      "strategy": "66% 진행. 30% 부분 익절 제안. 나머지는 목표까지 홀드.",
+      "entry_price": 96000,
+      "target_price": 100000,
+      "stop_loss": 92000,
+      "current_price": 98640,
+      "generated_at": "2025-03-17T10:00:00"
+    }
+  ],
+  "count": 1
+}
+```
+
+**비용**: 룰북 기반 (LLM 미사용) → AI 토큰 $0.
 
 ---
 
@@ -149,4 +197,7 @@ curl "https://api.decker-ai.com/api/v1/signals/BTCUSDT/state"
 
 # 공개 시그널
 curl "https://api.decker-ai.com/api/v1/judgment/signals/public?symbol=BTCUSDT&timeframe=1h"
+
+# LLM 인사이트 (에이전트·대화형)
+curl "https://api.decker-ai.com/api/v1/llm/opportunities?symbol=BTC&limit=5"
 ```

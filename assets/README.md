@@ -1,6 +1,6 @@
 # Decker AI Logo
 
-**DeckerClaw** — Decker와 가재(에이전트) 협업. 입양해서 자신의 에이전트에서 사용할 수 있습니다.
+**DeckerClaw** — Decker 자체 에이전트 모델 및 OpenClaw 생태계 협업. 입양해서 자신의 에이전트에서 사용할 수 있습니다.
 
 ## 공식 마스코트 (v1)
 
@@ -10,7 +10,7 @@
 |------|------|
 | `decker_claw_mascot_v1.png` | Telegram, 웹, API, 에이전트 프로필 |
 
-**컨셉**: Decker + Claw. 귀여운 가재 에이전트. DeckerClaw를 **입양**해서 자신의 트레이딩 에이전트에 붙여 쓸 수 있습니다. OpenClaw 오픈소스 기반.
+**컨셉**: Decker + Claw. 귀여운 가재 에이전트. DeckerClaw **입양** = (A) Telegram·웹 사용 (B) OpenClaw 스킬로 API 연동 (C) API 직접. Telegram은 Decker 자체 에이전트. OpenClaw 생태계와 협업.
 
 ## 클라이언트 아이콘 (DeckerClaw + progress_pct)
 
