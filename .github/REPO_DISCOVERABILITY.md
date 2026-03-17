@@ -3,6 +3,8 @@
 **목적**: Google·GitHub 검색에서 레포 발견 용이  
 **적용**: GitHub 웹 UI에서 수동 설정 (레포 → About → Edit)
 
+**지원 자산**: 암호화폐, 해외선물, 주식 (시세·시그널 제공 중, 향후 확장 예정)
+
 ---
 
 ## 1. About Description
@@ -12,13 +14,13 @@
 **권장 문구** (한 줄, 350자 이내):
 
 ```
-AI Market State Engine for crypto. progress_pct, signal, strategy. Bitcoin, Ethereum. Telegram bot, REST API. Trading signals, algorithmic trading.
+AI Market State Engine. Crypto, futures, stocks. progress_pct, signal, strategy. Bitcoin, Ethereum. Telegram bot, REST API. Trading signals, algorithmic trading.
 ```
 
 또는 (짧은 버전):
 
 ```
-AI crypto signal engine. Bitcoin, Ethereum. progress_pct, Telegram bot, API. Trading signals.
+AI signal engine. Crypto, futures, stocks. Bitcoin, Ethereum. progress_pct, Telegram bot, API.
 ```
 
 ---
@@ -37,18 +39,20 @@ AI crypto signal engine. Bitcoin, Ethereum. progress_pct, Telegram bot, API. Tra
 | 4 | bitcoin | 비트코인 |
 | 5 | ethereum | 이더리움 |
 | 6 | cryptocurrency | 암호화폐 |
-| 7 | telegram-bot | 텔레그램 봇 |
-| 8 | signal-engine | 시그널 엔진 |
-| 9 | algorithmic-trading | 알고리즘 트레이딩 |
-| 10 | trading-api | 트레이딩 API |
-| 11 | market-analysis | 시장 분석 |
-| 12 | python | Python 샘플 |
-| 13 | yaml | RULES.yaml |
-| 14 | trading-signals | 트레이딩 시그널 |
+| 7 | futures | 해외선물 |
+| 8 | stock-trading | 주식 |
+| 9 | telegram-bot | 텔레그램 봇 |
+| 10 | signal-engine | 시그널 엔진 |
+| 11 | algorithmic-trading | 알고리즘 트레이딩 |
+| 12 | trading-api | 트레이딩 API |
+| 13 | market-analysis | 시장 분석 |
+| 14 | python | Python 샘플 |
+| 15 | yaml | RULES.yaml |
+| 16 | trading-signals | 트레이딩 시그널 |
 
 **복사용** (쉼표 구분):
 ```
-ai-trading, crypto-signal, trading-bot, bitcoin, ethereum, cryptocurrency, telegram-bot, signal-engine, algorithmic-trading, trading-api, market-analysis, python, yaml, trading-signals
+ai-trading, crypto-signal, trading-bot, bitcoin, ethereum, cryptocurrency, futures, stock-trading, telegram-bot, signal-engine, algorithmic-trading, trading-api, market-analysis, python, yaml, trading-signals
 ```
 
 ---
@@ -69,6 +73,6 @@ ai-trading, crypto-signal, trading-bot, bitcoin, ethereum, cryptocurrency, teleg
 ## 5. 적용 체크리스트
 
 - [ ] About Description 설정
-- [ ] Topics 14개 추가
+- [ ] Topics 16개 추가 (crypto, futures, stocks 포함)
 - [ ] Website URL 확인
 - [ ] 1~2일 후 Google에서 "decker ai trading" 검색 테스트
