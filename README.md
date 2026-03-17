@@ -1,9 +1,15 @@
+<!--
+  Keywords: AI trading, crypto signal, Bitcoin, Ethereum, Telegram bot, trading API,
+  market state engine, progress_pct, algorithmic trading, cryptocurrency, trading bot
+-->
 <div align="center">
 
 # DECKER — AI Market State Engine
 
 **디지털 자산 시장 구조를 읽고, 시그널·진행도·전략을 하나로.**  
 *Signal Intelligence Engine for Digital Assets — not prediction, but state.*
+
+*AI trading · crypto signal · Bitcoin · Ethereum · Telegram bot · API*
 
 [![GitHub Stars](https://img.shields.io/github/stars/gigshow/decker-ai-strategy-builder?style=flat-square&color=DAA520)](https://github.com/gigshow/decker-ai-strategy-builder/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/gigshow/decker-ai-strategy-builder?style=flat-square)](https://github.com/gigshow/decker-ai-strategy-builder/network)
