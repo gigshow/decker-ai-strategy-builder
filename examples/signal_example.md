@@ -106,5 +106,5 @@ curl "https://api.decker-ai.com/api/v1/judgment/signals/public"
 
 - [Architecture](../docs/architecture.md) — 파이프라인·State Engine
 - [모델·알고리즘·성과](../docs/model.md) — 성과 지표
-- [Operation Rules](../operation_rules/RULES.yaml) — 17개 규칙
+- [Operation Rules](../operation_rules/RULES.yaml) — 21개 규칙
 - [API Guide](../docs/api-guide.md)

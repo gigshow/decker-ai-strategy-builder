@@ -17,7 +17,7 @@ flowchart LR
     end
 
     subgraph Strategy[전략]
-        OpRules[Operation Rules<br/>RULES.yaml<br/>17개 규칙]
+        OpRules[Operation Rules<br/>RULES.yaml<br/>21개 규칙]
         DSL[Strategy DSL<br/>사용자 정의 전략]
     end
 

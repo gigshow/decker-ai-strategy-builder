@@ -135,7 +135,7 @@ risk:
 
 | 구분 | RULES.yaml | Strategy DSL |
 |------|------------|--------------|
-| 용도 | 범용 규칙 (17개) | 사용자 정의 전략 |
+| 용도 | 범용 규칙 (21개) | 사용자 정의 전략 |
 | 조건 | progress_min, status, timeframe, risk_appetite | state, object, prime_stage, progress 범위 |
 | 매칭 | 첫 매칭 규칙 반환 | 전략별 독립 평가 |
 | LLM | 미사용 | 미사용 |

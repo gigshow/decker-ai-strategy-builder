@@ -277,5 +277,5 @@ A state swing → T signal touched → Target defined (+7%)
 - [시장 상태 이론](../concept/market_state_theory.md) — progress_pct 개념
 - [라벨링 알고리즘](../concept/labeling_algorithm.md) — 오브젝트·스윙·시그널
 - [모델·알고리즘·성과](model.md) — 알고리즘 스토리, 구조, 성과
-- [오퍼레이션 룰북](../operation_rules/RULES.yaml) — 17개 규칙
+- [오퍼레이션 룰북](../operation_rules/RULES.yaml) — 21개 규칙
 - [시그널 예시](../examples/signal_example.md) — progress_pct 계산 예시
