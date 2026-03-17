@@ -20,9 +20,17 @@
 
 ## 로컬 실행
 
+**API 연동 검증** (토큰 없이):
+
 ```bash
 cd turnkey
 pip install -r requirements.txt
+python verify_api.py
+```
+
+**Telegram 봇**:
+
+```bash
 export TELEGRAM_BOT_TOKEN=your_token
 export DECKER_API_URL=https://api.decker-ai.com  # 선택
 python bot.py

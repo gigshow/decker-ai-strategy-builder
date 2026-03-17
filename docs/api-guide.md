@@ -60,6 +60,7 @@ curl -X POST "https://api.decker-ai.com/api/v1/signals/push" \
 | GET | /api/v1/judgment/signals/public?symbol=BTCUSDT&timeframe=1h | 시그널 (direction, confidence, entry/target/stop) |
 | GET | /api/v1/signals/{symbol}/state | 종목별 시그널 상태 (progress_pct, status, risk_reward_ratio, market_state) |
 | GET | /api/v1/signals/{symbol}/strategy?timeframe=1h&risk_appetite=medium | 진행도 기반 전략 (오퍼레이션 룰북) |
+| GET | /api/v1/signals/{symbol}/consultation?timeframe=1h | 상의 응답 (rationale, choices) |
 | GET | /api/v1/market/prices?symbols=BTCUSDT,ETHUSDT | 실시간 시세 |
 | GET | /api/v1/judgment/compare?symbols=BTCUSDT,ETHUSDT&timeframe=1h | 다중 자산 비교 |
 | GET | /api/v1/judgment/market-status?interval=24h | 시장 상태 (바이낸스 청산, HL 펀딩) |
@@ -73,7 +74,7 @@ curl -X POST "https://api.decker-ai.com/api/v1/signals/push" \
 GET /api/v1/llm/opportunities?symbol=BTC&minConfidence=0.6&limit=5
 ```
 
-**용도**: 에이전트·대화형 서비스용. conviction, progress_pct, strategy 등 LLM에 넣기 좋은 JSON.
+**용도**: 에이전트·대화형 서비스용. conviction, progress_pct, strategy, **rationale**, **choices** (v3.0) 등 LLM에 넣기 좋은 JSON.
 
 **파라미터**
 
@@ -97,6 +98,12 @@ GET /api/v1/llm/opportunities?symbol=BTC&minConfidence=0.6&limit=5
       "progress_pct": 66,
       "status": "in_progress",
       "strategy": "66% 진행. 30% 부분 익절 제안. 나머지는 목표까지 홀드.",
+      "rationale": "진행도 66%, in_progress. 66% 진행. 30% 부분 익절 제안. 나머지는 목표까지 홀드.",
+      "choices": [
+        { "action": "hold", "description": "목표까지 홀드" },
+        { "action": "partial_take_profit", "pct": 30, "description": "30% 부분 익절" },
+        { "action": "full_close", "description": "전량 청산" }
+      ],
       "entry_price": 96000,
       "target_price": 100000,
       "stop_loss": 92000,
@@ -109,6 +116,35 @@ GET /api/v1/llm/opportunities?symbol=BTC&minConfidence=0.6&limit=5
 ```
 
 **비용**: 룰북 기반 (LLM 미사용) → AI 토큰 $0.
+
+---
+
+## 상의 API (Phase 3)
+
+```
+GET /api/v1/signals/{symbol}/consultation?timeframe=1h&risk_appetite=medium
+```
+
+**용도**: "이 시그널 지금 어떻게 할까?" — rationale, confidence, choices (선택지 버튼용).
+
+**응답 예시**
+
+```json
+{
+  "symbol": "BTCUSDT",
+  "timeframe": "1h",
+  "rationale": "진행도 66%, in_progress. 66% 진행. 30% 부분 익절 제안. 나머지는 목표까지 홀드.",
+  "confidence": 0.72,
+  "strategy": "66% 진행. 30% 부분 익절 제안. 나머지는 목표까지 홀드.",
+  "progress_pct": 66,
+  "status": "in_progress",
+  "choices": [
+    { "action": "hold", "description": "목표까지 홀드" },
+    { "action": "partial_take_profit", "pct": 30, "description": "30% 부분 익절" },
+    { "action": "full_close", "description": "전량 청산" }
+  ]
+}
+```
 
 ---
 
