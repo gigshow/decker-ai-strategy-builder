@@ -5,46 +5,72 @@
 -->
 <div align="center">
 
-# DECKER — AI Market State Engine
+<img src="assets/decker_claw_mascot_v1.png" width="80" alt="DeckerClaw" />
 
-**디지털 자산 시장 구조를 읽고, 시그널·진행도·전략을 하나로.**  
-*Signal Intelligence Engine for Digital Assets — not prediction, but state.*
+# Decker AI Strategy Builder
+
+**A deterministic signal lifecycle engine for crypto, futures, and stocks.**  
+*Measure progress. Apply rules. No prediction.*
 
 *AI trading · crypto · futures · stocks · Bitcoin · Ethereum · Telegram bot · API*
 
 [![GitHub Stars](https://img.shields.io/github/stars/gigshow/decker-ai-strategy-builder?style=flat-square&color=DAA520)](https://github.com/gigshow/decker-ai-strategy-builder/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/gigshow/decker-ai-strategy-builder?style=flat-square)](https://github.com/gigshow/decker-ai-strategy-builder/network)
 [![월 성과](https://img.shields.io/badge/월성과_횡보장-20~30%25-brightgreen?style=flat-square)](docs/signal-performance.md)
-[![Telegram](https://img.shields.io/badge/Telegram-Bot-26A5E4?style=flat-square&logo=telegram&logoColor=white)](https://t.me/deckerclawbot)
+[![Telegram](https://img.shields.io/badge/Telegram-DeckerClaw-26A5E4?style=flat-square&logo=telegram&logoColor=white)](https://t.me/deckerclawbot)
 [![API Docs](https://img.shields.io/badge/API-Docs-00C853?style=flat-square)](https://api.decker-ai.com/docs)
 [![Website](https://img.shields.io/badge/Website-decker--ai.com-6C47FF?style=flat-square)](https://decker-ai.com)
 
-[🌐 Website](https://decker-ai.com) · [🤖 Telegram Bot](https://t.me/deckerclawbot) · [📖 API Docs](https://api.decker-ai.com/docs) · [🚀 Quick Start](docs/quickstart.md) · [📊 Signal Performance](docs/signal-performance.md) · [🛡 Risk Management](docs/risk-management.md) · [🗺 Roadmap](docs/roadmap.md)
+[🌐 Website](https://decker-ai.com) · [🤖 Telegram (DeckerClaw)](https://t.me/deckerclawbot) · [📖 API Docs](https://api.decker-ai.com/docs) · [🚀 Quick Start](docs/quickstart.md) · [📊 Signal Performance](docs/signal-performance.md) · [🛡 Risk Management](docs/risk-management.md) · [🗺 Roadmap](docs/roadmap.md)
 
 </div>
 
 ---
 
-## ⚡ Overview
+## ⚡ Try It Now
 
-**DECKER**는 가격·시간 시계열에서 시장 구조(Object, Swing)를 분석하고, **진행도(progress_pct)**와 **상태(status)**를 결정론적으로 계산하여 고정밀 거래 시그널을 생성하는 **AI 마켓 스테이트 엔진**입니다.
+| Time | Path | What |
+|------|------|------|
+| **30 sec** | API | `curl -s "https://api.decker-ai.com/api/v1/signals/BTCUSDT/state"` |
+| **3 min** | Samples | `./samples/signal-push-strategy.sh BTCUSDT 96000 100000 92000` |
+| **5 min** | Telegram | [@deckerclawbot](https://t.me/deckerclawbot) — "비트코인 시그널 알려줘" |
+
+**Decker AI Strategy Builder**는 시그널의 **진행도(progress_pct)**를 계산하고, YAML 룰북으로 전략을 반환합니다. LLM 없이 동작합니다.
+
+> **DeckerClaw** — Decker와 협업하는 가재 에이전트. DeckerClaw를 **입양**해서 자신의 트레이딩 에이전트에서 사용할 수 있습니다.
+
+---
+
+## 🎯 Overview
+
+**Decker AI**는 가격·시간 시계열에서 시장 구조(Object, Swing)를 분석하고, **진행도(progress_pct)**와 **상태(status)**를 결정론적으로 계산하여 고정밀 거래 시그널을 생성하는 **AI 마켓 스테이트 엔진**입니다.
 
 > **You say:** "비트코인 시그널 알려줘" / "이 시그널 지금 어떻게 할까?" / "ETH 0.01 매수해줘"
 >
-> **DECKER returns:** 시그널·진행도(progress_pct)·전략·주문 실행 — 말만 하면
+> **DeckerClaw returns:** 시그널·진행도(progress_pct)·전략·주문 실행 — 말만 하면
 
-LLM은 가격을 예측하지 않습니다. DECKER는 시장 구조를 **계산**합니다.
+LLM은 가격을 예측하지 않습니다. Decker AI는 시장 구조를 **계산**합니다.
 
 ---
 
 ## 🎯 State Engine, not LLM
 
-| 구분 | 일반 AI 트레이딩 | DECKER |
-|------|------------------|--------|
+| 구분 | 일반 AI 트레이딩 | Decker AI |
+|------|------------------|-----------|
 | 시그널 생성 | LLM/ML 가격 예측 | **시장 상태 엔진** |
 | 핵심 출력 | "매수/매도" | progress_pct, status, 전략 |
 | LLM 역할 | 예측·판단 | **인터페이스·설명** |
 | 토큰 비용 | 시그널마다 호출 | **룰북 경로 $0** |
+
+---
+
+## 📌 3 Scenarios
+
+| Scenario | Decker AI Strategy Builder |
+|----------|----------------------------|
+| **Range-bound** | progress_pct가 각 스윙을 독립 추적. 횡보장에서도 20~30% 월 성과 |
+| **Trend** | 목표 도달 속도 ↑, Win Rate 70%+ |
+| **Reversal** | Target-first 철학. 실패한 롱 = 다음 숏 시그널 정보 |
 
 ---
 
@@ -56,7 +82,7 @@ LLM은 가격을 예측하지 않습니다. DECKER는 시장 구조를 **계산*
 2. **Signal fetch** — judgment_signals + 실시간 현재가 조회
 3. **State Engine** — progress_pct, status 결정론적 계산
 4. **Operation Rules** — RULES.yaml 매칭 → 전략 반환 (LLM 없이)
-5. **You get** — "66% 진행. 30% 부분 익절 제안. 나머지는 목표까지 홀드."
+5. **You get** — "66% 진행. 30% 부분 익절 제안. 나머지는 목표까지 홀드." (DeckerClaw가 자연어로 전달)
 
 ---
 
@@ -64,7 +90,7 @@ LLM은 가격을 예측하지 않습니다. DECKER는 시장 구조를 **계산*
 
 대부분의 전략은 `signal → entry` 순서로, **목표 없이 진입**합니다.
 
-DECKER는 **`target → signal → entry`** 순서입니다.
+Decker AI는 **`target → signal → entry`** 순서입니다.
 
 | 원칙 | 설명 |
 |------|------|
@@ -80,7 +106,7 @@ DECKER는 **`target → signal → entry`** 순서입니다.
 
 ## 📐 What is progress_pct?
 
-시그널은 생성(0%)부터 목표 도달(100%)까지 **수명 주기**를 가집니다. DECKER는 이 진행도를 실시간으로 계산합니다.
+시그널은 생성(0%)부터 목표 도달(100%)까지 **수명 주기**를 가집니다. Decker AI는 이 진행도를 실시간으로 계산합니다.
 
 **공식:**
 
@@ -95,7 +121,7 @@ DECKER는 **`target → signal → entry`** 순서입니다.
 | 90–100% | 목표 직전 | 청산 준비 |
 
 > 경쟁사 시그널: **BUY / SELL** 이진값만 제공  
-> DECKER: **BUY + progress 67%** = "기회는 있지만 타이밍 주의"
+> Decker AI: **BUY + progress 67%** = "기회는 있지만 타이밍 주의"
 
 상세: [시장 상태 이론](concept/market_state_theory.md) · [Architecture](docs/architecture.md)
 
@@ -139,7 +165,7 @@ A state swing → T signal touched → Target defined (+7%)
 |------|------|
 | **Labeling Algorithm** | 시계열 → 오브젝트(대상) 평가, 스윙(A/B/C) 분석 |
 | **State Engine** | 시그널 + 현재가 → progress_pct, status |
-| **Operation Rules** | RULES.yaml 17개 규칙 매칭 → 전략 반환 |
+| **Operation Rules** | RULES.yaml 룰북 매칭 → 전략 반환 |
 | **LLM Reasoner** | 결과를 자연어로 설명 (선택) |
 
 상세: [Architecture](docs/architecture.md)
@@ -148,18 +174,19 @@ A state swing → T signal touched → Target defined (+7%)
 
 ## 🚀 Quick Start
 
-| 필요한 것 | 설명 |
-|-----------|------|
-| 계정 | [decker-ai.com](https://decker-ai.com) 무료 가입 |
-| Telegram | [@deckerclawbot](https://t.me/deckerclawbot) |
+| Time | Path | Command / Action |
+|------|------|------------------|
+| **30 sec** | API | `curl -s "https://api.decker-ai.com/api/v1/signals/BTCUSDT/state"` |
+| **3 min** | Samples | `./samples/signal-push-strategy.sh BTCUSDT 96000 100000 92000` |
+| **10 min** | Telegram | [decker-ai.com](https://decker-ai.com) 가입 → [DeckerClaw](https://t.me/deckerclawbot) 연동 → "비트코인 시그널 알려줘" |
 
-**3단계로 시작:**
+**Telegram (DeckerClaw):**
 
-1. **가입** — [decker-ai.com](https://decker-ai.com) 회원가입 (무료)
-2. **연동** — [decker-link-telegram](https://decker-ai.com/decker-link-telegram)에서 코드 발급 → [@deckerclawbot](https://t.me/deckerclawbot)에 `/start {코드}`
-3. **사용** — "비트코인 시그널 알려줘", "포지션 보여줘", "ETH 0.01 매수해줘" 등 **말만 하면** 됩니다.
+1. [decker-ai.com](https://decker-ai.com) 회원가입 (무료)
+2. [decker-link-telegram](https://decker-ai.com/decker-link-telegram)에서 코드 발급 → [@deckerclawbot](https://t.me/deckerclawbot)에 `/start {코드}`
+3. "비트코인 시그널 알려줘", "포지션 보여줘", "ETH 0.01 매수해줘" — **말만 하면** 됩니다.
 
-**[🤖 지금 Telegram에서 체험하기](https://t.me/deckerclawbot)**
+**[🤖 DeckerClaw 체험하기](https://t.me/deckerclawbot)**
 
 ---
 
@@ -173,12 +200,14 @@ A state swing → T signal touched → Target defined (+7%)
 | [API Guide](docs/api-guide.md) | 공개 API (개발자·연동용) |
 | [Strategy DSL](docs/strategy-dsl.md) | YAML 전략 사양 |
 | [Roadmap](docs/roadmap.md) | 로드맵 |
-| [Operation Rules](operation_rules/RULES.yaml) | 오퍼레이션 룰북 (17개 규칙) |
+| [Operation Rules](operation_rules/RULES.yaml) | 오퍼레이션 룰북 |
+| [Brand Guide](docs/BRAND_GUIDE.md) | 네이밍·표현 규칙 |
 | [Signal LLM 개념](concept/signal_llm_concept.md) | State Engine, 시장 상태, 라벨링 |
 | [시장 상태 이론](concept/market_state_theory.md) | progress_pct 개념 |
 | [라벨링 알고리즘](concept/labeling_algorithm.md) | 오브젝트·스윙·시그널 발생 |
 | [시그널 예시](examples/signal_example.md) | 시그널→state→strategy 예시 |
 | [Samples](samples/README.md) | API 연동 예제 (개발자용) |
+| [Article Series (1~8)](docs/medium/README.md) | Medium 연재 아티클 (State Engine, progress_pct, YAML, API) |
 
 ---
 
@@ -190,7 +219,7 @@ A state swing → T signal touched → Target defined (+7%)
 | ✅ | **Phase 3** | 주문 승인 플로우 — "BTC 0.01 매수해줘 → 승인 → 실행" |
 | ✅ | **Phase 4** | 좋은 시그널 알림, 프로액티브 투자 비서 |
 | ✅ | **Phase 5** | 사용자 여정, member_joined 환영 |
-| ✅ | **오퍼레이션** | RULES.yaml v1.3.0, progress 33~95 규칙 17개 |
+| ✅ | **오퍼레이션** | RULES.yaml v1.4.0, progress·market_state 룰북 |
 | ✅ | **에이전트** | Telegram·Slack, HL·Polymarket 주문 |
 | 🔜 | **시그널 모델** | AI 시그널 모델 → 시그널 LLM 토큰 기반 서비스 |
 | 🔜 | **백테스트** | progress 구간별 수익률 검증·리포트 공개 |

@@ -1,17 +1,17 @@
-# Decker Architecture
+# Decker AI Architecture
 
-**AI Market State Engine — 시장 구조 기반 시그널 인텔리전스**
+**Decker AI Strategy Builder — 시장 구조 기반 시그널 인텔리전스**
 
 ---
 
 ## State Engine, not LLM
 
-DECKER는 LLM이 가격을 예측하는 서비스가 아닙니다.
+Decker AI는 LLM이 가격을 예측하는 서비스가 아닙니다.
 
-시계열 데이터에서 시장 구조(Object, Swing)를 분석하고, 진행도(progress_pct)와 상태(status)를 **결정론적으로 계산**하는 엔진입니다. LLM은 그 결과를 자연어로 전달하는 인터페이스입니다.
+시계열 데이터에서 시장 구조(Object, Swing)를 분석하고, 진행도(progress_pct)와 상태(status)를 **결정론적으로 계산**하는 엔진입니다. LLM은 그 결과를 자연어로 전달하는 인터페이스(DeckerClaw)입니다.
 
-| 구분 | 일반 AI 트레이딩 | DECKER |
-|------|------------------|--------|
+| 구분 | 일반 AI 트레이딩 | Decker AI |
+|------|------------------|-----------|
 | 시그널 생성 | LLM/ML 가격 예측 | **시장 상태 엔진** |
 | 핵심 출력 | "매수/매도" | progress_pct, status, 전략 |
 | LLM 역할 | 예측·판단 | **인터페이스·설명** |
@@ -23,7 +23,7 @@ DECKER는 LLM이 가격을 예측하는 서비스가 아닙니다.
 
 대부분의 전략은 `signal → entry` 순서입니다.
 
-DECKER는 **`target → signal → entry`** 순서입니다.
+Decker AI는 **`target → signal → entry`** 순서입니다.
 
 - 목표가 없는 진입은 유효하지 않습니다.
 - 시그널 없는 움직임은 무시합니다.
@@ -93,7 +93,7 @@ Market State → Signal Touch → Target Formation
 
 **시그널 소스**: `judgment_signals` 테이블. REST 푸시(`POST /signals/push`), GitHub, CQS 등에서 수집된 시그널이 저장됩니다.
 
-**라벨링 알고리즘**: 시그널 품질·생성의 **이론적 기반**입니다. 외부 시그널 제공자가 DPDP/라벨링 기반으로 생성한 시그널을 푸시할 수 있으며, DECKER는 수신된 시그널에 대해 State Engine(progress_pct, status)을 적용합니다.
+**라벨링 알고리즘**: 시그널 품질·생성의 **이론적 기반**입니다. 외부 시그널 제공자가 DPDP/라벨링 기반으로 생성한 시그널을 푸시할 수 있으며, Decker AI는 수신된 시그널에 대해 State Engine(progress_pct, status)을 적용합니다.
 
 ---
 
@@ -161,7 +161,7 @@ Market State → Signal Touch → Target Formation
 
 기존 봇은 "상승/하락/횡보" 같은 **현재 상태**만 알려줍니다.
 
-DECKER는 해당 상태가 **몇 % 진행되었는지**까지 계산합니다. 이 정보가 진입/청산 타이밍 결정에 직접 사용됩니다.
+Decker AI는 해당 상태가 **몇 % 진행되었는지**까지 계산합니다. 이 정보가 진입/청산 타이밍 결정에 직접 사용됩니다.
 
 ---
 

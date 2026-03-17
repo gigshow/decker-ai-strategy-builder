@@ -1,6 +1,6 @@
-# Decker API Guide
+# Decker AI API Guide
 
-**API 연동·개발자용.** 서비스 사용자 관점에서는 덱커가 시그널·시세·전략을 하나로 제공합니다.
+**API 연동·개발자용.** Decker AI Strategy Builder는 시그널·시세·전략을 하나로 제공합니다.
 
 Base URL: `https://api.decker-ai.com`  
 경로 prefix: `/api/v1/` (예: `/api/v1/signals/BTCUSDT/state`)  

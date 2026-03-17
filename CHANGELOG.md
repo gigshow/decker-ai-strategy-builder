@@ -4,6 +4,22 @@ All notable changes to the Decker AI Strategy Builder are documented in this fil
 
 ---
 
+## [v1.4.1] - 2025-03-17
+
+### Added
+
+- **Article Series (1~8)**: Medium 연재 아티클 (State Engine, Signal Lifecycle, YAML, API, Backtest, State Machines, $0 LLM Cost)
+- **DeckerClaw 클라이언트 아이콘**: `decker_client_claw_progress`, `_ring`, `_bar` (progress_pct 표현)
+- **BRAND_GUIDE.md**: 네이밍·표현 규칙, DeckerClaw 포지셔닝
+- **assets/**: DeckerClaw 마스코트, 클라이언트 아이콘, 로고
+
+### Changed
+
+- README: Article Series 링크, Try It Now 테이블 컬럼 정리 (Time|Path|What)
+- MiroFish 레포 콘텐츠 흡수 (랜딩·퀵스타트·배지·아티클)
+
+---
+
 ## [v1.4.0] - 2025-03-17
 
 ### Added

@@ -14,13 +14,13 @@
 **권장 문구** (한 줄, 350자 이내):
 
 ```
-AI Market State Engine. Crypto, futures, stocks. progress_pct, signal, strategy. Bitcoin, Ethereum. Telegram bot, REST API. Trading signals, algorithmic trading.
+Decker AI Strategy Builder — deterministic signal lifecycle engine. Crypto, futures, stocks. progress_pct, Telegram (DeckerClaw), REST API. No prediction.
 ```
 
 또는 (짧은 버전):
 
 ```
-AI signal engine. Crypto, futures, stocks. Bitcoin, Ethereum. progress_pct, Telegram bot, API.
+Decker AI Strategy Builder. Signal lifecycle engine. Crypto, futures, stocks. progress_pct, DeckerClaw, API.
 ```
 
 ---

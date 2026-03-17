@@ -29,5 +29,5 @@
 
 ## 문의
 
-- [Telegram @deckerclawbot](https://t.me/deckerclawbot)
+- [Telegram DeckerClaw @deckerclawbot](https://t.me/deckerclawbot)
 - [decker-ai.com](https://decker-ai.com)
