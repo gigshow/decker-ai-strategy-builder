@@ -277,7 +277,7 @@ To implement this in your own system, you need:
 
 That's it. Four steps. No ML pipeline. No new model. No training data.
 
-The full utility is [open source](https://github.com/gigshow/decker-ai-strategy-builder/blob/main/utils/tf_alignment_utils.py).
+The utility is [open source](https://github.com/gigshow/decker-ai-strategy-builder/blob/main/utils/tf_alignment_utils.py) in the repo.
 
 ---
 

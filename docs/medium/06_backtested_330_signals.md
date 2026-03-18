@@ -92,7 +92,7 @@ The implication? **You should be more aggressive when progress is high, not less
 
 ---
 
-## Finding #3: Drawdown Stays Controlled in the Public Summary
+## Finding #4: Drawdown Stays Controlled in the Public Summary
 
 | Metric | Value |
 |--------|-------|
@@ -120,7 +120,7 @@ The lifecycle approach turns a -2% worst case into a -0.62% worst case. Across h
 
 ---
 
-## Finding #4: Early Progress Is a Different Risk Zone
+## Finding #5: Early Progress Is a Different Risk Zone
 
 Not all progress ranges are equal. The public rulebook is cautious in the earliest range:
 

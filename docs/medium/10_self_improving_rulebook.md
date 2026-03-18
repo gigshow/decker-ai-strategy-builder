@@ -308,4 +308,4 @@ That's what Decker's feedback loop is. Not AI replacing judgment. **Data sharpen
 
 ---
 
-*The full signal schema, rules format, and Python utilities are available in the [Decker AI Strategy Builder repo](https://github.com/gigshow/decker-ai-strategy-builder). Trade outcome collection is part of the core pipeline.*
+*The signal schema, RULES format, and rule structure are open source in the [Decker AI Strategy Builder repo](https://github.com/gigshow/decker-ai-strategy-builder). The trade outcome collector and aggregator are part of the core pipeline; the concept and schema are documented in [strategy-dsl](https://github.com/gigshow/decker-ai-strategy-builder/blob/main/docs/strategy-dsl.md) and this article.*

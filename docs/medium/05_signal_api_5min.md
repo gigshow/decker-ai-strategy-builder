@@ -101,9 +101,11 @@ Response:
 {
   "symbol": "BTCUSDT",
   "timeframe": "4h",
-  "strategy": "66% progress. Consider partial profit-taking based on the rulebook."
+  "strategy": "4h timeframe, 66%. Take 40% partial profit. Hold rest to target."
 }
 ```
+
+The exact text comes from the rulebook — timeframe-specific rules (e.g. 4h vs 1h) return different partial percentages.
 
 **In a short setup flow**, you went from a trade idea to a strategy recommendation with progress tracking and risk metrics.
 
