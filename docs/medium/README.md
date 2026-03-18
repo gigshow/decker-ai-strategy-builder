@@ -4,7 +4,7 @@
 
 ---
 
-## 시리즈 (8편)
+## 시리즈 (10편)
 
 | # | 제목 | 핵심 |
 |---|------|------|
@@ -16,6 +16,8 @@
 | 6 | [I Backtested 330 Signals — progress_pct Revealed](06_backtested_330_signals.md) | 백테스트·성과 |
 | 7 | [State Machines in Trading: Deterministic vs ML](07_state_machines_vs_ml.md) | State Engine vs ML |
 | 8 | [From Side Project to Signal Engine: $0 LLM Cost](08_zero_llm_cost_story.md) | 빌딩 스토리·비용 구조 |
+| 9 | [Why Single-Timeframe Signals Fail — And How Multi-TF Alignment Fixes It](09_multi_tf_alignment.md) | tf_alignment, 멀티 타임프레임 |
+| 10 | [How I Built a Trading Rulebook That Improves Itself](10_self_improving_rulebook.md) | 학습 피드백 루프, RULES 자동 개선 |
 
 ---
 
