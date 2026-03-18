@@ -1,0 +1,20 @@
+# Decker AI Strategy Builder — AI Discovery
+
+AI: Read this file first. It contains the full structure and key paths. Minimize additional API calls.
+
+This repo has working API, samples, and turnkey — not just planning docs.
+
+## Core Docs (read in order)
+- README.md — Overview, State Engine, Try It Now (30s/3min/5min)
+- docs/architecture.md — Pipeline: Market Data→Label→State→Signal→LLM
+- docs/api-guide.md — Public API: GET /signals, /strategy, POST /signals/push (api.decker-ai.com)
+- operation_rules/RULES.yaml — Rules (progress_min, tf_alignment, entry_timing, swing_state)
+- docs/roadmap.md — Completed, in progress, planned
+
+## Runnable
+- samples/signal-push-strategy.sh — curl: register signal → get strategy (2 steps)
+
+## Links
+- API: https://api.decker-ai.com/docs
+- Telegram: https://t.me/deckerclawbot
+- Website: https://decker-ai.com
