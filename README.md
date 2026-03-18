@@ -44,7 +44,7 @@
 
 ## 🎯 Overview
 
-**Decker AI**는 가격·시간 시계열에서 시장 구조(Object, Swing)를 분석하고, **진행도(progress_pct)**와 **상태(status)**를 결정론적으로 계산하여 고정밀 거래 시그널을 생성하는 **AI 마켓 스테이트 엔진**입니다.
+**Decker AI**는 가격·시간 시계열에서 시장 구조(Object, Swing)를 분석하고, **진행도(progress_pct)**와 **상태(status)**를 결정론적으로 계산하여 고정밀 거래 시그널을 생성하는 **AI 마켓 스테이트 엔진**입니다. **Harness 목표**: AI 시장 이해 + 사용자 상의 + 최적 실행 (시장=게임).
 
 > **You say:** "비트코인 시그널 알려줘" / "이 시그널 지금 어떻게 할까?" / "ETH 0.01 매수해줘"
 >
@@ -228,7 +228,7 @@ Decker는 OpenClaw 생태계에 스킬로 참여합니다. OpenClaw 사용자는
 | [라벨링 알고리즘](concept/labeling_algorithm.md) | 오브젝트·스윙·시그널 발생 |
 | [시그널 예시](examples/signal_example.md) | 시그널→state→strategy 예시 |
 | [Samples](samples/README.md) | API 연동 예제 (개발자용) |
-| [Article Series (1~8)](docs/medium/README.md) | Medium 연재 아티클 (State Engine, progress_pct, YAML, API) |
+| [Article Series (1~10)](docs/medium/README.md) | Medium 연재 아티클 (State Engine, progress_pct, YAML, API, Multi-TF, Rulebook) |
 
 ---
 
@@ -243,8 +243,8 @@ Decker는 OpenClaw 생태계에 스킬로 참여합니다. OpenClaw 사용자는
 | ✅ | **오퍼레이션** | RULES.yaml v1.4.0, progress·market_state 룰북 |
 | ✅ | **에이전트** | Telegram 자체(선택 A) + OpenClaw 스킬(선택 B) + 턴키(선택 D), HL·PM 주문 |
 | ✅ | **턴키** | turnkey/ Railway 원클릭 경량 봇 |
-| 🔜 | **시그널 LLM v3.0** | 시그널 상태 → LLM 인사이트 API (`/llm/opportunities`) — API 존재, v3.0 토큰 레이어 예정 |
-| 🔜 | **시그널 엔진 + LLM 통합** | State Engine + Signal LLM = 통합 서비스 |
+| ✅ | **시그널 LLM v3.0** | rationale·choices·tf_alignment·entry_timing (`/llm/opportunities`, `/consultation`) |
+| ✅ | **시그널 엔진 + LLM 통합** | State Engine + Signal LLM = 통합 서비스 (Telegram + API + 스킬) |
 | 🔜 | **백테스트** | progress 구간별 수익률 검증·리포트 공개 |
 
 ---

@@ -86,7 +86,7 @@ curl -X POST "https://api.decker-ai.com/api/v1/signals/push" \
 GET /api/v1/llm/opportunities?symbol=BTC&minConfidence=0.6&limit=5
 ```
 
-**용도**: 에이전트·대화형 서비스용. conviction, progress_pct, strategy, **rationale**, **choices** (v3.0) 등 LLM에 넣기 좋은 JSON.
+**용도**: 에이전트·대화형 서비스용. conviction, progress_pct, strategy, **rationale**, **choices** (v3.0), **tf_alignment**, **entry_timing** 등 LLM에 넣기 좋은 JSON.
 
 **파라미터**
 
@@ -110,12 +110,14 @@ GET /api/v1/llm/opportunities?symbol=BTC&minConfidence=0.6&limit=5
       "progress_pct": 66,
       "status": "in_progress",
       "strategy": "66% 진행. 30% 부분 익절 제안. 나머지는 목표까지 홀드.",
-      "rationale": "진행도 66%, in_progress. 66% 진행. 30% 부분 익절 제안. 나머지는 목표까지 홀드.",
+      "rationale": "진행도 66%, in_progress. [전 TF 정렬 추세] [2프라임 브레이크] 66% 진행. 30% 부분 익절 제안.",
       "choices": [
         { "action": "hold", "description": "목표까지 홀드" },
         { "action": "partial_take_profit", "pct": 30, "description": "30% 부분 익절" },
         { "action": "full_close", "description": "전량 청산" }
       ],
+      "tf_alignment": "fully_aligned",
+      "entry_timing": "signal",
       "entry_price": 96000,
       "target_price": 100000,
       "stop_loss": 92000,
@@ -126,6 +128,8 @@ GET /api/v1/llm/opportunities?symbol=BTC&minConfidence=0.6&limit=5
   "count": 1
 }
 ```
+
+**추가 필드 (v3.0)**: `tf_alignment` (fully_aligned|lower_aligned|counter_trend|transition|mixed), `entry_timing` (predictive|signal|confirmation). rationale에 한국어 레이블 포함.
 
 **비용**: 룰북 기반 (LLM 미사용) → AI 토큰 $0.
 
@@ -145,7 +149,9 @@ GET /api/v1/signals/{symbol}/consultation?timeframe=1h&risk_appetite=medium
 {
   "symbol": "BTCUSDT",
   "timeframe": "1h",
-  "rationale": "진행도 66%, in_progress. 66% 진행. 30% 부분 익절 제안. 나머지는 목표까지 홀드.",
+  "rationale": "진행도 66%, in_progress. [전 TF 정렬 추세] [2프라임 브레이크] 66% 진행. 30% 부분 익절 제안.",
+  "tf_alignment": "fully_aligned",
+  "entry_timing": "signal",
   "confidence": 0.72,
   "strategy": "66% 진행. 30% 부분 익절 제안. 나머지는 목표까지 홀드.",
   "progress_pct": 66,

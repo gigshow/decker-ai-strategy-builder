@@ -38,6 +38,12 @@ Market State → Signal Touch → Target Formation
 
 ---
 
+## 시그널 에이전트 harness
+
+> **시그널 에이전트 harness** = State Engine + RULES + SKILL 내장. progress_pct·룰북 기반 판단. LLM 없이 동작 가능 (룰북 경로 $0).
+
+---
+
 ## 에이전트 레이어 — 선택에 따른 분기
 
 사용자가 **에이전트 모델을 선택**하면, 제공되는 아키텍처가 달라집니다.

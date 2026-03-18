@@ -28,6 +28,8 @@
 | Telegram | @deckerclawbot, decker-link-telegram (자체 에이전트) |
 | Hyperliquid·Polymarket | HL·PM 주문 |
 | OpenClaw 스킬 | SKILL.md 공개, web_fetch → Decker API |
+| R3 시그널 LLM v3.0 | rationale·choices·tf_alignment·entry_timing (룰북 경로 $0) |
+| R4 엔진+LLM 통합 | ChatJudgmentService, consultation, /llm/opportunities |
 
 ---
 
@@ -45,8 +47,8 @@
 | 항목 | 내용 |
 |------|------|
 | CoinGecko OHLC·GeckoTerminal | 시세 보조 연동 (선택, Demo 한도 내) — 분석: docs/CoinGecko_vs_Decker_분석_20250317.md |
-| 시그널 LLM v3.0 | 시그널 상태 → LLM 인사이트·설명 API (`/llm/opportunities`) |
-| 시그널 엔진 + LLM 앱 통합 | State Engine + Signal LLM = 통합 서비스 (Telegram + API + 스킬) |
+| 시그널 LLM v3.0 토큰 레이어 | (선택) 시그널 → LLM 호출 → 자연어 맥락. 현재 룰북 rationale로 대체 |
+| 시그널 엔진 + LLM 앱 통합 | ✅ State Engine + Signal LLM = 통합 서비스 (Telegram + API + 스킬) |
 | Slack | 사용법 확정 전까지 보류. Telegram 위주 |
 | Discord 연동 | 다음 세션 검토 (팀·커뮤니티 채널) |
 | What People Say | 초기 사용자 쿼트 수집 |

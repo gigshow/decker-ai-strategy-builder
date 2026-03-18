@@ -4,6 +4,21 @@ All notable changes to the Decker AI Strategy Builder are documented in this fil
 
 ---
 
+## [v1.4.2] - 2026-03-18
+
+### Added
+
+- **Article Series (9~10)**: #9 Multi-TF Alignment, #10 Self-Improving Rulebook
+- **rationale·choices**: llm_api, consultation에 tf_alignment·entry_timing 레이블 포함 (v3.0 시그널 LLM)
+- **Telegram 대화 가이드**: usage-guide에 대화 키워드 (시그널, 전략·상의, 시세, 포지션 등) 추가
+
+### Changed
+
+- README: Article Series 1~10, Harness 목표 한 줄 추가
+- api-guide: /llm/opportunities, /consultation에 tf_alignment, entry_timing 스펙
+
+---
+
 ## [v1.4.1] - 2025-03-17
 
 ### Added
