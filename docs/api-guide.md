@@ -4,11 +4,23 @@
 
 Base URL: `https://api.decker-ai.com`  
 경로 prefix: `/api/v1/` (예: `/api/v1/signals/BTCUSDT/state`)  
-전체 문서: [api.decker-ai.com/docs](https://api.decker-ai.com/docs)
+전체 문서: [api.decker-ai.com/docs](https://api.decker-ai.com/docs)  
+**llms.txt**: [api.decker-ai.com/llms.txt](https://api.decker-ai.com/llms.txt) — AI·LLM용 API 발견 매니페스트
 
-**인증**: 아래 엔드포인트는 인증 불필요 (공개 API). POST /signals/push 포함.
+---
 
-> **베타**: API·에이전트는 베타 테스트 중. 한도·과금 미적용. 시그널·전략·룰북 모델만 제공.
+## 인증 구조
+
+| 구분 | 베타 (현재) | 정식 (목표) |
+|------|-------------|-------------|
+| **공개 (키 없이)** | 시그널·전략·시세·llm/opportunities 모두 호출 가능 | 헬스체크, llms.txt만 |
+| **API 키** | 선택 (있으면 usage 추적) | **필수** (회원가입 → 키 발급) |
+| **한도** | 미적용 | Free 500/월, Pro 10k 등 |
+
+**API 키 발급**: decker-ai.com 가입 → 설정 → API 키 → 발급  
+**사용**: `X-Api-Key: dk_live_xxx` 헤더
+
+> **베타**: 현재는 키 없이도 시그널·전략·llm/opportunities 호출 가능. AI·에이전트 테스트용.
 
 ---
 
@@ -51,7 +63,7 @@ curl -X POST "https://api.decker-ai.com/api/v1/signals/push" \
 
 ---
 
-## 인증 불필요 (GET)
+## 엔드포인트 (베타: 키 없이 호출 가능, 정식: API 키 필요)
 
 | Method | Path | 용도 |
 |--------|------|------|
@@ -220,20 +232,26 @@ GET /api/v1/signals/{symbol}/strategy?timeframe=1h&risk_appetite=medium&tier=pre
 ## 사용 예시
 
 ```bash
-# 1. 시그널 등록 (시그널 제공자·개발자 API 연동용)
+# 베타: 키 없이 호출 가능
+curl "https://api.decker-ai.com/api/v1/llm/opportunities?symbol=BTC&limit=5"
+curl "https://api.decker-ai.com/api/v1/signals/BTCUSDT/state"
+
+# 정식 (목표): X-Api-Key 헤더 필요
+curl -H "X-Api-Key: dk_live_xxx" \
+  "https://api.decker-ai.com/api/v1/llm/opportunities?symbol=BTC&limit=5"
+
+# 시그널 등록 (시그널 제공자·개발자 API 연동용)
 curl -X POST "https://api.decker-ai.com/api/v1/signals/push" \
   -H "Content-Type: application/json" \
   -d '{"symbol":"BTCUSDT","timeframe":"1h","direction":"long","entry_price":96000,"target_price":100000,"stop_loss":92000}'
-
-# 2. 등록 후 전략 조회
-curl "https://api.decker-ai.com/api/v1/signals/BTCUSDT/strategy?timeframe=1h"
-
-# 시그널 상태
-curl "https://api.decker-ai.com/api/v1/signals/BTCUSDT/state"
-
-# 공개 시그널
-curl "https://api.decker-ai.com/api/v1/judgment/signals/public?symbol=BTCUSDT&timeframe=1h"
-
-# LLM 인사이트 (에이전트·대화형)
-curl "https://api.decker-ai.com/api/v1/llm/opportunities?symbol=BTC&limit=5"
 ```
+
+---
+
+## 시세·외부 데이터 (CoinGecko)
+
+Decker 시세는 **Binance·DB**를 우선 사용하고, 없을 때 **CoinGecko**를 보조로 사용합니다. (예: `CentralizedMarketService`)
+
+- **CoinGecko Demo API**: 무료, ~30 calls/min. [docs.coingecko.com/llms.txt](https://docs.coingecko.com/llms.txt) 참고.
+- **OHLC·GeckoTerminal**: 향후 전략 빌더·DEX 보조 연동 검토.
+- **분석 문서**: `docs/CoinGecko_vs_Decker_분석_20250317.md` (공개 레포에는 미포함)
