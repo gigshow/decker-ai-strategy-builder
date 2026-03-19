@@ -14,6 +14,8 @@ Strategy DSL은 시장 상태(A/B/C), 진행도(progress_pct), 오브젝트, 프
 
 **진화 경로**: 오퍼레이션 룰북(수동 규칙) → 전략 DSL(실데이터 기반 자동 파인튜닝)
 
+**RULES와 관계**: RULES.yaml의 tf_alignment, swing_state, entry_timing은 Strategy DSL의 **부분 집합**. RULES = DSL v1. DSL 파서 없이도 trade_outcomes → RULES 패치 제안 가능.
+
 ---
 
 ## DSL 구조

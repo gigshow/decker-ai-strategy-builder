@@ -38,7 +38,7 @@
 
 **Decker AI Strategy Builder**는 시그널의 **진행도(progress_pct)**를 계산하고, YAML 룰북으로 전략을 반환합니다. LLM 없이 동작합니다.
 
-> **DeckerClaw** — Decker 자체 에이전트 + OpenClaw 스킬 생태계. DeckerClaw를 **입양**할 수 있습니다: (A) [@deckerclawbot](https://t.me/deckerclawbot) Telegram 사용 (B) 자신의 OpenClaw에 Decker 스킬 추가 → web_fetch → API 연동 (C) REST API 직접 호출
+> **DeckerClaw** — Decker 자체 에이전트 + OpenClaw 스킬 생태계. DeckerClaw를 **입양**할 수 있습니다: (A) [@deckerclawbot](https://t.me/deckerclawbot) Telegram 사용 (B) OpenClaw·Slack·ClawHub에 Decker 스킬 추가 → web_fetch → API 연동 (C) REST API 직접 호출
 
 ---
 

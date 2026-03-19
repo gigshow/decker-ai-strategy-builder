@@ -196,38 +196,6 @@ rules:
     strategy: "A 메인스윙 50%+. 주 추세 방향. 홀드 우선. 진행도 기반 룰북 적용."
 
   # ══════════════════════════════════════════════════
-  # 레이어 5: SWING STATE (v2.0.0 신규 — A/B/C 스윙 타입 기반)
-  # ══════════════════════════════════════════════════
-
-  # [C 연결스윙] 청산·리버스·진입이 일어나는 전환 구간
-  - id: c_swing_initial_entry
-    tier: premium
-    swing_state: [C]
-    progress_min: 0
-    progress_max: 40
-    strategy: "C 연결스윙 초기 진입. 청산·리버스 구간. 시장 방향 전환 가능성. 소규모(2~3%) 선진입. A스윙 전환 확인 전 포지션 증가 금지."
-
-  - id: c_swing_mature
-    tier: premium
-    swing_state: [C]
-    progress_min: 41
-    strategy: "C 연결스윙 중반 이후. 리버스 포지션 고려. 또는 현 포지션 부분 청산 후 반대 진입 검토."
-
-  # [B 서브스윙] 메인스윙의 반대 방향 조정 구간
-  - id: b_swing_correction_end
-    tier: standard
-    swing_state: [B]
-    progress_min: 60
-    strategy: "B 서브스윙(조정) 60%+. 조정 마무리 구간. A스윙 방향 재진입 준비. 현 포지션 부분 청산 또는 A스윙 방향 신호 대기."
-
-  # [A 메인스윙] 추세의 주 방향
-  - id: a_swing_strong_trend
-    tier: standard
-    swing_state: [A]
-    progress_min: 50
-    strategy: "A 메인스윙 50%+. 주 추세 방향. 홀드 우선. 진행도 기반 룰북 적용."
-
-  # ══════════════════════════════════════════════════
   # 레이어 6: MARKET STATE + PROGRESS (v1.4.0, generic보다 먼저 매칭)
   # ══════════════════════════════════════════════════
 

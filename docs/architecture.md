@@ -17,6 +17,8 @@ Decker AI는 LLM이 가격을 예측하는 서비스가 아닙니다.
 | LLM 역할 | 예측·판단 | **인터페이스·설명** |
 | 토큰 비용 | 시그널마다 호출 | **룰북 경로 $0** |
 
+**비용·프라이버시 라우팅**: 결정론적 경로(룰북) 우선, LLM은 정책상 필요 시에만 호출.
+
 ---
 
 ## 핵심 철학: Target → Signal → Entry
@@ -310,5 +312,5 @@ A state swing → T signal touched → Target defined (+7%)
 - [시장 상태 이론](../concept/market_state_theory.md) — progress_pct 개념
 - [라벨링 알고리즘](../concept/labeling_algorithm.md) — 오브젝트·스윙·시그널
 - [모델·알고리즘·성과](model.md) — 알고리즘 스토리, 구조, 성과
-- [오퍼레이션 룰북](../operation_rules/RULES.yaml) — 21개 규칙
+- [오퍼레이션 룰북](../operation_rules/RULES.yaml) — 35개+ 규칙
 - [시그널 예시](../examples/signal_example.md) — progress_pct 계산 예시

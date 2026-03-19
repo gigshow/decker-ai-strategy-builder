@@ -91,6 +91,12 @@
 
 ---
 
+## OpenClaw·Slack·ClawHub 사용자
+
+OpenClaw를 쓰고 있다면 Decker 스킬을 추가해 시그널·포지션·주문을 연동할 수 있어요. [SKILL.md](openclaw_skills/decker/SKILL.md) 참고 → web_fetch → Decker API. Slack·ClawHub에서도 동일하게 스킬 추가 후 사용 가능.
+
+---
+
 ## API 연동
 
 - Base URL: `https://api.decker-ai.com`
