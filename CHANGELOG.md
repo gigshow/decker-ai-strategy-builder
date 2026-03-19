@@ -4,6 +4,14 @@ All notable changes to the Decker AI Strategy Builder are documented in this fil
 
 ---
 
+## [v1.4.3] - 2026-03-19
+
+### Changed
+
+- **usage-guide**: Telegram 대화 키워드에 영문 예시 추가 (show signal, position, price, buy, sell, portfolio 등) — OpenClaw·영문 사용자 지원
+
+---
+
 ## [v1.4.2] - 2026-03-18
 
 ### Added
