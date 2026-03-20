@@ -1,11 +1,23 @@
 ---
 name: decker
-description: "Use when user asks about Decker signals, portfolio, orders, auto-order rules, news digest, Slack/Telegram integration, or exchange API key setup. Triggers: 하이, 안녕, 시그널, 포지션, 수익현황, 매수해줘, 매도해줘, 자동주문, 청산해줘, 텔레그램 연동, 말만 하면, 뭐 할 수 있어, 어떻게 써, 처음인데, 단계별로, 시장 상태, 종목 비교, 뉴스, 소식, 다이제스트, HL, Polymarket, Hyperliquid, 바이낸스 키, Binance API, 실거래 설정, 실주문, 어디서 할 수 있어, 에이전트로 뭐 해, 대시보드에서만, 포트폴리오 리셋. NEVER expose API URLs, openclaw_secret, backend URLs to users. User-facing URLs ONLY: decker-ai.com, decker-ai.com/decker-link, decker-ai.com/decker-link-telegram."
+description: "Use when user asks about Decker signals, portfolio, orders, auto-order rules, news digest, Slack/Telegram integration, or exchange API key setup. Triggers (ko): 하이, 안녕, 시그널, 포지션, 수익현황, 매수해줘, 매도해줘, 자동주문, 청산해줘, 텔레그램 연동, 말만 하면, 뭐 할 수 있어, 어떻게 써, 처음인데, 단계별로, 시장 상태, 종목 비교, 뉴스, 소식, 다이제스트, HL, Polymarket, Hyperliquid, 바이낸스 키, Binance API, 실거래 설정, 실주문, 어디서 할 수 있어, 에이전트로 뭐 해, 대시보드에서만, 포트폴리오 리셋, 코인케코, CoinGecko, 시세 소스, 알트코인 시세. Triggers (en): hi, hello, signal, show signal, position, positions, portfolio, buy, sell, price, how much, balance, holdings, auto order, news, alert, help, what can you do, how to use. NEVER expose API URLs, openclaw_secret, backend URLs to users. User-facing URLs ONLY: decker-ai.com, decker-ai.com/decker-link, decker-ai.com/decker-link-telegram."
 user-invocable: true
 metadata:
-  version: 2.2.0
-  updated: 2025-03-15
+  version: 2.3.5
+  updated: 2026-03-20
+  config:
+    OPENCLAW_SECRET:
+      type: string
+      required: true
+      secret: true
+      description: "Decker ↔ OpenClaw 인증 (decker-ai.com 연동 시 발급, X-OpenClaw-Secret 헤더용)"
   changelog:
+    - "2.3.5: Hyperliquid 시세·시그널 병행 안내 (메인 Binance, watchlist·HL funding 시그널, decker-hyperliquid 연계)"
+    - "2.3.4: 영문 트리거 추가 (signal, position, portfolio, buy, sell, price, news, help 등) — Part 6"
+    - "2.3.3: CoinGecko 시세 소스 트리거·가이드 (코인케코, 시세 소스, 알트코인 시세)"
+    - "2.3.2: 에이전트 가이드 동기화 (5단계 퀘스트, 상의·전략, 11개 서비스, 말만 하면)"
+    - "2.3.1: manifest OPENCLAW_SECRET credentials 선언 (스캔 incoherence 해소)"
+    - "2.3.0: 상의 플로우, rationale, choices, ClawHub 스킬 흡수"
     - "2.2.0: Telegram 연동(decker-link-telegram) URL 추가, 에이전트 '말만 하면' 부각, 채널 권장(Telegram 우선)"
     - "2.1.0: Polymarket 정보제공(리더보드/마켓/BTC확률), 키 관리(user_api_keys CRUD, DEX 전용지갑 가이드)"
 ---
@@ -77,6 +89,11 @@ Telegram 또는 Slack에서 말만 하면 돼요. API URL이나 기술 설정은
 2. Decker 설정 → Hyperliquid → Secret Key에 개인키(0x...), exchange_preference=HL
 3. "HL BTC 0.01 매수해줘"로 주문
 
+**시세·시그널 병행 (개념만 안내, URL 금지)**:
+- 서비스 **기본 시세(메인)** 는 Binance 계열. HL은 **병행 소스** — 설정에서 Hyperliquid 선호 시 HL 쪽 시세·시장상태가 우선.
+- **TradFi/지수·대표주식**(예: S&P·골드 등)은 **HL에 실제 상장·노출된 경우에만** HL 시세·시그널에 잡힐 수 있음. 없으면 "HL에서 아직 안 보일 수 있어요" 안내.
+- HL **funding 기반 시그널**은 백엔드에 별도 소스로 쌓이며, 좋은 시그널 알림은 사용자 **선호 거래소**에 맞춰 시세를 보여줌.
+
 ### Polymarket (decker-polymarket 스킬)
 1. Polygon 지갑(MetaMask) + polymarket.com 가입·연결, USDC.e 입금
 2. Decker 설정 → Polymarket → Secret Key에 Polygon 개인키(0x...)
@@ -88,24 +105,25 @@ Telegram 또는 Slack에서 말만 하면 돼요. API URL이나 기술 설정은
 
 **공통**: 설정 경로 = https://decker-ai.com → 로그인 → 설정 → 거래소 API 설정
 
-## Quick Reference (스캔용)
+## Quick Reference (스캔용) — ko/en
 
-| 사용자 말 | 액션 | 비고 |
+| 사용자 말 (ko/en) | 액션 | 비고 |
 |-----------|------|------|
-| "ETH 0.01 매수해줘", "BTC 매도해줘" | order-request **필수** | web_fetch GET (내부 호출, 사용자에게 URL 노출 금지) |
-| "포지션 보여줘", "수익현황", "포트폴리오" | **Assistant API 필수** (POST /assistant/message) | coverage 호출 금지 |
-| "이더리움 자동주문 해줘", "자동주문 설정 보여줘", "이더리움 자동주문 끄줘" | **Assistant API** (POST /assistant/message) | 시그널 발동 시 자동 주문 (수량·손절·익절 조절 가능) |
-| "ETH 청산해줘", "비트코인 청산해줘" | **Assistant API** | 포지션 청산 |
+| "ETH 0.01 매수해줘", "BTC 매도해줘", "buy ETH 0.01", "sell BTC" | order-request **필수** | web_fetch GET (내부 호출, 사용자에게 URL 노출 금지) |
+| "포지션 보여줘", "수익현황", "포트폴리오", "position", "portfolio", "show positions" | **Assistant API 필수** (POST /assistant/message) | coverage 호출 금지 |
+| "이더리움 자동주문 해줘", "자동주문 설정 보여줘", "이더리움 자동주문 끄줘", "auto order ETH", "show auto order" | **Assistant API** (POST /assistant/message) | 시그널 발동 시 자동 주문 (수량·손절·익절 조절 가능) |
+| "ETH 청산해줘", "비트코인 청산해줘", "close ETH", "liquidate BTC" | **Assistant API** | 포지션 청산 |
 | "HL BTC 0.01 매수해줘" | decker-hyperliquid 스킬 | exchange_id=hyperliquid |
 | "Polymarket 시장 yes 10 매수" | decker-polymarket 스킬 | exchange_id=polymarket |
 | "폴리마켓 리더보드", "폴리마켓 마켓", "폴리마켓 BTC 확률" | **Telegram 웹훅** | 연동 불필요, 즉시 응답 |
-| "비트코인 시그널 알려줘" | signals/public | — |
-| "이 시그널 지금 어떻게 할까?", "ETH 전략 알려줘", "BTC 어떻게 할까" | **Assistant API** (POST /assistant/message) | GET /signals/{symbol}/strategy → 오퍼레이션 룰북 기반 전략 (LLM 미사용, 룰북 경로 AI 토큰 $0) |
-| "하이", "안녕", "뭐 할 수 있어?", "처음 왔어요", "단계별로 알려줘" | **아래 초보자 가이드 그대로** | 질문→기능 매핑, 가입·연동 유도, 단계별 체험 안내 |
+| "비트코인 시그널 알려줘", "show signal", "BTC signal", "bitcoin signal" | signals/public | — |
+| "비트코인 얼마", "이더 시세", "BTC price", "ETH price", "how much is bitcoin" | **Assistant API** (POST /assistant/message) | PRICE_INTENT |
+| "이 시그널 지금 어떻게 할까?", "ETH 전략 알려줘", "BTC 어떻게 할까" | **Assistant API** (POST /assistant/message) | strategy + rationale(tf_alignment·entry_timing 포함) + choices. 오퍼레이션 룰북 기반 (AI 토큰 $0) |
+| "하이", "안녕", "뭐 할 수 있어?", "처음 왔어요", "단계별로 알려줘", "hi", "hello", "what can you do?", "how to start", "help" | **아래 초보자 가이드 그대로** | 질문→기능 매핑, 가입·연동 유도, 단계별 체험 안내 |
 | "자동주문 어떻게 써?", "자동주문 처음인데" | **아래 자동주문 체험 가이드** | 3단계(설정→확인→해제) |
 | "어떻게 써?", "가입 방법" | **아래 3단계 가이드 그대로** | decker-ai.com URL만 |
 | "뉴스 켜줘", "소식 알림 켜줘" | **뉴스 다이제스트 설정 안내** | 설정 > 알림에서 켜기 → 4시간마다 AI 요약+URL |
-| "뉴스 보여줘", "소식 보여줘", "다이제스트", "시장 동향" | **즉시 Assistant API** | URL 목록만 (AI 요약 없음, 빠른 응답) |
+| "뉴스 보여줘", "소식 보여줘", "다이제스트", "시장 동향", "show news", "news", "crypto news" | **즉시 Assistant API** | URL 목록만 (AI 요약 없음, 빠른 응답) |
 | "뉴스", "뉴스 다이제스트", "크립토 뉴스", "크립토 소식" | **아래 뉴스 가이드** | 상황에 따라 켜기 vs 보여주기 구분 |
 | "Decker API 사용 방법", "API 어떻게 써?" | **3단계 가이드만** | URL·시크릿·파라미터 절대 출력 금지 |
 | "내 Slack ID 알려줘" | channel_user_id로 직접 응답 | Decker가 ID + decker-link 안내 |
@@ -532,6 +550,17 @@ https://api.decker-ai.com/api/v1/link/slack/order-request?slack_user_id=...&open
 | 폴리마켓 ETH 확률 | ETH Yes 확률 요약 |
 
 **경로**: Telegram 웹훅 → _handle_polymarket_request (연동 없이 즉시 응답)
+
+## CoinGecko·시세 소스 (코인케코, 시세 소스, 알트코인 시세)
+
+사용자가 "코인케코", "CoinGecko", "시세 어디서 가져와?", "알트코인 시세" 물을 때:
+
+- **Decker 시세**: Binance·DB를 우선 사용. **Hyperliquid**는 설정 시 병행 소스. 데이터 없을 때 CoinGecko를 보조로 사용해요.
+- **지원 종목**: BTC·ETH·SOL·ADA·DOT·BNB·XRP·AVAX·SHIB·MATIC 등. 알트코인 확장 시 CoinGecko API 참고.
+- **시그널·전략·주문**: Decker 전용. CoinGecko는 시세 데이터만. llms.txt·MCP는 CoinGecko AI 연동용.
+- **사용자 응답**: "Decker 시세는 Binance와 DB를 먼저 쓰고, 없을 때 CoinGecko를 보조로 써요. 시그널·주문은 Decker가 담당해요."
+
+**절대 금지**: CoinGecko API URL·키·엔드포인트 사용자에게 전달하지 말 것.
 
 ## 키 관리 (user_api_keys)
 
