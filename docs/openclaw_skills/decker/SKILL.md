@@ -117,19 +117,12 @@ Telegram 또는 Slack에서 말만 하면 돼요. API URL이나 기술 설정은
 | "ETH 청산해줘", "비트코인 청산해줘", "close ETH", "liquidate BTC" | **Assistant API** | 포지션 청산 |
 | "HL BTC 0.01 매수해줘" | decker-hyperliquid 스킬 | exchange_id=hyperliquid |
 | "Polymarket 시장 yes 10 매수" | decker-polymarket 스킬 | exchange_id=polymarket |
-<<<<<<< HEAD
-| "폴리마켓 리더보드", "폴리마켓 마켓", "폴리마켓 BTC 확률" | **Telegram 웹훅** | 연동 불필요, 즉시 응답 |
-| "비트코인 시그널 알려줘", "show signal", "BTC signal", "bitcoin signal" | signals/public | — |
-| "비트코인 얼마", "이더 시세", "BTC price", "ETH price", "how much is bitcoin" | **Assistant API** (POST /assistant/message) | PRICE_INTENT |
-| "이 시그널 지금 어떻게 할까?", "ETH 전략 알려줘", "BTC 어떻게 할까" | **Assistant API** (POST /assistant/message) | strategy + rationale(tf_alignment·entry_timing 포함) + choices. 오퍼레이션 룰북 기반 (AI 토큰 $0) |
-=======
 | "폴리마켓 리더보드", "폴리마켓 마켓", "폴리마켓 BTC 확률" | **Telegram 웹훅** | 연동 불필요, 즉시 응답 (라이브 API) |
 | "추천종목", "폴리마켓 시그널 뭐 있어" (채팅) | **Assistant API** | DB `judgment_signals` — PM은 추천 폴백·`venue=polymarket` 피드와 동일 소스 계열 |
 | 에이전트 도구 (내부) | `GET /api/v1/llm/opportunities?venue=polymarket` | 스케줄러가 쌓은 PM 시그널만 JSON 피드 — 사용자에게 URL·키 출력 금지 |
 | "비트코인 시그널 알려줘", "show signal", "BTC signal", "bitcoin signal" | **Assistant API** (권장) 또는 signals/public | public은 **symbol=BTCUSDT** 등 필수. 사용자에게 답할 때 **신뢰도 N%만 앞세우지 말 것** — 방향·진입/목표/손절·갱신·강도·출처 요약 |
 | "비트코인 얼마", "이더 시세", "BTC price", "ETH price", "how much is bitcoin" | **Assistant API** (POST /assistant/message) | PRICE_INTENT |
 | "이 시그널 지금 어떻게 할까?", "ETH 전략 알려줘", "BTC 어떻게 할까" | **Assistant API** (POST /assistant/message) | strategy + rationale(tf_alignment·entry_timing 포함) + choices; 서버가 진행 품질·상태 메타도 조합 가능. **사용자에게 필드명·URL 나열 금지** — 자연어 요약만 |
->>>>>>> 3d79743 (docs(release): v1.4.4 public agent onboarding, issue templates, ClawHub index)
 | "하이", "안녕", "뭐 할 수 있어?", "처음 왔어요", "단계별로 알려줘", "hi", "hello", "what can you do?", "how to start", "help" | **아래 초보자 가이드 그대로** | 질문→기능 매핑, 가입·연동 유도, 단계별 체험 안내 |
 | "자동주문 어떻게 써?", "자동주문 처음인데" | **아래 자동주문 체험 가이드** | 3단계(설정→확인→해제) |
 | "어떻게 써?", "가입 방법" | **아래 3단계 가이드 그대로** | decker-ai.com URL만 |
