@@ -1,0 +1,27 @@
+name: IDE·에이전트 스킬
+description: `.cursor/skills/decker-*`·문서·ClawHub 패키지 (레포 스킬 사용자)
+title: "[skills] "
+labels: ["cursor-skills"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        스킬 구조 단일 출처: **[DECKER_AGENT_SKILLS.md](https://github.com/gigshow/decker-trading-platform/blob/main/docs/DECKER_AGENT_SKILLS.md)** · 최소 경로: [ONBOARDING_PUBLIC.md §2](https://github.com/gigshow/decker-trading-platform/blob/main/docs/ONBOARDING_PUBLIC.md)
+  - type: textarea
+    id: goal
+    attributes:
+      label: 목표
+      description: 어떤 스킬·문서를 쓰려 했나요?
+    validations:
+      required: true
+  - type: textarea
+    id: setup
+    attributes:
+      label: 환경
+      description: 사용 중인 IDE·OS, 클론 vs sparse-checkout 등
+  - type: textarea
+    id: problem
+    attributes:
+      label: 문제·오류
+    validations:
+      required: true

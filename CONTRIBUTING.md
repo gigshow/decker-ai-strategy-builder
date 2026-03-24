@@ -17,9 +17,10 @@
 
 ### 이슈
 
+- **페르소나별 템플릿**: [`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/) — 제품 사용 · API · IDE 스킬 · 자체 호스팅 (`01`–`04`, `config.yml`)
 - **버그**: [Bug Report](.github/ISSUE_TEMPLATE/bug_report.md)
 - **시그널 피드백**: [Signal Feedback](.github/ISSUE_TEMPLATE/signal_feedback.md)
-- **기능 제안**: 일반 이슈
+- **커뮤니티**: [GITHUB_COMMUNITY.md](docs/GITHUB_COMMUNITY.md)
 
 ## Pull Request
 

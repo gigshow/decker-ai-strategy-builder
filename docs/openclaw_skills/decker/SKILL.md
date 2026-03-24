@@ -3,8 +3,8 @@ name: decker
 description: "Use when user asks about Decker signals, portfolio, orders, auto-order rules, news digest, Slack/Telegram integration, or exchange API key setup. Triggers (ko): 하이, 안녕, 시그널, 포지션, 수익현황, 매수해줘, 매도해줘, 자동주문, 청산해줘, 텔레그램 연동, 말만 하면, 뭐 할 수 있어, 어떻게 써, 처음인데, 단계별로, 시장 상태, 종목 비교, 뉴스, 소식, 다이제스트, HL, Polymarket, Hyperliquid, 바이낸스 키, Binance API, 실거래 설정, 실주문, 어디서 할 수 있어, 에이전트로 뭐 해, 대시보드에서만, 포트폴리오 리셋, 코인케코, CoinGecko, 시세 소스, 알트코인 시세. Triggers (en): hi, hello, signal, show signal, position, positions, portfolio, buy, sell, price, how much, balance, holdings, auto order, news, alert, help, what can you do, how to use. NEVER expose API URLs, openclaw_secret, backend URLs to users. User-facing URLs ONLY: decker-ai.com, decker-ai.com/decker-link, decker-ai.com/decker-link-telegram."
 user-invocable: true
 metadata:
-  version: 2.3.5
-  updated: 2026-03-20
+  version: 2.3.7
+  updated: 2026-03-22
   config:
     OPENCLAW_SECRET:
       type: string
@@ -12,6 +12,8 @@ metadata:
       secret: true
       description: "Decker ↔ OpenClaw 인증 (decker-ai.com 연동 시 발급, X-OpenClaw-Secret 헤더용)"
   changelog:
+    - "2.3.7: 시그널·추천 요약 UX — 사용자 응답에서 신뢰도% 단독 헤드라인 지양, 갱신 시각·반영 출처·강도·가격 중심(제품과 동일). GET judgment/signals/public 은 symbol 필수. 추천종목은 Assistant 우선(전략/trades 보조 조회 실패해도 추천 리스트 유지되는 서버 동작). 운영 검증: docs/AGENT_ENDPOINT_VERIFICATION.md, docs/VERIFICATION_EXECUTION_REPORT.md"
+    - "2.3.6: 시그널 전략·상의 응답에 상태 품질·코드 개념(서버) — 사용자에게 API 경로·필드명 나열 금지 정책 유지. 레포: docs/SIGNAL_LLM_AGENT_VERIFICATION.md (개발자용)"
     - "2.3.5: Hyperliquid 시세·시그널 병행 안내 (메인 Binance, watchlist·HL funding 시그널, decker-hyperliquid 연계)"
     - "2.3.4: 영문 트리거 추가 (signal, position, portfolio, buy, sell, price, news, help 등) — Part 6"
     - "2.3.3: CoinGecko 시세 소스 트리거·가이드 (코인케코, 시세 소스, 알트코인 시세)"
@@ -115,10 +117,19 @@ Telegram 또는 Slack에서 말만 하면 돼요. API URL이나 기술 설정은
 | "ETH 청산해줘", "비트코인 청산해줘", "close ETH", "liquidate BTC" | **Assistant API** | 포지션 청산 |
 | "HL BTC 0.01 매수해줘" | decker-hyperliquid 스킬 | exchange_id=hyperliquid |
 | "Polymarket 시장 yes 10 매수" | decker-polymarket 스킬 | exchange_id=polymarket |
+<<<<<<< HEAD
 | "폴리마켓 리더보드", "폴리마켓 마켓", "폴리마켓 BTC 확률" | **Telegram 웹훅** | 연동 불필요, 즉시 응답 |
 | "비트코인 시그널 알려줘", "show signal", "BTC signal", "bitcoin signal" | signals/public | — |
 | "비트코인 얼마", "이더 시세", "BTC price", "ETH price", "how much is bitcoin" | **Assistant API** (POST /assistant/message) | PRICE_INTENT |
 | "이 시그널 지금 어떻게 할까?", "ETH 전략 알려줘", "BTC 어떻게 할까" | **Assistant API** (POST /assistant/message) | strategy + rationale(tf_alignment·entry_timing 포함) + choices. 오퍼레이션 룰북 기반 (AI 토큰 $0) |
+=======
+| "폴리마켓 리더보드", "폴리마켓 마켓", "폴리마켓 BTC 확률" | **Telegram 웹훅** | 연동 불필요, 즉시 응답 (라이브 API) |
+| "추천종목", "폴리마켓 시그널 뭐 있어" (채팅) | **Assistant API** | DB `judgment_signals` — PM은 추천 폴백·`venue=polymarket` 피드와 동일 소스 계열 |
+| 에이전트 도구 (내부) | `GET /api/v1/llm/opportunities?venue=polymarket` | 스케줄러가 쌓은 PM 시그널만 JSON 피드 — 사용자에게 URL·키 출력 금지 |
+| "비트코인 시그널 알려줘", "show signal", "BTC signal", "bitcoin signal" | **Assistant API** (권장) 또는 signals/public | public은 **symbol=BTCUSDT** 등 필수. 사용자에게 답할 때 **신뢰도 N%만 앞세우지 말 것** — 방향·진입/목표/손절·갱신·강도·출처 요약 |
+| "비트코인 얼마", "이더 시세", "BTC price", "ETH price", "how much is bitcoin" | **Assistant API** (POST /assistant/message) | PRICE_INTENT |
+| "이 시그널 지금 어떻게 할까?", "ETH 전략 알려줘", "BTC 어떻게 할까" | **Assistant API** (POST /assistant/message) | strategy + rationale(tf_alignment·entry_timing 포함) + choices; 서버가 진행 품질·상태 메타도 조합 가능. **사용자에게 필드명·URL 나열 금지** — 자연어 요약만 |
+>>>>>>> 3d79743 (docs(release): v1.4.4 public agent onboarding, issue templates, ClawHub index)
 | "하이", "안녕", "뭐 할 수 있어?", "처음 왔어요", "단계별로 알려줘", "hi", "hello", "what can you do?", "how to start", "help" | **아래 초보자 가이드 그대로** | 질문→기능 매핑, 가입·연동 유도, 단계별 체험 안내 |
 | "자동주문 어떻게 써?", "자동주문 처음인데" | **아래 자동주문 체험 가이드** | 3단계(설정→확인→해제) |
 | "어떻게 써?", "가입 방법" | **아래 3단계 가이드 그대로** | decker-ai.com URL만 |
@@ -303,7 +314,7 @@ Decker 사용은 **3단계**로 시작해요:
 | **엔드포인트** | POST /api/v1/assistant/message |
 | **인증** | Header: X-OpenClaw-Secret: {OPENCLAW_SECRET} |
 | **Body** | { "message": "비트코인 시세 알려줘", "channel": "slack", "channel_user_id": "U08LGKSKY2D", "channel_id": "C01234ABCD" } |
-| **응답** | { "response": "...", "intent": "PRICE_INTENT", "confidence": 0.95, "success": true } |
+| **응답** | { "response": "...", "intent": "PRICE_INTENT", "confidence": 0.95, "success": true } — 초기화/처리 오류 시에도 HTTP 200 + **success: false** + 재시도 안내일 수 있음 (사용자에게는 response 문구만 전달, URL·스택 금지) |
 
 **사용 예** (OpenClaw가 web_fetch로 호출):
 - "비트코인 시세 알려줘" → PRICE_INTENT
@@ -346,8 +357,9 @@ Decker 사용은 **3단계**로 시작해요:
 
 2. **시그널 조회** ("시그널 알아봐", "Decker 시그널", "비트코인 이더 시그널 알려줘")
    - **우선** GET .../judgment/signals/public?symbol=BTCUSDT&timeframe=1h (ETHUSDT, SOLUSDT 등도)
-   - 응답: direction(롱/숏), confidence(%), entry_price, target_price, stop_loss
-   - **응답 형식**: "BTC 1h: 롱, 신뢰도 82%. 진입 $97,500 / 목표 $99,200 / 손절 $96,100. 🍗 치킨먹자? (응 또는 '0.01 BTC 매수해줘' → 주문 실행)"
+   - 응답 JSON: direction, confidence(내부값), entry_price, target_price, stop_loss, strength, generated_at 등
+   - **사용자에게 말할 때**: "BTC 1h 롱 — 진입 $97,500 / 목표 $99,200 / 손절 $96,100. ⏱ 갱신: ~N분 전, 반영 출처 한 줄, 💪 강도: …" 식으로 요약. **신뢰도 OO%만 제목처럼 쓰지 말 것** (제품 채팅과 동일).
+   - CTA: "🍗 치킨먹자?" 등 — 이어서 주문이면 order-request 또는 Assistant
    - coverage는 valid 여부만 → signals/public이 투자 판단에 필수
 
 2b. **신호 현황 요약**: "Decker 신호 현황 알려줘", "커버리지" (단, **포지션/포트폴리오 요청 시 coverage 호출 금지**)
@@ -500,7 +512,7 @@ Decker 사용은 **3단계**로 시작해요:
 
 ## Output Rules (EVClaw 패턴)
 
-- **시그널 응답**: compact, 진입/목표/손절 포함, "🍗 치킨먹자?" CTA
+- **시그널 응답**: compact, 진입/목표/손절 + 갱신 시각·출처·강도(자연어). **신뢰도%를 한 줄 제목처럼 쓰지 말 것** — "🍗 치킨먹자?" CTA 유지
 - **포트폴리오**: "총 평가액 X USDT, 손익 Y (Z%), 보유 N개" 한 줄 요약
 - **주문 후**: "승인 요청이 Slack으로 발송되었습니다" 고정 문구
 

@@ -1,0 +1,27 @@
+name: 자체 호스팅·배포
+description: Docker·Railway·DB·환경변수·온프레미스 실행
+title: "[self-host] "
+labels: ["self-hosting"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        인프라 요약: [ENVIRONMENT_MAPPING_20251116.md](https://github.com/gigshow/decker-trading-platform/blob/main/docs/ENVIRONMENT_MAPPING_20251116.md) · 한 장: [DECKER_MINIMAL_WORKFLOW.md](https://github.com/gigshow/decker-trading-platform/blob/main/docs/DECKER_MINIMAL_WORKFLOW.md)
+  - type: textarea
+    id: goal
+    attributes:
+      label: 목표
+      description: 무엇을 배포/실행하려 하나요?
+    validations:
+      required: true
+  - type: textarea
+    id: stack
+    attributes:
+      label: 스택
+      description: OS, Docker 버전, Python/Node, DB 연결 방식
+  - type: textarea
+    id: logs
+    attributes:
+      label: 로그·에러 (가능하면)
+    validations:
+      required: true

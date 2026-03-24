@@ -1,0 +1,35 @@
+name: API·연동
+description: REST·인증·웹훅·클라이언트 연동 (개발자·통합)
+title: "[api] "
+labels: ["api"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        프로덕션 API 문서: **https://api.decker-ai.com/docs**
+  - type: textarea
+    id: endpoint
+    attributes:
+      label: 엔드포인트 / 메서드
+      description: 예) GET /api/v1/...
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: 재현 요청 (curl·최소 예시)
+    validations:
+      required: true
+  - type: textarea
+    id: response
+    attributes:
+      label: 응답 코드·본문 (가능하면)
+  - type: dropdown
+    id: env
+    attributes:
+      label: 환경
+      options:
+        - 프로덕션 (api.decker-ai.com)
+        - 로컬 / 자체 호스팅
+    validations:
+      required: true

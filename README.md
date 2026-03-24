@@ -40,6 +40,14 @@
 
 > **DeckerClaw** — Decker 자체 에이전트 + OpenClaw 스킬 생태계. DeckerClaw를 **입양**할 수 있습니다: (A) [@deckerclawbot](https://t.me/deckerclawbot) Telegram 사용 (B) OpenClaw·Slack·ClawHub에 Decker 스킬 추가 → web_fetch → API 연동 (C) REST API 직접 호출
 
+### Visitor paths (에이전트·문서)
+
+| 페르소나 | 다음 한 걸음 |
+|----------|----------------|
+| **써보기** | [decker-ai.com](https://decker-ai.com) · [Telegram `/` 명령](docs/TELEGRAM_AGENT_COMMANDS.md) |
+| **에이전트·스킬** | [온보딩 한 장](docs/ONBOARDING_PUBLIC.md) · [짧은 인덱스](docs/AGENT_SKILLS_PUBLIC_SUMMARY.md) · [스킬 표](docs/DECKER_AGENT_SKILLS.md) · [OpenClaw 패키지](docs/openclaw_skills/README.md) |
+| **개발·연동** | [API Guide](docs/api-guide.md) · [CONTRIBUTING.md](CONTRIBUTING.md) · [roadmap](docs/roadmap.md) |
+
 ---
 
 ## 🎯 Overview
@@ -215,6 +223,10 @@ Decker는 OpenClaw 생태계에 스킬로 참여합니다. OpenClaw 사용자는
 
 | 문서 | 용도 |
 |------|------|
+| [온보딩 (페르소나)](docs/ONBOARDING_PUBLIC.md) | 써보기 · IDE 스킬 · 기여 — 한 장 |
+| [에이전트 요약](docs/AGENT_SKILLS_PUBLIC_SUMMARY.md) | ClawHub·릴리즈용 짧은 인덱스 |
+| [텔레그램 `/` 명령](docs/TELEGRAM_AGENT_COMMANDS.md) | 봇 명령·자연어 단일 출처 |
+| [스킬·워크플로 표](docs/DECKER_AGENT_SKILLS.md) | 도메인 스킬 vs 엔지니어링 워크플로 |
 | [Quick Start](docs/quickstart.md) | 3단계 가이드, 체험 시나리오 |
 | [Architecture](docs/architecture.md) | 파이프라인·모듈·State Engine |
 | [모델·알고리즘·성과](docs/model.md) | 알고리즘 스토리, 구조, 성과 지표 |

@@ -38,4 +38,7 @@ POST /api/v1/assistant/message
 Body: `{ "message": "...", "channel": "slack", "channel_user_id": "U...", "channel_id": "C..." }`  
 Header: X-OpenClaw-Secret  
 - channel_id: 채널 ID 질문 시 응답용 (선택, 있으면 "채널 ID 알려줘"에 친절 응답)
-- message 예: "포지션 보여줘", "이더리움 자동주문 해줘", "자동주문 설정 보여줘", "이더리움 자동주문 끄줘"
+- message 예: "포지션 보여줘", "이더리움 자동주문 해줘", "자동주문 설정 보여줘", "이더리움 자동주문 끄줘", "추천종목 알려줘"
+- 일부 오류 시에도 HTTP 200 + `success: false` + 안내 문구 — 사용자에게는 `response`만 전달 (URL/스택 비노출)
+
+**검증·엔드포인트 표**: 레포 `docs/AGENT_ENDPOINT_VERIFICATION.md` (프로덕션 JSON API 호스트는 **api.decker-ai.com**; 웹앱 도메인만 쓰면 HTML 응답 주의)

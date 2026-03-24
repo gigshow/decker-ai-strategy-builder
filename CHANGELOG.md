@@ -4,6 +4,17 @@ All notable changes to the Decker AI Strategy Builder are documented in this fil
 
 ---
 
+## [v1.4.4] - 2026-03-24
+
+### Added
+
+- **에이전트·공개 문서** (ClawHub·방문자 온보딩): `docs/ONBOARDING_PUBLIC.md`, `AGENT_SKILLS_PUBLIC_SUMMARY.md`, `TELEGRAM_AGENT_COMMANDS.md`, `DECKER_AGENT_SKILLS.md`, `GITHUB_COMMUNITY.md`, `RELEASE_CHECKLIST_PUBLIC_DOCS.md`, `PUBLIC_REPO_REBUILD_PROPOSAL.md`
+- **루트 `CLAUDE.md`** — 세션 진입용 에이전트 요약 (이 레포 기준)
+- **`.github/ISSUE_TEMPLATE`** — `config.yml` + 페르소나별 `01`–`04` (제품 / API / IDE 스킬 / 자체 호스팅)
+- **README** — 상단 Visitor paths(3갈래) + Docs 표에 위 문서 링크
+
+---
+
 ## [v1.4.3] - 2026-03-19
 
 ### Changed

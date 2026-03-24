@@ -1,0 +1,34 @@
+name: 제품 사용 (웹·텔레그램)
+description: 서비스 이용·계정·UI·텔레그램 연동 (최종 사용자)
+title: "[product] "
+labels: ["product"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        텔레그램 `/` 명령·채널 구분은 **[TELEGRAM_AGENT_COMMANDS.md](https://github.com/gigshow/decker-trading-platform/blob/main/docs/TELEGRAM_AGENT_COMMANDS.md)** 단일 출처입니다.
+  - type: textarea
+    id: context
+    attributes:
+      label: 상황
+      description: 무엇을 하려 했고, 어디에서 막혔나요?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 기대한 동작
+  - type: textarea
+    id: actual
+    attributes:
+      label: 실제 동작 / 오류 메시지
+  - type: dropdown
+    id: surface
+    attributes:
+      label: 표면
+      options:
+        - 웹 (decker-ai.com)
+        - 텔레그램 봇
+        - 기타
+    validations:
+      required: true
