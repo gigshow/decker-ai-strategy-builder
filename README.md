@@ -45,7 +45,7 @@
 | 페르소나 | 다음 한 걸음 |
 |----------|----------------|
 | **써보기** | [decker-ai.com](https://decker-ai.com) · [Telegram `/` 명령](docs/TELEGRAM_AGENT_COMMANDS.md) |
-| **에이전트·스킬** | [온보딩 한 장](docs/ONBOARDING_PUBLIC.md) · [짧은 인덱스](docs/AGENT_SKILLS_PUBLIC_SUMMARY.md) · [스킬 표](docs/DECKER_AGENT_SKILLS.md) · [OpenClaw 패키지](docs/openclaw_skills/README.md) |
+| **에이전트·스킬** | [투웨이 한 페이지](docs/TWO_WAY_MODEL.md) · [온보딩 한 장](docs/ONBOARDING_PUBLIC.md) · [짧은 인덱스](docs/AGENT_SKILLS_PUBLIC_SUMMARY.md) · [스킬 표](docs/DECKER_AGENT_SKILLS.md) · [OpenClaw 패키지](docs/openclaw_skills/README.md) |
 | **개발·연동** | [API Guide](docs/api-guide.md) · [CONTRIBUTING.md](CONTRIBUTING.md) · [roadmap](docs/roadmap.md) |
 
 ---

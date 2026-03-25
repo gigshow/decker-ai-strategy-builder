@@ -1,6 +1,6 @@
 # DeckerClaw Turnkey — 경량 Telegram 봇
 
-**선택 D: 턴키** — OpenClaw 없이 Decker 시그널·전략을 Telegram에서 바로 사용.
+**선택 D: 턴키** — OpenClaw 없이 Decker 시그널·전략을 Telegram에서 바로 사용. Way 1(호스팅 봇)과 구분하려면 [투웨이 모델 한 페이지](../docs/TWO_WAY_MODEL.md)를 본다.
 
 시그널·전략 조회만 지원. DB 없음. Decker API 호출만.
 

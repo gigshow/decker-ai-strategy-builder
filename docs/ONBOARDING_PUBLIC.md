@@ -4,6 +4,8 @@
 
 **짧은 인덱스(표)**: [AGENT_SKILLS_PUBLIC_SUMMARY.md](./AGENT_SKILLS_PUBLIC_SUMMARY.md) — ClawHub·릴리즈 노트용으로 유지.
 
+**투웨이 모델 (Way 1 자체 에이전트 · Way 2 OpenClaw 스킬)** — [TWO_WAY_MODEL.md](./TWO_WAY_MODEL.md)에서 한 페이지로 정리한다.
+
 ---
 
 ## 1. 제품을 써보고 싶다 (최종 사용자)
@@ -60,6 +62,7 @@ git clone https://github.com/gigshow/decker-ai-strategy-builder.git
 
 | 문서 | 용도 |
 |------|------|
+| [TWO_WAY_MODEL.md](./TWO_WAY_MODEL.md) | Way 1·2·API·턴키 한 페이지 |
 | [AGENT_SKILLS_PUBLIC_SUMMARY.md](./AGENT_SKILLS_PUBLIC_SUMMARY.md) | 짧은 인덱스 |
 | [DECKER_AGENT_SKILLS.md](./DECKER_AGENT_SKILLS.md) | 스킬 구조·표 |
 | [TELEGRAM_AGENT_COMMANDS.md](./TELEGRAM_AGENT_COMMANDS.md) | 텔레그램·웹 PhaseD 구분 |

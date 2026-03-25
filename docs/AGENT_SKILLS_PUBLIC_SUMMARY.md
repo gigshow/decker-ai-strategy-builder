@@ -4,6 +4,7 @@
 
 | 문서 | 내용 |
 |------|------|
+| [TWO_WAY_MODEL.md](./TWO_WAY_MODEL.md) | Way 1·2·API·턴키 한 페이지 (DeckerClaw 입구 정리) |
 | [ONBOARDING_PUBLIC.md](./ONBOARDING_PUBLIC.md) | 레포 방문자: 써보기·IDE 스킬·기여 경로 한 장 |
 | [DECKER_AGENT_SKILLS.md](./DECKER_AGENT_SKILLS.md) | Decker 도메인 스킬(`decker-*`) vs 엔지니어링 워크플로 |
 | [TELEGRAM_AGENT_COMMANDS.md](./TELEGRAM_AGENT_COMMANDS.md) | 텔레그램 봇 `/` 명령·자연어·웹 PhaseD와 채널 구분 |

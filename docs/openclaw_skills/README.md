@@ -1,6 +1,6 @@
 # OpenClaw Decker 스킬
 
-**선택 B: OpenClaw 협업** — 자신의 OpenClaw에 Decker 스킬을 추가해 시그널·전략·포지션·주문을 연동할 수 있습니다.
+**선택 B: OpenClaw 협업 (Way 2)** — 자신의 OpenClaw에 Decker 스킬을 추가해 시그널·전략·포지션·주문을 연동할 수 있습니다. Way 1(Telegram 자체 에이전트)과의 구분은 [TWO_WAY_MODEL.md](../TWO_WAY_MODEL.md)를 본다.
 
 > **동기화**: `decker/SKILL.md`는 메인 레포 `docs/openclaw_skills/decker/`에서 `scripts/sync_skill_to_public_repo.sh`로 복사. **Hyperliquid** 확장은 [decker-hyperliquid/SKILL.md](decker-hyperliquid/SKILL.md) (메인 `docs/openclaw_skills/decker-hyperliquid/`와 동기).
 
