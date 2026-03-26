@@ -4,6 +4,27 @@
 
 ---
 
+## Kakao channel entry guide
+
+Decker를 한 줄로 소개하면:
+**"나만의 금융 AI 에이전트, 대화로 시그널·주문·청산까지 텔레그램에서 바로."**
+
+카카오 채널은 **입구/상담 채널**입니다.
+
+- **카카오 채널**: 서비스 소개, 가입/연동 안내, 문의/상담
+- **텔레그램 (@deckerclawbot)**: 시그널 조회, 주문, 청산, 자동주문 등 실사용
+- **카카오 채널 링크**: https://pf.kakao.com/_RxlxjVX
+
+### Kakao -> Telegram 3-step flow
+
+1. 카카오 채널에서 서비스 소개/사용법 확인
+2. `decker-ai.com` 가입 + 텔레그램 연동
+3. 텔레그램에서 "비트코인 시그널 알려줘", "ETH 0.01 매수해줘"처럼 실행
+
+> 카카오 채널 바로가기: https://pf.kakao.com/_RxlxjVX
+
+---
+
 ## 채팅 vs 대시보드
 
 | 구분 | 채팅 (Telegram 권장, OpenClaw 스킬) | 대시보드 (decker-ai.com) |

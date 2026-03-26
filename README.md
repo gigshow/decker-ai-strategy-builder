@@ -21,7 +21,7 @@
 [![API Docs](https://img.shields.io/badge/API-Docs-00C853?style=flat-square)](https://api.decker-ai.com/docs)
 [![Website](https://img.shields.io/badge/Website-decker--ai.com-6C47FF?style=flat-square)](https://decker-ai.com)
 
-[🌐 Website](https://decker-ai.com) · [🤖 Telegram (DeckerClaw)](https://t.me/deckerclawbot) · [📖 API Docs](https://api.decker-ai.com/docs) · [🚀 Quick Start](docs/quickstart.md) · [📊 Signal Performance](docs/signal-performance.md) · [🛡 Risk Management](docs/risk-management.md) · [🗺 Roadmap](docs/roadmap.md)
+[🌐 Website](https://decker-ai.com) · [🤖 Telegram (DeckerClaw)](https://t.me/deckerclawbot) · [💬 Kakao Channel](https://pf.kakao.com/_RxlxjVX) · [💬 Kakao Channel Guide](docs/usage-guide.md#kakao-channel-entry-guide) · [📖 API Docs](https://api.decker-ai.com/docs) · [🚀 Quick Start](docs/quickstart.md) · [📊 Signal Performance](docs/signal-performance.md) · [🛡 Risk Management](docs/risk-management.md) · [🗺 Roadmap](docs/roadmap.md)
 
 </div>
 
@@ -31,6 +31,7 @@
 
 | Time | Path | What |
 |------|------|------|
+| **1 min** | Kakao | Kakao channel entry: intro, onboarding, human consultation |
 | **30 sec** | API | `curl -s "https://api.decker-ai.com/api/v1/signals/BTCUSDT/state"` |
 | **3 min** | Samples | `./samples/signal-push-strategy.sh BTCUSDT 96000 100000 92000` |
 | **5 min** | Telegram | [@deckerclawbot](https://t.me/deckerclawbot) — "비트코인 시그널 알려줘" |
@@ -44,7 +45,7 @@
 
 | 페르소나 | 다음 한 걸음 |
 |----------|----------------|
-| **써보기** | [decker-ai.com](https://decker-ai.com) · [Telegram `/` 명령](docs/TELEGRAM_AGENT_COMMANDS.md) |
+| **써보기** | [decker-ai.com](https://decker-ai.com) · [Kakao 진입 가이드](docs/usage-guide.md#kakao-channel-entry-guide) · [Telegram `/` 명령](docs/TELEGRAM_AGENT_COMMANDS.md) |
 | **에이전트·스킬** | [투웨이 한 페이지](docs/TWO_WAY_MODEL.md) · [온보딩 한 장](docs/ONBOARDING_PUBLIC.md) · [짧은 인덱스](docs/AGENT_SKILLS_PUBLIC_SUMMARY.md) · [스킬 표](docs/DECKER_AGENT_SKILLS.md) · [OpenClaw 패키지](docs/openclaw_skills/README.md) |
 | **개발·연동** | [API Guide](docs/api-guide.md) · [CONTRIBUTING.md](CONTRIBUTING.md) · [roadmap](docs/roadmap.md) |
 
@@ -52,11 +53,24 @@
 
 ## 🎯 Overview
 
-**Decker AI**는 가격·시간 시계열에서 시장 구조(Object, Swing)를 분석하고, **진행도(progress_pct)**와 **상태(status)**를 결정론적으로 계산하여 고정밀 거래 시그널을 생성하는 **AI 마켓 스테이트 엔진**입니다. **Harness 목표**: AI 시장 이해 + 사용자 상의 + 최적 실행 (시장=게임).
+한 줄 소개:
+**나만의 금융 AI 에이전트, 대화로 시그널·주문·청산까지 텔레그램에서 바로.**
+
+사용자 관점에서 Decker는 이렇게 동작합니다.
+
+1. 카카오 채널에서 서비스 소개/문의로 시작
+2. `decker-ai.com` 가입 + 텔레그램 연동
+3. 텔레그램 `@deckerclawbot`에서 시그널 조회·주문·청산 실행
 
 > **You say:** "비트코인 시그널 알려줘" / "이 시그널 지금 어떻게 할까?" / "ETH 0.01 매수해줘"
 >
 > **DeckerClaw returns:** 시그널·진행도(progress_pct)·전략·주문 실행 — 말만 하면
+
+---
+
+### Technical deep dive
+
+**Decker AI**는 가격·시간 시계열에서 시장 구조(Object, Swing)를 분석하고, **진행도(progress_pct)**와 **상태(status)**를 결정론적으로 계산하여 고정밀 거래 시그널을 생성하는 **AI 마켓 스테이트 엔진**입니다. **Harness 목표**: AI 시장 이해 + 사용자 상의 + 최적 실행 (시장=게임).
 
 LLM은 가격을 예측하지 않습니다. Decker AI는 시장 구조를 **계산**합니다.
 
