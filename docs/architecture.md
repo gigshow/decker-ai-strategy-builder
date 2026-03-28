@@ -1,6 +1,6 @@
 # Decker AI Architecture
 
-**Decker AI Strategy Builder — 시장 구조 기반 시그널 인텔리전스**
+**Decker AI Strategy Builder — 시퀀스·상태머신·게이트로 읽는 시장 구조 엔진** (progress_pct 생명주기 + RULES; DeckerClaw / API)
 
 ---
 
@@ -8,12 +8,12 @@
 
 Decker AI는 LLM이 가격을 예측하는 서비스가 아닙니다.
 
-시계열 데이터에서 시장 구조(Object, Swing)를 분석하고, 진행도(progress_pct)와 상태(status)를 **결정론적으로 계산**하는 엔진입니다. LLM은 그 결과를 자연어로 전달하는 인터페이스(DeckerClaw)입니다.
+시계열은 **시퀀스 라벨**과 **5상태 FSM**으로 읽히고, **운영 게이트(GO/WATCH/HOLD)**와 시그널 생명주기에서 **진행도(progress_pct)·상태(status)**를 **결정론적으로 계산**합니다. LLM은 그 결과를 자연어로 전달하는 선택 인터페이스(DeckerClaw·상의)입니다.
 
 | 구분 | 일반 AI 트레이딩 | Decker AI |
 |------|------------------|-----------|
-| 시그널 생성 | LLM/ML 가격 예측 | **시장 상태 엔진** |
-| 핵심 출력 | "매수/매도" | progress_pct, status, 전략 |
+| 시그널 생성 | LLM/ML 가격 예측 | **구조 엔진** (시퀀스·FSM·게이트) |
+| 핵심 출력 | "매수/매도" | progress_pct, status, operation_gate, 전략 |
 | LLM 역할 | 예측·판단 | **인터페이스·설명** |
 | 토큰 비용 | 시그널마다 호출 | **룰북 경로 $0** |
 

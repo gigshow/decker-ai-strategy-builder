@@ -11,16 +11,22 @@
 
 **설정 위치**: 레포 메인 → 우측 About → ⚙️ Edit
 
-**권장 문구** (한 줄, 350자 이내):
+**권장 문구** (한 줄, 350자 이내) — README 슬로건·Phase 4(시퀀스·FSM·게이트)와 정렬:
 
 ```
-Decker AI Strategy Builder — deterministic signal lifecycle engine. Crypto, futures, stocks. progress_pct, Telegram (DeckerClaw), REST API. No prediction.
+Decker — the market has grammar. Sequence labeling + 5-state FSM + GO/WATCH/HOLD + progress_pct & YAML rules. DeckerClaw (Telegram) + REST API. Deterministic structure, not price prediction.
 ```
 
-또는 (짧은 버전):
+또는 (한국어 About용):
 
 ```
-Decker AI Strategy Builder. Signal lifecycle engine. Crypto, futures, stocks. progress_pct, DeckerClaw, API.
+시장에는 문법이 있다 — 시퀀스 라벨·상태머신·GO/WATCH/HOLD·progress_pct·룰북. 텔레그램 DeckerClaw·공개 API. 가격 예측이 아니라 결정론적 구조 엔진.
+```
+
+짧은 영문 버전:
+
+```
+Structural market engine: sequences → FSM → gate → RULES → optional LLM. progress_pct lifecycle. DeckerClaw + API.
 ```
 
 ---
@@ -49,10 +55,12 @@ Decker AI Strategy Builder. Signal lifecycle engine. Crypto, futures, stocks. pr
 | 14 | python | Python 샘플 |
 | 15 | yaml | RULES.yaml |
 | 16 | trading-signals | 트레이딩 시그널 |
+| 17 | state-machine | 상태 머신 |
+| 18 | deterministic | 결정론적 엔진 |
 
-**복사용** (쉼표 구분):
+**복사용** (쉼표 구분, 20개 제한 시 아래에서 2개 제거):
 ```
-ai-trading, crypto-signal, trading-bot, bitcoin, ethereum, cryptocurrency, futures, stock-trading, telegram-bot, signal-engine, algorithmic-trading, trading-api, market-analysis, python, yaml, trading-signals
+ai-trading, crypto-signal, trading-bot, bitcoin, ethereum, cryptocurrency, futures, stock-trading, telegram-bot, signal-engine, algorithmic-trading, trading-api, market-analysis, python, yaml, trading-signals, state-machine, deterministic
 ```
 
 ---

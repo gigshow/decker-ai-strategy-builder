@@ -31,4 +31,5 @@ This repo ships a **working public API**, runnable samples, and operation rules 
 ## Links
 - API: https://api.decker-ai.com/docs
 - Telegram: https://t.me/deckerclawbot
+- Kakao channel: https://pf.kakao.com/_RxlxjVX
 - Website: https://decker-ai.com

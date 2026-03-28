@@ -4,6 +4,15 @@ All notable changes to the Decker AI Strategy Builder are documented in this fil
 
 ---
 
+## [v1.4.6] - 2026-03-28
+
+### Changed
+
+- **README**: 상단 배지·히어로 링크에 **Kakao Channel** 복원; SEO keywords 보강
+- **`llms.txt`**: Kakao 채널 URL 추가
+- **`docs/architecture.md`**: 한 줄 소개·State Engine 절을 시퀀스·FSM·게이트·`operation_gate` 중심으로 정리
+- **`.github/REPO_DISCOVERABILITY.md`**: GitHub About 권장 문구·Topics를 Phase 4 내러티브에 맞게 갱신
+
 ## [v1.4.5] - 2026-03-28
 
 ### Added

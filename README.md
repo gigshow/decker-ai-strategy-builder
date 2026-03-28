@@ -1,7 +1,7 @@
 <!--
   Keywords: AI trading, crypto signal, Bitcoin, Ethereum, market state engine,
   state machine, sequence labeling, algorithmic trading, trading API, Telegram bot,
-  deterministic signal, progress_pct, operation rules, GO WATCH HOLD
+  deterministic signal, progress_pct, operation rules, GO WATCH HOLD, Kakao channel
 -->
 <div align="center">
 
@@ -17,10 +17,11 @@
 [![GitHub Forks](https://img.shields.io/github/forks/gigshow/decker-ai-strategy-builder?style=flat-square)](https://github.com/gigshow/decker-ai-strategy-builder/network)
 [![Monthly Return](https://img.shields.io/badge/range--market_return-20~30%25-brightgreen?style=flat-square)](docs/signal-performance.md)
 [![Telegram](https://img.shields.io/badge/Telegram-DeckerClaw-26A5E4?style=flat-square&logo=telegram&logoColor=white)](https://t.me/deckerclawbot)
+[![Kakao Channel](https://img.shields.io/badge/Kakao-Channel-FEE500?style=flat-square&logo=kakaotalk&logoColor=000000)](https://pf.kakao.com/_RxlxjVX)
 [![API Docs](https://img.shields.io/badge/API-Docs-00C853?style=flat-square)](https://api.decker-ai.com/docs)
 [![Website](https://img.shields.io/badge/Website-decker--ai.com-6C47FF?style=flat-square)](https://decker-ai.com)
 
-[🌐 Website](https://decker-ai.com) · [🤖 Telegram (DeckerClaw)](https://t.me/deckerclawbot) · [📖 API Docs](https://api.decker-ai.com/docs) · [🚀 Quick Start](docs/quickstart.md) · [📚 Article Series](docs/medium/README.md) · [🗺 Roadmap](docs/roadmap.md)
+[🌐 Website](https://decker-ai.com) · [🤖 Telegram (DeckerClaw)](https://t.me/deckerclawbot) · [💬 Kakao Channel](https://pf.kakao.com/_RxlxjVX) · [📖 API Docs](https://api.decker-ai.com/docs) · [🚀 Quick Start](docs/quickstart.md) · [📚 Article Series](docs/medium/README.md) · [🗺 Roadmap](docs/roadmap.md)
 
 </div>
 
