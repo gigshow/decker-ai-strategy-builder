@@ -70,7 +70,7 @@ curl -X POST "https://api.decker-ai.com/api/v1/signals/push" \
 | GET | /api/v1/system/health | 헬스체크 |
 | GET | /api/v1/judgment/coverage | 20종목×6시간대 신호 현황 |
 | GET | /api/v1/judgment/signals/public?symbol=BTCUSDT&timeframe=1h | 시그널 (direction, confidence, entry/target/stop) |
-| GET | /api/v1/signals/{symbol}/state | 종목별 시그널 상태 (progress_pct, status, risk_reward_ratio, market_state) |
+| GET | /api/v1/signals/{symbol}/state | 종목별 시그널 상태 — `signals[].state`에 `progress_pct`, `status`, `state_quality`, (선택) `engine_trace_id` 등; 시퀀스·`operation_gate` 전체는 엔진 병합 경로에서만 ([examples/signal_example.md](../examples/signal_example.md) §2) |
 | GET | /api/v1/signals/{symbol}/strategy?timeframe=1h&risk_appetite=medium | 진행도 기반 전략 (오퍼레이션 룰북) |
 | GET | /api/v1/signals/{symbol}/consultation?timeframe=1h | 상의 응답 (rationale, choices) |
 | GET | /api/v1/market/prices?symbols=BTCUSDT,ETHUSDT | 실시간 시세 |

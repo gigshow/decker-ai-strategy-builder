@@ -12,7 +12,7 @@ This repo ships a **working public API**, runnable samples, and operation rules 
 - docs/roadmap.md — Shipped, in progress, planned (product Phase 4 vs article “Context Engine” noted there)
 
 ## Concept (structural truth)
-- concept/sequence_engine.md — Sequence labeling, 5-state FSM, GO/WATCH/HOLD
+- concept/sequence_engine.md — Sequence labeling, session FSM + gate (diagrams/system_flow.md = canonical transitions)
 - concept/labeling_algorithm.md — How candles get sequence roles
 - concept/signal_llm_concept.md — Engine decides; LLM explains
 - concept/market_state_theory.md — progress_pct and lifecycle framing

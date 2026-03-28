@@ -52,7 +52,7 @@ Market State → Signal Touch → Target Formation
 
 ```
 [Decker 공통 백엔드]
-  State Engine | RULES.yaml v1.4.0 | API
+  State Engine | RULES.yaml (버전은 [RULES.yaml 헤더](../operation_rules/RULES.yaml) `version`/`updated` 기준) | API
         │
         ├── [선택 A: 자체 에이전트 모델]
         │     intent_engine → Telegram @deckerclawbot / Web
@@ -78,10 +78,12 @@ Decker는 OpenClaw 생태계에 스킬로 참여합니다. OpenClaw 사용자는
 ```
 시계열 데이터
     → [라벨링 알고리즘] → 오브젝트 평가, 라벨 (S, T, 1)
-    → [State Engine] → progress_pct, status
+    → [시퀀스·세션 FSM + (별도) 시그널 진행도] → 구조 상태 + progress_pct, status
     → [오퍼레이션 룰북] → 전략 (RULES.yaml 첫 매칭)
     → Web / Telegram(자체) / OpenClaw 스킬 / API
 ```
+
+*참고*: `progress_pct`·`status`는 시그널(진입·목표·손절)+현재가로 계산되는 층과, 시퀀스 라벨·FSM 층이 **합성**될 수 있다. `GET /api/v1/signals/{symbol}/state`의 `signals[].state`는 전자 중심 + DB `engine_trace_id` 등(있을 때) — 전체 엔진 스냅샷·`operation_gate` 병합은 상의·전략 경로·문서 `SIGNAL_STATE_ENGINE_MERGE`를 본다.
 
 ```
 ┌─────────────┐     ┌─────────────────┐
@@ -314,8 +316,8 @@ The Sequence Engine extends the base architecture with contextual state awarenes
 Raw OHLCV
     ↓  Sequence Labeler (MODE_SEQ_V2)
        Each candle: role (anchor/test/signal/connector) + direction + quality score
-    ↓  5-State Machine
-       INIT → C_SET → B_FORMING → B_SET → W_PENDING
+    ↓  Session FSM (core path; monorepo StateEngine)
+       INIT · C_SET · B_FORMING · B_SET · A_FORMING · W_PENDING (+ BREAK± / NEUTRAL when live)
        Tracks: main swing + sub-swing (counter-narrative) + connector phase
     ↓  Operation Gate
        GO · WATCH · HOLD  (three operational modes, not binary)

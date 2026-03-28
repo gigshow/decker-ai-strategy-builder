@@ -92,15 +92,13 @@ From the design documentation:
 
 ## Calling the Engine
 
-Here's what a structural state looks like when the engine responds:
+The block below is an **illustrative** evaluate/merge shape (session snapshot + quality), not a guarantee that every public endpoint returns this exact JSON. `GET /api/v1/signals/{symbol}/state` is **progress-first** unless engine fields are merged — see [examples/signal_example.md](../../../examples/signal_example.md) and [api-guide](../../api-guide.md). Gate keys in live payloads may appear as **`operation_gate`** (brand) or **`operation_context.action_gate`** (merge).
 
 ```json
 {
-  "state": "B_SET",
-  "sub_swing": 2,
-  "in_connector_phase": false,
+  "engine_c_state": "B_SET",
+  "engine_sub_swing_id": 2,
   "label_mode": "sequence_v2",
-  "last_event": "b_leg_confirmed",
   "key_direction": "+",
   "label_quality": {
     "confidence": 0.87,
@@ -110,9 +108,8 @@ Here's what a structural state looks like when the engine responds:
 }
 ```
 
-`state: "B_SET"` means: the B-leg (test swing) of the current sequence is established and confirmed.  
-`sub_swing: 2` means: we're in the second sub-swing — the counter-force has made its second structural attempt.  
-`in_connector_phase: false` means: the last candle was not a connector — it was a directional candle with positional meaning.
+`engine_c_state: "B_SET"` (when present): the B-leg of the current sequence is structurally confirmed — resolution/arming continues in **`A_FORMING`** in code.  
+`engine_sub_swing_id: 2`: second sub-swing scope (when the DB/engine exposes it).
 
 None of this comes from a prediction model. This is **deterministic state parsing** — the same candle stream produces the same output, every time.
 
@@ -146,7 +143,7 @@ RSI/MACD gives you a single frame. You can see if the actor is angry or happy. B
 
 The sequence label gives you the **episode number, the story arc position, and what just happened in the last scene**.
 
-`sub_swing: 2, state: B_FORMING` translates to: *"We're in the second act of a counter-narrative. The protagonist's thesis is being tested. The outcome hasn't resolved yet."*
+`engine_sub_swing_id: 2` with session in `B_FORMING` translates to: *"We're in the second act of a counter-narrative. The protagonist's thesis is being tested. The outcome hasn't resolved yet."*
 
 That's what the engine communicates — not a number, but a **position in a story**.
 

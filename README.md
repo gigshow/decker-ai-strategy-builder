@@ -125,7 +125,7 @@ Understanding Decker's engine becomes clearer through three lenses:
 
 ```
 Sequence Labeler  →  Each candle: role (anchor/test/signal) + direction + quality score
-State Engine      →  5-state FSM: structural position in current cycle  
+State Engine      →  Session FSM: structural position (see diagrams/system_flow.md for core vs runtime states)  
 Operation Gate    →  GO / WATCH / HOLD: three-way operational mode
 RULES Engine      →  YAML rulebook: 9 layers, 30+ rules, version-controlled
 AI Consultation   →  LLM as translator (not decision-maker): explains state in plain language
@@ -160,7 +160,7 @@ Details: [Signal Performance](docs/signal-performance.md) · [Model & Algorithm]
 State Engine, signal lifecycle, Target→Signal→Entry philosophy, YAML rulebook, multi-timeframe alignment, and the $0-LLM-cost architecture.
 
 **Part 2 — Context Engine (Articles 11–15)**  
-How markets speak in sequences, the 5-state machine, the GO/WATCH/HOLD gate, why AI explains but doesn't decide, and how to version a trading algorithm across two repos.
+How markets speak in sequences, the session state machine, the GO/WATCH/HOLD gate, why AI explains but doesn't decide, and how to version a trading algorithm across two repos.
 
 → [Read the full series](docs/medium/README.md)
 
@@ -230,7 +230,7 @@ curl -s "https://api.decker-ai.com/api/v1/signals/BTCUSDT/state" | python3 -m js
 | ✅ | Operations | RULES.yaml v2.3+, progress/multi-TF/engine conditions |
 | ✅ | Agent | Telegram (Way A) + OpenClaw (Way B) + turnkey (Way D) |
 | ✅ | Signal LLM | rationale · choices · tf_alignment · entry_timing |
-| ✅ | State Engine | Sequence labeling + 5-state FSM + GO/WATCH/HOLD gate |
+| ✅ | State Engine | Sequence labeling + session FSM + GO/WATCH/HOLD gate ([diagrams](diagrams/system_flow.md)) |
 | 🔜 | Backtest report | progress-range profit validation, public results |
 | 🔜 | DSL | Strategy expression beyond RULES |
 

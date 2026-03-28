@@ -9,7 +9,7 @@
 Decker is built on three pillars:
 
 1. **Target → Signal → Entry** — Target structure is defined before entry; signals confirm that structure.
-2. **Sequence Engine (Context Engine)** — Candles are read as a grammatical sequence; a 5-state machine tracks structural position; a ternary **operation gate** (`GO` / `WATCH` / `HOLD`) expresses operational mode.
+2. **Sequence Engine (Context Engine)** — Candles are read as a grammatical sequence; a **session FSM** tracks structural position (five core names in docs; runtime adds **`A_FORMING`** and break states — [system flow](../diagrams/system_flow.md)); a ternary **operation gate** (`GO` / `WATCH` / `HOLD`) expresses operational mode.
 3. **RULES + optional LLM** — [RULES.yaml](../operation_rules/RULES.yaml) matches state to strategy (**$0** on the rules path). The LLM only narrates the result.
 
 Concept docs: [Sequence Engine](../concept/sequence_engine.md) · [Labeling](../concept/labeling_algorithm.md) · [Diagrams](../diagrams/system_flow.md)
@@ -74,7 +74,7 @@ DECKER는 **`target → signal → entry`** 순서입니다.
 | 구성 요소 | 의미 |
 |-----------|------|
 | **Sequence labels** | 각 봉의 구조적 역할 |
-| **5-state FSM** | INIT → C_SET → B_FORMING → B_SET → W_PENDING |
+| **Session FSM (core)** | INIT · C_SET · B_FORMING · B_SET · **A_FORMING** · W_PENDING (+ break states); 상세 전이는 [diagrams/system_flow.md](../diagrams/system_flow.md) |
 | **operation_gate** | GO / WATCH / HOLD |
 | **label_quality** | confidence, stability, regime_consistency |
 
@@ -202,7 +202,7 @@ Max DD: 8.1%
 ```
 OHLCV candles
     → [Sequence labeling] → roles + 3-lane context + label_quality
-    → [5-state machine] → structural state + operation_gate (GO/WATCH/HOLD)
+    → [session FSM + gate] → structural state + operation_gate (GO/WATCH/HOLD)
     → [State Engine] → progress_pct, status (signal lifecycle)
     → [RULES.yaml] → strategy + ranked choices (first match)
     → [LLM consultation, optional] → natural language (does not override engine)

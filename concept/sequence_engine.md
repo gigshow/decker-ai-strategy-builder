@@ -65,24 +65,27 @@ The **sub-swing counter** is particularly important. When the sub-swing is on it
 
 ---
 
-## Layer 3: The 5-State Machine
+## Layer 3: Session state machine (core path)
 
-The labeled sequence events drive a **finite state machine** with five discrete states:
+The labeled sequence events drive a **finite state machine**. The **narrative** below includes “invalidate back to anchor” shortcuts; the **minimal trigger table** in the monorepo `StateEngine` matches [System flow diagrams](../diagrams/system_flow.md) (solid edges). Runtime enum also includes **A_FORMING** and **break** states (`BREAK_PLUS` / `BREAK_MINUS` / `NEUTRAL`).
 
 ```
 INIT
  │ anchor appears
 ▼
 C_SET ──────────── bilateral break ──────────▶ W_PENDING
- │ test begins                                      │ direction resolves
+ │ test begins                                      │ resolved / rebind
 ▼                                                   ▼
 B_FORMING ── test invalidated ──────────────▶ C_SET
- │ test confirmed
+ │ test confirmed                                 (narrative; see diagram)
 ▼
-B_SET ─── signal confirmed ────▶ INIT (new cycle)
+B_SET ─── signal pending / confirmed ────▶ A_FORMING
  │ test invalidated
 ▼
 C_SET
+A_FORMING ── failed break / reset ──▶ C_SET
+A_FORMING ── wide pending enter ──▶ W_PENDING
+W_PENDING ── resolved / rebind ──▶ C_SET
 ```
 
 Every market moment is in exactly one of these states. And from each state, only specific transitions are possible — based on which labeled event just arrived.

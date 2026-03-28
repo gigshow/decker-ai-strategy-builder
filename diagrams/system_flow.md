@@ -19,7 +19,7 @@ flowchart LR
     end
 
     subgraph State[2. State Machine]
-        FSM[5-State FSM\nINIT → C_SET\nB_FORMING → B_SET\nW_PENDING]
+        FSM[Session FSM\nINIT · C_SET · B_FORMING\nB_SET · A_FORMING · W_PENDING\n+ break states when live]
         Lanes[3-Lane Tracking\nmain · sub-swing · connector]
     end
 
@@ -67,7 +67,9 @@ flowchart LR
 
 ---
 
-## The 5-State Machine
+## Session state machine (core path)
+
+Aligned with the engine `StateEngine` **`TRANSITION_RULES`** tuple in the monorepo (`services/decker-engine`). Narrative “test invalidated → back to anchor” paths appear in [Sequence Engine](../concept/sequence_engine.md) but are **not** separate named triggers in that core table.
 
 ```mermaid
 stateDiagram-v2
@@ -76,12 +78,13 @@ stateDiagram-v2
     C_SET --> B_FORMING : test begins
     C_SET --> W_PENDING : bilateral break
     B_FORMING --> B_SET : test confirmed
-    B_FORMING --> C_SET : test invalidated
-    B_SET --> INIT : signal confirmed (new cycle)
-    B_SET --> C_SET : test invalidated
-    W_PENDING --> B_FORMING : direction resolved
-    W_PENDING --> C_SET : break invalidated
+    B_SET --> A_FORMING : signal pending / confirmed
+    A_FORMING --> C_SET : failed break / cycle reset
+    A_FORMING --> W_PENDING : wide pending enter
+    W_PENDING --> C_SET : resolved / rebind
 ```
+
+Runtime enum also includes **BREAK_PLUS**, **BREAK_MINUS**, **NEUTRAL** for confirmed / structural break handling — omitted here for readability; see the monorepo labeling guide and state-engine regression tests.
 
 *Each transition is deterministic: same input → same output. Always.*
 

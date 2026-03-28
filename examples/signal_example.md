@@ -21,17 +21,36 @@ A signal is pushed to the engine with entry, target, and stop-loss levels:
 
 ---
 
-## 2. Structural State Evaluation
+## 2. Signal state on the API (`GET /api/v1/signals/{symbol}/state`)
 
-The engine evaluates the candle sequence around the signal and returns:
+Production `signals[].state` is built from **`build_signal_state`** (progress layer) plus optional DB enrich **`engine_trace_id`**, **`engine_sub_swing_id`**, **`engine_connector_swing_id`** when stored on `judgment_signals`. It does **not** always include sequence labels, `operation_gate`, or `label_quality` — those appear when the engine evaluate path is **merged** into `signal_state` (consultation / internal merge; see monorepo `SIGNAL_STATE_ENGINE_MERGE.md`). Merged payloads may expose gate info under **`operation_context.action_gate`** as well as branded **`operation_gate`** in some serializers — cross-check [api-guide](../docs/api-guide.md).
+
+**Typical `state` object (price + signal leg known):**
 
 ```json
 {
-  "state": "B_SET",
-  "last_event": "b_leg_confirmed",
-  "direction": "+",
-  "sub_swing_count": 1,
-  "in_connector_phase": false,
+  "symbol": "BTCUSDT",
+  "direction": "long",
+  "signal_at": 96000,
+  "target": 100000,
+  "stop_loss": 92000,
+  "current": 98400,
+  "progress_pct": 60.0,
+  "remaining_pct": 40.0,
+  "to_target_pct": 1.6,
+  "status": "in_progress",
+  "state_quality": "full",
+  "risk_reward_ratio": 2.0,
+  "engine_trace_id": "01HQ…",
+  "engine_sub_swing_id": 1
+}
+```
+
+**Illustrative composite (engine + gate narrative — not guaranteed on raw `/state`):**
+
+```json
+{
+  "engine_c_state": "B_SET",
   "operation_gate": "GO",
   "label_quality": {
     "confidence": 0.88,
@@ -41,11 +60,10 @@ The engine evaluates the candle sequence around the signal and returns:
 }
 ```
 
-**Reading this output:**
-- `state: "B_SET"` — The B-leg (test swing) is structurally confirmed. Resolution is pending.
-- `last_event: "b_leg_confirmed"` — The test phase just completed.
-- `sub_swing_count: 1` — Counter-narrative is at its first attempt. Manageable risk.
-- `operation_gate: "GO"` — Structural conditions are met. Evaluate entry.
+**Reading the typical block:**
+- `progress_pct` / `status` — Signal lifecycle vs current price (same formulas as [Architecture § State Engine](../docs/architecture.md)).
+- `state_quality` — `full` | `partial` | `unknown` (whether the entry→target leg is well-defined).
+- `engine_*` keys — Present when the row has been linked to an engine run; absent does not mean “no sequence engine,” only that this response slice is progress-first.
 
 ---
 
@@ -128,13 +146,16 @@ Or ask [@deckerclawbot](https://t.me/deckerclawbot): *"What should I do with my 
 
 ## Understanding the States
 
-| State | Structural Situation | Gate |
-|-------|---------------------|------|
+| State | Structural Situation | Gate (typical) |
+|-------|---------------------|----------------|
 | `INIT` | No anchor yet | WATCH |
 | `C_SET` | Anchor established | WATCH |
 | `B_FORMING` | Test in progress | WATCH |
 | `B_SET` | Test confirmed, resolution pending | GO |
+| `A_FORMING` | Signal / outcome handling (after `B_SET`) | WATCH / varies |
 | `W_PENDING` | Bilateral break, direction unclear | HOLD |
+
+*Gates are product-facing summaries; runtime keys may use `operation_context.action_gate` when merged.*
 
 ---
 

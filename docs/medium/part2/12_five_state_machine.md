@@ -26,13 +26,15 @@ Sometimes it does. Often enough that people keep using it. But there's a silent 
 
 The Decker engine inverts this entirely. Instead of asking *"what shape does the price form?"*, it asks *"what structural state is the market in, and what can happen from here?"*
 
-The answer is a 5-state machine. And unlike a pattern library, it has no false positives — because it doesn't predict. It **describes**.
+The answer is a **small, auditable session state machine**. And unlike a pattern library, it has no false positives — because it doesn't predict. It **describes**.
+
+> **Implementation note:** The open engine’s `SessionState` enum includes **`A_FORMING`** (signal / break handling after `B_SET`) and **break** states (`BREAK_PLUS` / `BREAK_MINUS` / `NEUTRAL`). The five rows below are the **core narrative** states readers first learn; canonical transitions vs code are in [diagrams/system_flow.md](../../../diagrams/system_flow.md).
 
 ---
 
-## The Five States
+## The five core states (narrative)
 
-The state engine tracks one session at a time through five discrete states:
+The state engine tracks one session at a time. These five names are the usual mental model:
 
 | State | Name | Meaning |
 |-------|------|---------|
@@ -42,7 +44,7 @@ The state engine tracks one session at a time through five discrete states:
 | `B_SET` | Test Confirmed | The test has completed structurally — resolution is pending |
 | `W_PENDING` | Wide Break Pending | A bilateral break occurred — direction is ambiguous, waiting for resolution |
 
-That's it. Five states. Every moment the market is in exactly one of them. And from each state, only specific transitions are possible — not based on price levels or indicator thresholds, but based on **what labeled candle events arrive**.
+Add **`A_FORMING`** after `B_SET` when the engine moves into signal / outcome handling (see diagram). Every moment the market is in exactly one session state. Transitions follow **labeled events**, not indicator thresholds.
 
 ---
 
@@ -54,21 +56,22 @@ Here's the core design decision that makes this different from any ML-based appr
 
 Conceptually, the transition table looks like this:
 
-| Current State | Event | Next State |
+| Current State | Event (trigger) | Next State |
 |---|---|---|
 | `INIT` | Anchor candle appears | `C_SET` |
 | `C_SET` | Test begins | `B_FORMING` |
 | `C_SET` | Bilateral break | `W_PENDING` |
 | `B_FORMING` | Test confirmed | `B_SET` |
-| `B_FORMING` | Test invalidated | `C_SET` |
-| `B_SET` | Signal confirmed | `INIT` (new cycle) |
-| `B_SET` | Test invalidated | `C_SET` |
-| `W_PENDING` | Direction resolved | `B_FORMING` |
-| `W_PENDING` | Break invalidated | `C_SET` |
+| `B_SET` | Signal pending / confirmed | `A_FORMING` |
+| `A_FORMING` | Failed break / cycle reset | `C_SET` |
+| `A_FORMING` | Wide pending enter | `W_PENDING` |
+| `W_PENDING` | Resolved / rebind | `C_SET` |
+
+*Narrative-only shortcuts* (e.g. “test invalidated” straight to `C_SET`) appear in prose and higher-level pipelines; the **minimal** `TRANSITION_RULES` tuple in code is what regression tests lock — see [system_flow.md](../../../diagrams/system_flow.md).
 
 The transition graph is finite and closed. You can draw it on a napkin. Every possible market evolution maps to a path through this graph.
 
-When you're in `B_SET`, you know exactly two things can happen: either the signal confirms (cycle ends, new cycle starts) or the test breaks down (return to anchor). That's not a guess. That's a constraint. And constraints are more useful than predictions.
+When you're in `B_SET`, the next **named** core step is into `A_FORMING` when a signal path arms; outcomes then reset or branch into wide-pending or break states. That's not a guess. That's a constraint. And constraints are more useful than predictions.
 
 ---
 

@@ -93,7 +93,7 @@ High quality does not mean "will profit." It means "the structural conditions fo
 
 ## Output Format
 
-After processing a candle sequence, the labeling algorithm produces:
+After processing a candle sequence, the pipeline produces a **conceptual** bundle similar to below. **Field names and nesting differ** by path (evaluate vs `GET …/state`); the latter is progress-first unless engine keys are merged — [signal example](../examples/signal_example.md).
 
 ```json
 {
@@ -102,8 +102,8 @@ After processing a candle sequence, the labeling algorithm produces:
     "direction": "+",
     "position_in_cycle": "b_leg_confirmed"
   },
-  "state": "B_SET",
-  "sub_swing_count": 2,
+  "engine_c_state": "B_SET",
+  "engine_sub_swing_id": 2,
   "in_connector_phase": false,
   "label_quality": {
     "confidence": 0.87,
@@ -114,7 +114,7 @@ After processing a candle sequence, the labeling algorithm produces:
 }
 ```
 
-This output feeds directly into the [State Machine](sequence_engine.md#layer-2-the-5-state-machine) and [Operation Gate](sequence_engine.md#layer-4-the-operation-gate-go--watch--hold).
+This output feeds directly into the [session state machine](sequence_engine.md#layer-3-session-state-machine-core-path) and [Operation Gate](sequence_engine.md#layer-4-the-operation-gate-go--watch--hold).
 
 ---
 
@@ -135,7 +135,7 @@ This output feeds directly into the [State Machine](sequence_engine.md#layer-2-t
 
 The labeling output is consumed by:
 
-1. **State Machine** — Transitions between the 5 structural states based on label events
+1. **Session state machine** — Transitions from label events; narrative “five core” states plus **`A_FORMING`** and break states in the open engine enum (see [system flow](../diagrams/system_flow.md))
 2. **Operation Gate** — Determines `GO` / `WATCH` / `HOLD` based on the current state
 3. **RULES Engine** — Applies policy rules using label quality and state fields
 4. **AI Consultation** — Explains the structural state in natural language
