@@ -132,7 +132,7 @@ AI Consultation   →  LLM as translator (not decision-maker): explains state in
 Signal Lifecycle  →  progress_pct: real-time position within the signal's journey
 ```
 
-Full technical detail: [Architecture](docs/architecture.md) · [Algorithm Concepts](concept/labeling_algorithm.md) · [Model & Performance](docs/model.md)
+Full technical detail: [Architecture](docs/architecture.md) · [Algorithm Concepts](concept/labeling_algorithm.md) · [Model & Performance](docs/model.md) · [**Recipe → run with live OHLCV**](docs/engine-recipe-and-run.md) (monorepo script)
 
 ---
 

@@ -17,6 +17,7 @@ This repo ships a **working public API**, runnable samples, and operation rules 
 - concept/signal_llm_concept.md — Engine decides; LLM explains
 - concept/market_state_theory.md — progress_pct and lifecycle framing
 - diagrams/system_flow.md — Mermaid: labeler → FSM → gate → RULES → consultation
+- docs/engine-recipe-and-run.md — Concept → monorepo B1 script (live OHLCV → evaluate JSON)
 
 ## Articles (public series)
 - docs/medium/README.md — Part 1 + Part 2 index
