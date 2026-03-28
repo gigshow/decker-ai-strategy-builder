@@ -1,22 +1,5 @@
-# Decker AI Strategy Builder — Documentation Index
+# Documentation index
 
-Use this file to discover available pages before exploring further.
+**Canonical manifest**: use the repository root [`llms.txt`](../llms.txt) — it is the single source of truth for AI discovery paths.
 
-**이 레포는 계획문서만 있는 것이 아님.** 실제 사용 가능한 API·실행 가능한 samples가 있습니다.
-
-## Documentation
-
-- README.md — Project overview, Story, Quick Start, Achievements, **서비스 뒷단 구조(핵심 파이프라인)**
-- docs/quickstart.md — 3-step guide, Telegram 권장·Slack 보조, usage
-- docs/api-guide.md — **Public API (실제 사용 가능)**: GET /signals, /strategy, POST /signals/push — api.decker-ai.com 호출
-- docs/architecture.md — **서비스 뒷단 구조**, 핵심 파이프라인 (Market Data→Label→State→Signal→LLM Reasoner)
-- docs/roadmap.md — Completed, in progress, planned
-- operation_rules/RULES.yaml — Operation rules (progress_min, timeframe, risk)
-- operation_rules/PATCHNOTES.md — Version history
-- samples/signal-push-strategy.sh — **실행 가능**: 시그널 등록 → 전략 조회 curl 2단계. 이 스크립트 돌려보면 API 동작 확인 가능
-
-## Links
-
-- Website: https://decker-ai.com
-- Telegram: https://t.me/deckerclawbot
-- API Docs: https://api.decker-ai.com/docs
+This file exists so tools that only scan `docs/` still find a pointer upward.

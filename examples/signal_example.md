@@ -1,8 +1,12 @@
-# 시그널 → State → Strategy 예시
+# Signal → State → Strategy Example
+
+*A complete walkthrough: from signal input through structural state evaluation to operation gate and strategy output.*
 
 ---
 
-## 1. 시그널 입력
+## 1. Signal Input
+
+A signal is pushed to the engine with entry, target, and stop-loss levels:
 
 ```json
 {
@@ -17,94 +21,131 @@
 
 ---
 
-## 2. Trade Flow
+## 2. Structural State Evaluation
 
-```
-A state swing → T signal touched → Target defined (+4.2%)
-→ Entry triggered (96000) → Target execution → Exit / Reverse
-```
+The engine evaluates the candle sequence around the signal and returns:
 
-### 라벨링 과정
-
-1. 시계열 분석 → 이전 저점이 오브젝트로 식별
-2. 프라임 평가 → 96000 레벨에서 1/2 평가 확인
-3. 스윙 분류 → A 메인스윙 (상승 방향)
-4. 평가봉(2프라임) 브레이크 → **시그널(S) 발생**
-5. Target 정의: 100000 (이전 고점 기반)
-
----
-
-## 3. State Engine 계산
-
-현재가: **98,400**
-
-**progress_pct** (Long):
-
-```
-(current - entry) / (target - entry) × 100
-= (98400 - 96000) / (100000 - 96000) × 100
-= 2400 / 4000 × 100
-= 60%
+```json
+{
+  "state": "B_SET",
+  "last_event": "b_leg_confirmed",
+  "direction": "+",
+  "sub_swing_count": 1,
+  "in_connector_phase": false,
+  "operation_gate": "GO",
+  "label_quality": {
+    "confidence": 0.88,
+    "stability": 0.84,
+    "regime_consistency": 0.91
+  }
+}
 ```
 
-**status**: in_progress (목표 100,000 미도달, 손절 92,000 미도달)
+**Reading this output:**
+- `state: "B_SET"` — The B-leg (test swing) is structurally confirmed. Resolution is pending.
+- `last_event: "b_leg_confirmed"` — The test phase just completed.
+- `sub_swing_count: 1` — Counter-narrative is at its first attempt. Manageable risk.
+- `operation_gate: "GO"` — Structural conditions are met. Evaluate entry.
 
 ---
 
-## 4. 오퍼레이션 룰북 매칭
+## 3. Progress Calculation
 
-RULES.yaml 위→아래 검사:
+With the signal live and current price at **98,400**:
 
-- progress_min: 66 → 60% 미만, 불일치
-- progress_min: 50, risk_appetite: [high] → 조건에 따라 매칭 가능
+```
+progress_pct = (98,400 − 96,000) / (100,000 − 96,000) × 100 = 60%
+```
 
-**매칭 결과**: "60% 진행. 리스크 허용 시 홀드 권장. 66% 도달 시 30% 부분 익절 제안."
+| progress_pct | Status | Meaning |
+|---|---|---|
+| 0–32% | Early | Wait or prepare |
+| **33–66%** | **Active** | **Entry window, risk management begins** |
+| 67–89% | Late | Partial take-profit |
+| 90–100% | At target | Prepare exit |
 
----
-
-## 5. 시나리오별 결과
-
-| 현재가 | progress_pct | status | 전략 |
-|--------|--------------|--------|------|
-| 96,000 | 0% | in_progress | 진입 직후. 목표 도달까지 홀드 |
-| 98,000 | 50% | in_progress | 50% 진행. risk_appetite에 따라 판단 |
-| 98,640 | 66% | in_progress | **66% 진행. 30% 부분 익절 제안** |
-| 99,200 | 80% | in_progress | 80% 진행. 50% 부분 익절 후 나머지 홀드 |
-| 100,000 | 100% | target_reached | **목표 도달. 전량 청산. Reverse 평가** |
-| 92,000 | — | stop_hit | **손절 구간. 청산 또는 관망** |
+At 60% progress, we're in the active phase — the move has proven itself but hasn't exhausted its potential.
 
 ---
 
-## 6. Target → Signal → Entry 적용
+## 4. RULES Engine Match
 
-이 예시에서 거래 순서는:
+The RULES engine evaluates 9 layers and matches the first applicable rule:
 
-1. **Target**: 100,000 (이전 고점 기반 목표 구조 확인)
-2. **Signal**: A 스윙 + 2프라임 브레이크 → S 시그널 발생
-3. **Entry**: 96,000 (기대값 +4.2%, 손절 -4.2% 정의 완료 후 진입)
+```
+Matched rule: progress_66
+Tier:         standard
+Condition:    progress_min: 60, progress_max: 79
 
-목표가 없었다면 이 진입은 **invalid** 처리됩니다.
+Strategy: "66% progress. 30% partial take-profit or hold. 
+           Risk management: tighten stop-loss."
+
+Choices:
+  ① 30% partial take-profit
+  ② Hold to target
+  ③ Full exit
+```
 
 ---
 
-## 7. API 호출 예시
+## 5. AI Consultation Output
+
+The consultation service translates the structural state into natural language:
+
+```
+📍 BTCUSDT  4h
+Gate: GO
+Progress: 60%
+Sub-swing: 1 (counter-narrative first attempt — manageable)
+Confidence: 88%
+
+[Strategy] B-leg confirmed. Signal at 60% progress. 
+Counter-narrative is at its first structural attempt, not yet threatening.
+Recommended: consider 30% partial TP to lock gains, 
+hold remainder to target with stop tightened to entry.
+
+[Your options]
+  ① 30% partial take-profit (lock 60% of expected gain)
+  ② Hold to target (full position, tighter stop)
+  ③ Full exit (crystallize current profit)
+```
+
+---
+
+## 6. API Call
 
 ```bash
-# State 조회
+# Get the current state for a signal
 curl "https://api.decker-ai.com/api/v1/signals/BTCUSDT/state"
 
-# Strategy 조회
-curl "https://api.decker-ai.com/api/v1/signals/BTCUSDT/strategy?timeframe=4h&risk_appetite=medium"
-
-# 시그널 목록
-curl "https://api.decker-ai.com/api/v1/judgment/signals/public"
+# Get the full strategy (state + RULES match + choices)
+curl "https://api.decker-ai.com/api/v1/signals/BTCUSDT/strategy"
 ```
+
+Or ask [@deckerclawbot](https://t.me/deckerclawbot): *"What should I do with my BTCUSDT signal?"*
 
 ---
 
-## 참고
+## Understanding the States
 
-- [Architecture](../docs/architecture.md) — 파이프라인·State Engine
-- [모델·알고리즘·성과](../docs/model.md) — 성과 지표
-- [Operation Rules](../operation_rules/RULES.yaml) — 35개+ 규칙
+| State | Structural Situation | Gate |
+|-------|---------------------|------|
+| `INIT` | No anchor yet | WATCH |
+| `C_SET` | Anchor established | WATCH |
+| `B_FORMING` | Test in progress | WATCH |
+| `B_SET` | Test confirmed, resolution pending | GO |
+| `W_PENDING` | Bilateral break, direction unclear | HOLD |
+
+---
+
+## References
+
+- [Sequence Engine concept](../concept/sequence_engine.md)
+- [System flow diagrams](../diagrams/system_flow.md)
+- [RULES.yaml](../operation_rules/RULES.yaml)
 - [API Guide](../docs/api-guide.md)
+- [Article #13: GO, WATCH, or HOLD](../docs/medium/part2/13_go_watch_hold.md)
+
+---
+
+*한국어 설명: 시그널 데이터(진입가·목표가·손절가)와 현재가를 기반으로 progress_pct를 계산하고, 오퍼레이션 룰북(RULES.yaml)으로 전략을 매칭합니다. `이 시그널 지금 어떻게 할까?` 라고 @deckerclawbot에 물어보면 자연어로 설명해줍니다.*

@@ -1,4 +1,17 @@
-# 시장 상태 이론
+# Market State Theory — progress_pct and Signal Lifecycle
+
+*How Decker measures where a signal is in its structural journey.*
+
+> **Quick summary**: Most trading tools tell you the current state (up / down / sideways). Decker tells you **how far along** the current state is — and what that means for entry and exit timing.
+
+| Key concept | What it means |
+|-------------|---------------|
+| `progress_pct` | How far the signal has traveled from entry toward target (0–100%) |
+| `status` | Lifecycle state: `in_progress`, `target_reached`, `stop_hit`, `pending` |
+| `action_gate` | Operational mode: `GO`, `WATCH`, `HOLD` |
+
+For the structural engine that generates these signals: [Sequence Engine](sequence_engine.md)  
+For the operation rules that use them: [RULES.yaml](../operation_rules/RULES.yaml)
 
 ---
 

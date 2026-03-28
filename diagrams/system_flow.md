@@ -1,109 +1,182 @@
-# Decker 시스템 흐름
+# Decker — System Flow Diagrams
+
+Visual overviews of the Decker engine pipeline.
 
 ---
 
-## 전체 파이프라인
+## Full Pipeline (Phase 4: Sequence Engine)
 
 ```mermaid
 flowchart LR
-    subgraph Input[입력]
-        MarketData[실시간 시세<br/>Market Data]
-        SignalSource[시그널 소스<br/>judgment_signals]
+    subgraph Input[Input]
+        OHLCV[OHLCV Candles\nRaw market data]
+        SigStore[Signal Store\njudgment_signals]
     end
 
-    subgraph Core[핵심 엔진]
-        LabelAlgo[Labeling Algorithm<br/>오브젝트 평가<br/>S / T / 1 라벨]
-        StateEngine[State Engine<br/>progress_pct<br/>status]
+    subgraph Label[1. Sequence Labeler]
+        Role[Candle Role\nanchor / test / signal\nconnector / wide-break]
+        Quality[Label Quality\nconfidence · stability\nregime consistency]
     end
 
-    subgraph Strategy[전략]
-        OpRules[Operation Rules<br/>RULES.yaml<br/>35개+ 규칙]
+    subgraph State[2. State Machine]
+        FSM[5-State FSM\nINIT → C_SET\nB_FORMING → B_SET\nW_PENDING]
+        Lanes[3-Lane Tracking\nmain · sub-swing · connector]
     end
 
-    subgraph Output[출력]
+    subgraph Gate[3. Operation Gate]
+        GO[GO\nCycle complete]
+        WATCH[WATCH\nTest in progress]
+        HOLD[HOLD\nStructural risk]
+    end
+
+    subgraph Rules[4. RULES Engine]
+        YAML[RULES.yaml\n9 layers · 30+ rules\nversion-controlled]
+        Choices[Strategy + Choices\nranked action options]
+    end
+
+    subgraph Consult[5. AI Consultation]
+        LLM[LLM as Translator\nnot decision-maker]
+        NL[Natural language\nexplanation]
+    end
+
+    subgraph Output[Output]
         Web[Web]
-        Telegram[Telegram]
-        API[API]
+        TG[Telegram\n@deckerclawbot]
+        API[REST API]
     end
 
-    MarketData --> LabelAlgo
-    SignalSource --> LabelAlgo
-    LabelAlgo --> StateEngine
-    StateEngine --> OpRules
-    OpRules --> Web
-    OpRules --> Telegram
-    OpRules --> API
+    OHLCV --> Role
+    OHLCV --> Quality
+    Role --> FSM
+    Quality --> FSM
+    FSM --> Lanes
+    Lanes --> GO
+    Lanes --> WATCH
+    Lanes --> HOLD
+    GO --> YAML
+    WATCH --> YAML
+    HOLD --> YAML
+    YAML --> Choices
+    SigStore --> YAML
+    Choices --> LLM
+    LLM --> NL
+    NL --> Web
+    NL --> TG
+    Choices --> API
 ```
 
 ---
 
-## 라벨링 → 시그널 발생 흐름
+## The 5-State Machine
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> C_SET : anchor candle
+    C_SET --> B_FORMING : test begins
+    C_SET --> W_PENDING : bilateral break
+    B_FORMING --> B_SET : test confirmed
+    B_FORMING --> C_SET : test invalidated
+    B_SET --> INIT : signal confirmed (new cycle)
+    B_SET --> C_SET : test invalidated
+    W_PENDING --> B_FORMING : direction resolved
+    W_PENDING --> C_SET : break invalidated
+```
+
+*Each transition is deterministic: same input → same output. Always.*
+
+---
+
+## Three Lanes (Simultaneous Tracking)
 
 ```mermaid
 flowchart TD
-    TS[시계열 데이터] --> OD[Object 식별<br/>고점/저점/유동성]
-    OD --> PE[Prime 평가<br/>1/2 → 1/2']
-    PE --> SC[Swing 분류<br/>A / B / C]
-    SC --> SW[Swing 조합 계산<br/>AB, AC, BB, BC]
-    SW --> BK{2프라임<br/>브레이크?}
-    BK -->|Yes| SIG[시그널 S 발생]
-    BK -->|No| WAIT[대기]
-    SIG --> SE[State Engine<br/>progress_pct 계산]
+    subgraph Main[Main Swing]
+        MA[Who is winning\nthe current cycle?]
+    end
+
+    subgraph Sub[Sub-Swing Counter]
+        SA[What is the opposition\nbuilding toward?]
+        SC[sub_swing count\n1st attempt vs 2nd+]
+    end
+
+    subgraph Conn[Connector Phase]
+        CA[Are we in a pause,\na bridge, or a trap?]
+    end
+
+    Main --> Gate[Operation Gate\nGO · WATCH · HOLD]
+    Sub --> Gate
+    Conn --> Gate
 ```
 
 ---
 
-## 시그널 → 전략 시퀀스
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant API
-    participant StateEngine
-    participant RULES
-
-    User->>API: GET /signals/BTCUSDT/strategy
-    API->>StateEngine: build_signal_state(signal, current_price)
-    StateEngine-->>API: {progress_pct: 66, status: "in_progress"}
-    API->>RULES: reason_signal_state(state, user_context)
-    RULES-->>API: 전략 텍스트
-    API-->>User: "66% 진행. 30% 부분 익절 제안."
-```
-
----
-
-## Trade Flow
+## Signal Lifecycle (progress_pct)
 
 ```mermaid
 flowchart LR
-    A[A State Swing] --> T[T Signal Touch]
-    T --> TGT[Target 정의<br/>+7%]
-    TGT --> ENTRY[Entry 트리거]
-    ENTRY --> EXEC[Target 실행]
-    EXEC --> EXIT{Exit}
-    EXIT -->|Target 도달| CLOSE[포지션 청산]
-    EXIT -->|Reverse 시그널| REV[Reverse 진입]
+    BIRTH[Signal birth\n0%] --> E30[Entry zone\n33%]
+    E30 --> MID[Midpoint\n66%]
+    MID --> NEAR[Near target\n90%]
+    NEAR --> TARGET[Target\n100%]
+
+    E30 -->|GO| ACT[Act / Enter]
+    MID -->|Partial TP| TRIM[Trim position]
+    NEAR -->|Pre-exit| PREP[Prepare exit]
+    TARGET -->|Full exit| CLOSE[Close position]
 ```
 
 ---
 
-## Target → Signal → Entry 원칙
+## Target → Signal → Entry
 
 ```mermaid
 flowchart TD
-    TARGET[Target 구조 확인] --> SIGNAL[Signal 확인<br/>2프라임 브레이크]
-    SIGNAL --> ENTRY[Entry<br/>기대값 + 리스크 정의 완료]
-    ENTRY --> TRADE[거래 실행]
+    TGT[Target structure confirmed] --> SIG[Signal confirmed\nSequence completed]
+    SIG --> ENTRY[Entry\nExpected value + risk defined]
+    ENTRY --> TRADE[Execute trade]
 
-    NO_TARGET[Target 없음] --> INVALID[❌ Invalid Entry]
-    NO_SIGNAL[Signal 없음] --> IGNORED[❌ Movement Ignored]
+    NO_TGT[No target] --> INVALID[❌ Entry invalid]
+    NO_SIG[No signal] --> IGNORED[❌ Movement ignored]
 ```
+
+*Most systems: signal → entry (no target)*  
+*Decker: target → signal → entry (target-first philosophy)*
 
 ---
 
-## 참고
+## AI Layer Boundary
 
-- [Architecture](../docs/architecture.md) — 파이프라인·모듈
-- [모델·알고리즘·성과](../docs/model.md) — 성과 지표
-- [라벨링 알고리즘](../concept/labeling_algorithm.md) — 오브젝트·스윙
-- [Strategy DSL](../docs/strategy-dsl.md) — 사용자 정의 전략
+```mermaid
+flowchart LR
+    subgraph Engine[Engine Layer]
+        E1[Sequence labeler]
+        E2[State machine]
+        E3[Operation gate]
+        E4[RULES engine]
+    end
+
+    subgraph AI[AI Layer]
+        A1[LLM consultation\nTranslator only]
+    end
+
+    subgraph Human[Human / Agent Layer]
+        H1[Decision\nAct on choices]
+    end
+
+    Engine -- "Structural state\nGO·WATCH·HOLD\nStrategy choices" --> AI
+    AI -- "Natural language\nexplanation" --> Human
+    Human -- "Execute" --> Market[Market]
+```
+
+*The AI receives the engine's output and explains it. It never overrides it.*
+
+---
+
+## References
+
+- [Sequence Engine concept](../concept/sequence_engine.md) — Full concept explanation
+- [Architecture](../docs/architecture.md) — Module breakdown
+- [Model & Performance](../docs/model.md) — Algorithm story and metrics
+- [RULES.yaml](../operation_rules/RULES.yaml) — The open-source rulebook
+- [Article Series Part 2](../docs/medium/part2/README.md) — Deep dives

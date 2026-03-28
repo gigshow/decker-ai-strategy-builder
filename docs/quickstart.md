@@ -1,5 +1,21 @@
 # Decker Quick Start
 
+**3 steps. Under 5 minutes. Signal → State → Strategy.**
+
+| Path | Time | What you get |
+|------|------|-------------|
+| **API (no account)** | 30 sec | `curl "https://api.decker-ai.com/api/v1/signals/BTCUSDT/state"` |
+| **Telegram** | 5 min | Connect [@deckerclawbot](https://t.me/deckerclawbot) → ask in natural language |
+| **OpenClaw skill** | 10 min | Add Decker skill → `web_fetch` → API integration |
+
+*For deeper context on how the engine works: [Sequence Engine concept](../concept/sequence_engine.md) · [Article Series](medium/README.md)*
+
+---
+
+*한국어 가이드 / Korean guide below*
+
+---
+
 3단계로 시작. 5분 안에 시그널·포지션·주문 체험.
 
 ---

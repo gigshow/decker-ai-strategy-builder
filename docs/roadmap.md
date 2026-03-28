@@ -2,6 +2,20 @@
 
 ---
 
+## Vision
+
+> **The market is a game** — AI understands the game state, consults with you, and helps find the optimal next move.
+
+| Stage | Goal | Status |
+|-------|------|--------|
+| **Conversational** | Natural language signals, orders, positions via Telegram/OpenClaw | ✅ Complete |
+| **Consultation** | AI explains the structural state + ranked choices | ✅ Complete (Context Engine) |
+| **Game-like** | Full context awareness, multi-TF structural reasoning, optimal move suggestion | 🔜 Building |
+
+*Note on naming: "Phase 4" in the product roadmap refers to the proactive signals feature. The "Phase 4 Context Engine" referenced in the [article series](medium/README.md) refers to the sequence labeling + state machine + operation gate architecture — a separate milestone.*
+
+---
+
 ## 비전 (Vision)
 
 > **시장 = 게임** — "오르면 매도, 내리면 매수" 게임 심리를 AI가 이해하고, 사용자와 상의해서 최적의 수를 실행한다.

@@ -76,4 +76,4 @@ git clone https://github.com/gigshow/decker-ai-strategy-builder.git
 
 ## 5. 메타
 
-공개 레포 개선 제안·체크리스트: [PUBLIC_REPO_REBUILD_PROPOSAL.md](./PUBLIC_REPO_REBUILD_PROPOSAL.md).
+공개 내러티브·구조는 README, [architecture.md](./architecture.md), [concept/sequence_engine.md](../concept/sequence_engine.md), [docs/medium/part2/README.md](./medium/part2/README.md)에 정리되어 있습니다. 내부용 기획 초안은 공개 레포에 두지 않습니다.

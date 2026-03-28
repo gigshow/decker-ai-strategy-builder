@@ -1,117 +1,158 @@
-# 시계열 라벨링 알고리즘
+# Sequence Labeling — How Decker Reads Market Structure
+
+*The algorithm that turns raw price candles into a structured, grammatically-aware sequence.*
+
+> For the full conceptual overview of the engine: [Sequence Engine](sequence_engine.md)  
+> For the deep-dive article: [Article #11 — Markets Speak in Sequences, Not Signals](../docs/medium/part2/11_markets_speak_in_sequences.md)
 
 ---
 
-## 역할
+## The Core Idea
 
-시계열 데이터를 분석하여 **상태 정보**와 **시그널**을 생성합니다.  
-이 알고리즘이 DECKER 시그널 엔진의 **원천 데이터**를 생성하는 핵심 IP입니다.
+Most systems analyze price data as isolated numbers: "Is the RSI high? Did the MACD cross?" These are point-in-time scores with no memory of what came before.
 
-> 알고리즘의 내부 작동 방식은 IP입니다.  
-> 이 문서는 알고리즘이 **무엇을 출력하는지**에 집중합니다.
+Decker's labeling algorithm analyzes price as **structured sequences** — the same way natural language processing reads text: with grammar, context, and role.
 
----
-
-## 알고리즘 출력 (Output)
-
-### 시그널 데이터
-
-| 필드 | 의미 |
-|------|------|
-| `symbol` | 종목 |
-| `timeframe` | 시간대 (15m, 1h, 4h, 8h, 1d, 1w) |
-| `direction` | 방향 (long / short) |
-| `confidence` | 신뢰도 (0~1) |
-| `entry_price` | 진입 기준가 |
-| `target_price` | 목표가 |
-| `stop_loss` | 손절가 |
-| `signal_type` | 신호 강도 (S: 강, T: 표준, 중첩: 복수 동시 발생) |
-| `swing_state` | 스윙 타입 (A/B/C) — 로드맵 |
-
-### 상태 개념
-
-| 상태 | 의미 |
-|------|------|
-| **A 스윙** | 메인스윙 — 트렌드의 주 방향 |
-| **B 스윙** | 서브스윙 — 메인스윙의 반대 방향 조정 |
-| **C 스윙** | 연결스윙 — 청산·진입·리버스가 일어나는 전환 구간 |
-
-스윙 방향은 신호 `direction`으로 표현됩니다 (long = A+/B+/C+, short = A-/B-/C-).
+> **A candle is a word. A label is its grammatical role. A sequence is a sentence.**
 
 ---
 
-## 신호의 신뢰도
+## What Each Candle Receives
 
-**단일 TF 신호만으로도 충분히 정확하고 신뢰도가 높습니다.**
+Every candle gets a label that describes its **structural role** in the current price sequence:
 
-- 알고리즘은 각 TF에서 독립적으로 실행
-- 높은 confidence 시그널은 단일 TF만으로 거래 가능
-- 다중 TF 분석은 신뢰도를 높이는 추가 레이어이며, 필수는 아님
+| Label | Role | Meaning |
+|-------|------|---------|
+| **Anchor (C)** | Foundation | The market has committed to a direction. This candle establishes the structural starting point. |
+| **Test (B)** | Challenge | The opposing force is challenging the anchor. Outcome undecided. |
+| **Confirmation (A / Signal)** | Resolution | The anchor direction prevails. The cycle is structurally complete. |
+| **Connector (T, T2)** | Bridge | Transitional candle. Maximum two consecutive connectors per swing. |
+| **Wide Break (W)** | Ambiguity | Both directions attempted simultaneously. Resolution required. |
 
-**실패 케이스**:  
-더 큰 TF의 반대 의지가 강할 경우, 작은 TF 신호가 목표가에 도달하지 못할 수 있습니다.  
-→ 이것이 `tf_alignment`를 통해 분석하는 이유입니다.
-
----
-
-## 진입 타이밍
-
-알고리즘이 신호를 생성하는 과정에서 세 가지 진입 타이밍이 존재합니다:
-
-| 타이밍 | `entry_timing` | 시점 | 특성 |
-|--------|----------------|------|------|
-| **예측 진입** | `predictive` | 신호 형성 중 선점 | 리스크 높음, 가격 유리 |
-| **신호 진입** | `signal` | S 라벨 발생 시 | 표준 진입 |
-| **확인 진입** | `confirmation` | 스윙 테스트 통과 후 | 리스크 낮음, 가격 다소 불리 |
-
-어떤 타이밍이 최선인지는 전략(오퍼레이션 룰북)과 시장 상태(tf_alignment)에 따라 다릅니다.  
-모두 수익 가능성이 있는 접근입니다.
+The label is determined by **candle relationships** — not candle values. The question is not "is this candle bullish?" but "what role does this candle play given what came before it?"
 
 ---
 
-## 다중 TF 라벨링 구조
+## The Grammar Rules
 
-같은 시점에 각 TF는 독립적인 스윙 상태와 신호를 가집니다:
+The labeling system follows strict grammatical constraints that make it formally verifiable:
+
+**Rule 1 — Signal placement**: A confirmation (signal) label only appears after the second leg of a sequence. No premature resolution.
 
 ```
-시각 T:
-  1h: A+ (상승 메인스윙) → 신호 발생
-  4h: A- (하락 메인스윙) → 신호 없음
-  1d: A- (하락 메인스윙) → 신호 없음
+Valid:   Anchor → Connector → Connector → Second leg → Signal
+Invalid: Anchor → Signal (missing legs)
 ```
 
-이 상태를 `tf_alignment = counter_trend`로 표현하며,  
-오퍼레이션 룰북은 이를 기반으로 전략을 분기합니다.
+**Rule 2 — Connector limits**: Connectors bridge but never resolve. A maximum of two consecutive connectors per swing cycle. After two connectors, the sequence must resolve into a positional label.
 
-### 의지의 전파
-
-작은 TF의 신호 전환은 큰 TF 스윙 전환의 시작점이 될 수 있습니다:
-
-```
-1h A+ 전환 → (시간 경과) → 4h 전환 테스트 → 4h C 스윙 → 4h A+ 확정
-```
-
-각 TF 전환은 상위 TF의 목표 형성에 영향을 미칩니다.  
-퍼즐처럼 하나씩 확인되며, 카드를 한 장 더 받을수록 리스크와 비용이 증가합니다.
+**Rule 3 — Reset on backward break**: When the market breaks in the opposite direction (overwriting a previous high or low), the entire labeling context resets. New anchor. New sequence. New grammar.
 
 ---
 
-## 파이프라인 내 위치
+## Three Simultaneous Lanes
+
+The labeling algorithm tracks three structural lanes simultaneously:
 
 ```
-시계열 데이터 → [라벨링 알고리즘 (IP)] → 시그널 + 상태
-    → judgment_signals 저장
-    → State Engine (progress_pct, status)
-    → tf_alignment_utils (다중 TF 정렬)
-    → 오퍼레이션 룰북 (전략 반환)
-    → AI 대화 레이어 (사용자 조언)
+Time →
+
+Main swing:   ═══════════════════════════════════════
+                  ↑ The dominant cycle
+
+Sub-swing:          ───────    ───────────
+                    ↑ The counter-narrative (opponent's moves)
+
+Connector:               ──          ──
+                         ↑ Bridge / pause phases
 ```
+
+| Lane | What it tracks | Why it matters |
+|------|---------------|----------------|
+| **Main** | Dominant structural cycle | Who's winning right now |
+| **Sub-swing** | Counter-narrative attempts | What the opposition is building |
+| **Connector** | Transition phases | Bridge, pause, or trap |
+
+The **sub-swing count** is particularly significant. A sub-swing on its second attempt means the counter-force has made multiple structural pushes. The engine tracks this as a number — `sub_swing_count: 2` — which propagates to the RULES engine for risk-adjusted strategy recommendations.
 
 ---
 
-## 참고
+## Label Quality Metrics
 
-- [시장 상태 이론](market_state_theory.md) — progress_pct, 3축 모델, tf_alignment
-- [Signal LLM 개념](signal_llm_concept.md) — State Engine, not LLM
-- [덱커 서비스 모델](../../docs/덱커_서비스모델_상태엔진_운용_20260318.md) — 진입 타이밍, 학습 루프
-- [모델·알고리즘·성과](../docs/model.md)
+Each labeling event includes quality metrics:
+
+| Metric | Range | Meaning |
+|--------|-------|---------|
+| `confidence` | 0–1 | How structurally clean is this label assignment? |
+| `stability` | 0–1 | How stable is the current sequence? |
+| `regime_consistency` | 0–1 | Is the current label consistent with the broader market regime? |
+
+High quality does not mean "will profit." It means "the structural conditions for this signal type are present and well-defined." A `confidence: 0.91` signal with `action_gate: WATCH` means: structurally clean, but not yet resolved.
+
+---
+
+## Output Format
+
+After processing a candle sequence, the labeling algorithm produces:
+
+```json
+{
+  "last_label": {
+    "role": "test",
+    "direction": "+",
+    "position_in_cycle": "b_leg_confirmed"
+  },
+  "state": "B_SET",
+  "sub_swing_count": 2,
+  "in_connector_phase": false,
+  "label_quality": {
+    "confidence": 0.87,
+    "stability": 0.91,
+    "regime_consistency": 0.84
+  },
+  "label_mode": "sequence_v2"
+}
+```
+
+This output feeds directly into the [State Machine](sequence_engine.md#layer-2-the-5-state-machine) and [Operation Gate](sequence_engine.md#layer-4-the-operation-gate-go--watch--hold).
+
+---
+
+## Why This Produces Better Signals
+
+| Aspect | Indicator-based | Decker Sequence Labeling |
+|--------|----------------|--------------------------|
+| Input | Candle values (price, volume) | Candle relationships (sequence position) |
+| Memory | None (point-in-time) | Full sequence context |
+| Reproducibility | ✅ | ✅ (deterministic FSM) |
+| "Which chapter are we in?" | ❌ | ✅ |
+| Works in ranging markets | Limited | ✅ (independent per-cycle) |
+| Sub-swing (counter-force) tracking | ❌ | ✅ |
+
+---
+
+## What the Algorithm Outputs (for downstream systems)
+
+The labeling output is consumed by:
+
+1. **State Machine** — Transitions between the 5 structural states based on label events
+2. **Operation Gate** — Determines `GO` / `WATCH` / `HOLD` based on the current state
+3. **RULES Engine** — Applies policy rules using label quality and state fields
+4. **AI Consultation** — Explains the structural state in natural language
+
+Full pipeline: [Sequence Engine concept](sequence_engine.md) · [System flow diagrams](../diagrams/system_flow.md)
+
+---
+
+## Try It
+
+```bash
+# Get the current structural state for BTC
+curl "https://api.decker-ai.com/api/v1/signals/BTCUSDT/state"
+```
+
+Or ask [@deckerclawbot](https://t.me/deckerclawbot): *"What's the structural state of Bitcoin?"*
+
+---
+
+*한국어 설명이 필요하신 분: [시장 상태 이론](market_state_theory.md)에서 progress_pct 개념을, [라벨링 알고리즘 기초](signal_llm_concept.md)에서 한국어 기초 설명을 확인하세요.*

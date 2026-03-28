@@ -4,11 +4,29 @@ All notable changes to the Decker AI Strategy Builder are documented in this fil
 
 ---
 
+## [v1.4.5] - 2026-03-28
+
+### Added
+
+- **Concept**: `concept/sequence_engine.md` — Context Engine / Phase 4 narrative (labeling, FSM, gate, RULES, consultation)
+- **Articles (Part 2)**: `docs/medium/part2/` — articles 11–15 (IP-sanitized); index updates in `docs/medium/README.md`
+
+### Changed
+
+- **공개 내러티브 정렬**: README, `diagrams/system_flow.md`, `docs/architecture.md`, `concept/labeling_algorithm.md`, `concept/signal_llm_concept.md`, `docs/model.md`, `examples/signal_example.md`, `examples/strategy_prompt_example.md` — Phase 4 시퀀스·FSM·GO/WATCH/HOLD·엔진/LLM 경계
+- **`llms.txt`**: 루트를 단일 진입점으로 통합; `docs/llms.txt`는 루트로 안내
+- **온보딩**: 삭제된 내부 기획 문서(`PUBLIC_REPO_REBUILD_PROPOSAL`) 제거·링크 대체
+- **README**: `llms.txt`·Sequence Engine 표 링크; `operation_gate` 용어 통일
+
+### Removed
+
+- `docs/PUBLIC_REPO_REBUILD_PROPOSAL.md` — 내부용 기획 문서, 공개 레포에서 제외
+
 ## [v1.4.4] - 2026-03-24
 
 ### Added
 
-- **에이전트·공개 문서** (ClawHub·방문자 온보딩): `docs/ONBOARDING_PUBLIC.md`, `AGENT_SKILLS_PUBLIC_SUMMARY.md`, `TELEGRAM_AGENT_COMMANDS.md`, `DECKER_AGENT_SKILLS.md`, `GITHUB_COMMUNITY.md`, `RELEASE_CHECKLIST_PUBLIC_DOCS.md`, `PUBLIC_REPO_REBUILD_PROPOSAL.md`
+- **에이전트·공개 문서** (ClawHub·방문자 온보딩): `docs/ONBOARDING_PUBLIC.md`, `AGENT_SKILLS_PUBLIC_SUMMARY.md`, `TELEGRAM_AGENT_COMMANDS.md`, `DECKER_AGENT_SKILLS.md`, `GITHUB_COMMUNITY.md`, `RELEASE_CHECKLIST_PUBLIC_DOCS.md` (당시 초안 `PUBLIC_REPO_REBUILD_PROPOSAL.md`는 이후 공개 레포에서 제거됨)
 - **루트 `CLAUDE.md`** — 세션 진입용 에이전트 요약 (이 레포 기준)
 - **`.github/ISSUE_TEMPLATE`** — `config.yml` + 페르소나별 `01`–`04` (제품 / API / IDE 스킬 / 자체 호스팅)
 - **README** — 상단 Visitor paths(3갈래) + Docs 표에 위 문서 링크

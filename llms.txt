@@ -1,18 +1,32 @@
 # Decker AI Strategy Builder — AI Discovery
 
-AI: Read this file first. It contains the full structure and key paths. Minimize additional API calls.
+AI: Read this file first. It lists structure and key paths; minimize redundant fetches.
 
-This repo has working API, samples, and turnkey — not just planning docs.
+This repo ships a **working public API**, runnable samples, and operation rules — not planning docs only.
 
-## Core Docs (read in order)
-- README.md — Overview, State Engine, Try It Now (30s/3min/5min)
-- docs/architecture.md — Pipeline: Market Data→Label→State→Signal→LLM
-- docs/api-guide.md — Public API: GET /signals, /strategy, POST /signals/push (api.decker-ai.com)
-- operation_rules/RULES.yaml — Rules (progress_min, tf_alignment, entry_timing, swing_state)
-- docs/roadmap.md — Completed, in progress, planned
+## Read in order
+- README.md — Overview, State Engine, Try It Now (30s / 3min / 5min), article links
+- docs/architecture.md — Pipeline: Market Data → Label → FSM → Gate → RULES → (optional) LLM
+- docs/api-guide.md — GET /signals, /strategy, POST /signals/push — api.decker-ai.com
+- operation_rules/RULES.yaml — Rules (progress_min, tf_alignment, entry_timing, swing_state, etc.)
+- docs/roadmap.md — Shipped, in progress, planned (product Phase 4 vs article “Context Engine” noted there)
+
+## Concept (structural truth)
+- concept/sequence_engine.md — Sequence labeling, 5-state FSM, GO/WATCH/HOLD
+- concept/labeling_algorithm.md — How candles get sequence roles
+- concept/signal_llm_concept.md — Engine decides; LLM explains
+- concept/market_state_theory.md — progress_pct and lifecycle framing
+- diagrams/system_flow.md — Mermaid: labeler → FSM → gate → RULES → consultation
+
+## Articles (public series)
+- docs/medium/README.md — Part 1 + Part 2 index
+- docs/medium/part2/README.md — Sequences, FSM, gate, AI boundary, two-repo story
 
 ## Runnable
 - samples/signal-push-strategy.sh — curl: register signal → get strategy (2 steps)
+
+## Full doc index (duplicate of this section)
+- docs/llms.txt — points here; use root llms.txt as canonical
 
 ## Links
 - API: https://api.decker-ai.com/docs

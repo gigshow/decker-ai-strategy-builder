@@ -17,4 +17,4 @@
   → web_fetch GET https://api.decker-ai.com/... → API 응답 → Claude 자연어 전달
 ```
 
-상세: [Brand Guide — Way 2](BRAND_GUIDE.md)
+상세: [Brand Guide — Way 2](../BRAND_GUIDE.md)

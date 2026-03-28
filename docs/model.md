@@ -1,6 +1,18 @@
-# Decker 모델: 알고리즘과 성과
+# Decker Model — Algorithm Story and Performance
 
-**대상**: 심층 고객 — 알고리즘의 탄생, 구조, 차별점, 성과를 알고 싶은 분
+**Audience**: Readers who want the algorithm story, structure, differentiation, and performance metrics — in one place.
+
+---
+
+## English overview
+
+Decker is built on three pillars:
+
+1. **Target → Signal → Entry** — Target structure is defined before entry; signals confirm that structure.
+2. **Sequence Engine (Context Engine)** — Candles are read as a grammatical sequence; a 5-state machine tracks structural position; a ternary **operation gate** (`GO` / `WATCH` / `HOLD`) expresses operational mode.
+3. **RULES + optional LLM** — [RULES.yaml](../operation_rules/RULES.yaml) matches state to strategy (**$0** on the rules path). The LLM only narrates the result.
+
+Concept docs: [Sequence Engine](../concept/sequence_engine.md) · [Labeling](../concept/labeling_algorithm.md) · [Diagrams](../diagrams/system_flow.md)
 
 ---
 
@@ -44,37 +56,31 @@ DECKER는 **`target → signal → entry`** 순서입니다.
 
 | 접근 | 가능성 |
 |------|--------|
-| 시계열을 오브젝트로 평가 | 구조 기반 시그널 생성 |
+| 시퀀스 라벨 + 상태 머신 | 구조 기반 시그널, 재현 가능한 전이 |
 | 진행도(progress_pct) 계산 | 정량적 전략 타이밍 |
-| 오퍼레이션 룰북 매칭 | 결정론적 전략, LLM 비용 $0 |
+| 오퍼레이션 룰북 매칭 | 결정론적 전략, LLM 비용 $0 (룰 경로) |
+| GO/WATCH/HOLD 게이트 | 이진 신호가 놓치는 "관망 vs 리스크오프" 구분 |
 
 ---
 
 ## 3. 구조와 개념
 
-### 3.1 라벨링 알고리즘
+### 3.1 시퀀스 라벨링 (현행 제품 축)
 
-시계열 데이터를 **오브젝트(대상)**로 평가하여 라벨을 부착합니다.
+시계열 봉은 **역할(role)**로 라벨됩니다 — 앵커(C), 테스트(B), 시그널/확인, 커넥터, 와이드 브레이크(W) 등. 라벨은 **봉 관계**(이전 봉 대비 고저 돌파·인사이드 등)로 결정되며, **문법 규칙**(예: 시그널은 특정 시퀀스 이후에만)을 따릅니다.
 
-| 라벨 | 의미 |
-|------|------|
-| **1/2 대상 + 1/2 프라임** | 평가 대상과 평가 기준(프라임)의 조합 |
-| **S** | 시그널 — 진입 조건 충족 |
-| **T** | 터치 — 향후 시그널 진입점, 중첩 |
+동시에 **3개 레인**을 추적합니다: 메인 스윙, 서브 스윙(역방 압력), 커넥터 구간.
 
-오브젝트는 시점에 따라 멀티스윙으로 구성됩니다.
+| 구성 요소 | 의미 |
+|-----------|------|
+| **Sequence labels** | 각 봉의 구조적 역할 |
+| **5-state FSM** | INIT → C_SET → B_FORMING → B_SET → W_PENDING |
+| **operation_gate** | GO / WATCH / HOLD |
+| **label_quality** | confidence, stability, regime_consistency |
 
-| 스윙 | 의미 |
-|------|------|
-| **A** | 메인스윙 — 트렌드 키 방향 |
-| **B** | 서브스윙 — 메인스윙의 반대 방향 조정 |
-| **C** | 연결스윙 — 청산·진입·리버스 구간 |
+상세: [라벨링 알고리즘](../concept/labeling_algorithm.md) · [Sequence Engine](../concept/sequence_engine.md) · [시스템 다이어그램](../diagrams/system_flow.md)
 
-스윙 계산은 ab, ac, bb, bc 등 조합으로 이루어지며, 각 스윙의 **평가봉(2프라임)**을 현재가가 브레이크할 때 시그널이 발생합니다.
-
-상세: [라벨링 알고리즘](../concept/labeling_algorithm.md)
-
-### 3.2 State Engine
+### 3.2 State Engine (progress_pct · status)
 
 시그널(진입·목표·손절) + 현재가 → **progress_pct**, **status**
 
@@ -97,7 +103,7 @@ DECKER는 **`target → signal → entry`** 순서입니다.
 
 RULES.yaml 위→아래 순서로 검사. **첫 매칭 규칙** 반환. `state.progress_pct ≥ rule.progress_min`이면 progress_min 충족.
 
-조건: progress_min, status, timeframe, risk_appetite, weight_diff_min/max.
+조건 예: progress_min, status, timeframe, risk_appetite, weight_diff_min/max, tf_alignment, entry_timing, 엔진 합성 키(문서·버전은 [RULES.yaml 헤더](../operation_rules/RULES.yaml) 참고).
 
 상세: [Operation Rules](../operation_rules/RULES.yaml)
 
@@ -107,12 +113,12 @@ RULES.yaml 위→아래 순서로 검사. **첫 매칭 규칙** 반환. `state.p
 
 ### 4.1 전략 특성
 
-시그널 모델은 예측이 아닌 **오브젝트 스윙 평가** 기반입니다.
+시그널 모델은 단일 지표 예측이 아니라 **구조·진행도·룰북** 기반입니다.
 
 - **Signal confirmation before entry** — 시그널 확인 후 진입
 - **Pre-defined target structure** — 사전 정의된 목표 구조
 - **Reverse-liquidity awareness** — 리버스 유동성 인식
-- **Multi-timeframe swing evaluation** — 멀티타임프레임 스윙 평가
+- **Multi-timeframe alignment** — 멀티 타임프레임 정렬 (RULES 레이어)
 
 목표 구조가 확인된 경우에만 포지션을 열어, 랜덤 진입을 회피합니다.
 
@@ -137,22 +143,20 @@ RULES.yaml 위→아래 순서로 검사. **첫 매칭 규칙** 반환. `state.p
 | **max_drawdown** | 누적 수익 곡선에서 고점 대비 최대 하락폭 |
 | **profit_factor** | 총 수익 / 총 손실 |
 
-### 4.4 거래 흐름
+### 4.4 거래 흐름 (개념)
 
 ```
-A state swing → T signal touched → Target defined (+7%)
-→ Entry triggered → Position closed at target
-→ Reverse opportunity evaluated
+Structural cycle completes → Target defined → Entry with risk bounds
+→ progress_pct tracked → RULES suggest partial TP / hold / exit
+→ Target or stop → Reverse opportunity evaluated
 ```
 
-예시:
+예시 단계:
 
-1. A state 스윙 — 메인 트렌드 방향 확인
-2. T signal 터치 — 진입 가능 시그널 감지
-3. Target 정의 — +7% 목표 설정
-4. Entry 트리거 — 시그널 확인, 포지션 진입
-5. Target 도달 — 포지션 청산
-6. Reverse 평가 — 반대 방향 기회 분석
+1. 시퀀스·상태 머신으로 구조적 국면 확정
+2. 시그널(방향·진입·목표·손절)과 현재가로 progress_pct 산출
+3. RULES 첫 매칭으로 전략·choices 제공
+4. (선택) LLM이 동일 입력을 자연어로 설명
 
 ### 4.5 Backtest Example
 
@@ -193,13 +197,15 @@ Max DD: 8.1%
 
 ---
 
-## 6. 파이프라인 요약
+## 6. 파이프라인 요약 (Phase 4)
 
 ```
-시계열 데이터
-    → [라벨링 알고리즘] → 오브젝트 평가, 라벨 (S, T, 1)
-    → [State Engine] → progress_pct, status
-    → [오퍼레이션 룰북] → 전략 (RULES.yaml 첫 매칭)
+OHLCV candles
+    → [Sequence labeling] → roles + 3-lane context + label_quality
+    → [5-state machine] → structural state + operation_gate (GO/WATCH/HOLD)
+    → [State Engine] → progress_pct, status (signal lifecycle)
+    → [RULES.yaml] → strategy + ranked choices (first match)
+    → [LLM consultation, optional] → natural language (does not override engine)
     → Web / Telegram / API
 ```
 
@@ -209,7 +215,8 @@ Max DD: 8.1%
 
 - [Architecture](architecture.md) — 파이프라인·모듈·API
 - [Signal LLM 개념](../concept/signal_llm_concept.md) — State Engine, not LLM
-- [시장 상태 이론](../concept/market_state_theory.md) — progress_pct 개념
-- [라벨링 알고리즘](../concept/labeling_algorithm.md) — 오브젝트·스윙·시그널
-- [Operation Rules](../operation_rules/RULES.yaml) — 35개+ 규칙
-- [시그널 예시](../examples/signal_example.md) — progress_pct 계산 예시
+- [시장 상태 이론](../concept/market_state_theory.md) — progress_pct
+- [라벨링 알고리즘](../concept/labeling_algorithm.md) — 시퀀스 라벨링
+- [Operation Rules](../operation_rules/RULES.yaml)
+- [시그널 예시](../examples/signal_example.md)
+- [Article series](medium/README.md)

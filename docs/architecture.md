@@ -306,9 +306,40 @@ A state swing → T signal touched → Target defined (+7%)
 
 ---
 
-## 참고
+## Phase 4: The Sequence Engine (Context Engine)
 
-- [Signal LLM 개념](../concept/signal_llm_concept.md) — State Engine, not LLM
+The Sequence Engine extends the base architecture with contextual state awareness:
+
+```
+Raw OHLCV
+    ↓  Sequence Labeler (MODE_SEQ_V2)
+       Each candle: role (anchor/test/signal/connector) + direction + quality score
+    ↓  5-State Machine
+       INIT → C_SET → B_FORMING → B_SET → W_PENDING
+       Tracks: main swing + sub-swing (counter-narrative) + connector phase
+    ↓  Operation Gate
+       GO · WATCH · HOLD  (three operational modes, not binary)
+    ↓  RULES Engine (9 layers, YAML, version-controlled)
+       First matching rule → strategy text + ranked action choices
+    ↓  AI Consultation (translator, not decision-maker)
+       Natural language explanation of the structural state
+```
+
+**Key properties:**
+- **Deterministic**: Same candle input → same state output. Always.
+- **Auditable**: Every signal carries a trace ID linking it to the exact engine version and state that produced it.
+- **Three-lane tracking**: Main swing + sub-swing (counter-narrative) + connector phase tracked simultaneously.
+- **Ternary gate**: `GO` / `WATCH` / `HOLD` — because "no signal" and "structurally blocked" are different situations.
+
+Full concept: [The Sequence Engine](../concept/sequence_engine.md)  
+Deep-dive articles: [Article Series Part 2](medium/part2/README.md)
+
+---
+
+## 참고 / References
+
+- [Sequence Engine concept](../concept/sequence_engine.md) — Sequence labeling, state machine, GO/WATCH/HOLD gate *(new)*
+- [Signal LLM 개념](../concept/signal_llm_concept.md) — State Engine vs LLM
 - [시장 상태 이론](../concept/market_state_theory.md) — progress_pct 개념
 - [라벨링 알고리즘](../concept/labeling_algorithm.md) — 오브젝트·스윙·시그널
 - [모델·알고리즘·성과](model.md) — 알고리즘 스토리, 구조, 성과
