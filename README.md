@@ -57,7 +57,7 @@ This shift — from point-in-time scoring to context-aware state parsing — is 
 ```
 Raw candles (OHLCV)
     ↓  Sequence Labeling  →  Each candle gets a grammatical role (anchor / test / signal)
-    ↓  State Machine      →  5 structural states: INIT → C_SET → B_FORMING → B_SET → W_PENDING  
+    ↓  State Machine      →  Session FSM: INIT→C_SET→B_FORMING→B_SET→A_FORMING→W_PENDING or C_SET (+ BREAK±/NEUTRAL live) — diagrams/system_flow.md
     ↓  Operation Gate     →  GO · WATCH · HOLD  (not binary — three operational modes)
     ↓  RULES Engine       →  9-layer YAML rulebook → strategy + ranked choices
     ↓  AI Consultation    →  LLM translates structural state into natural language

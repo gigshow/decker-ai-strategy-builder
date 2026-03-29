@@ -233,6 +233,20 @@ GET /api/v1/signals/{symbol}/strategy?timeframe=1h&risk_appetite=medium&tier=pre
 
 `market_state`는 오퍼레이션 룰북의 `market_state` 조건과 연동. (breakout_early, pullback, range, trend 등 향후 확장)
 
+### 예시(`examples/signal_example.md`) 대비 실제 `signals[].state`
+
+운영 응답은 시그널 소스·DB·엔진 병합 여부에 따라 달라진다. 아래는 **자주 등장하는 키**와, 예시 JSON에만 두껍게 나오는 축의 구분이다.
+
+| 필드·축 | 일반 `GET …/state` | 비고 |
+|---------|-------------------|------|
+| `progress_pct`, `status`, `state_quality` | 자주 | `build_signal_state` 기본 |
+| `symbol`, `direction`, `target`, `stop_loss`, `current`, `signal_at` | 자주 | 가격 레그 |
+| `remaining_pct`, `to_target_pct`, `risk_reward_ratio` | 조건부 | 데이터 완전성 |
+| `engine_trace_id`, `engine_sub_swing_id`, `engine_connector_swing_id` | 조건부 | `judgment_signals`·enrich 경로 |
+| `engine_c_state`, `operation_gate`, `label_quality`, `operation_context` | 드묾/없음 | 엔진 병합·상의 등 **다른 경로**에서 더 흔함 → [signal_example.md §2](../examples/signal_example.md) |
+
+프로덕션 JSON **원본**을 문서에 박제하지 않는다. 대신 **합성·마스킹 예시**를 사용한다: [`examples/state_response_masked.example.json`](../examples/state_response_masked.example.json) — 실서버 응답과 키가 다를 수 있으므로 이 절의 필드 표·`signal_example.md` §2와 함께 본다.
+
 ---
 
 ## 사용 예시

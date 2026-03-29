@@ -1,0 +1,25 @@
+{
+  "symbol": "BTCUSDT",
+  "timeframe": "1h",
+  "signals": [
+    {
+      "id": "judgment_masked_001",
+      "timeframe": "1h",
+      "direction": "long",
+      "state": {
+        "progress_pct": 42.5,
+        "status": "in_progress",
+        "state_quality": "high",
+        "symbol": "BTCUSDT",
+        "entry_price": 95000.0,
+        "target_price": 99000.0,
+        "stop_loss": 93000.0,
+        "current": 96500.0,
+        "signal_at": "2026-03-01T12:00:00Z",
+        "engine_trace_id": "eng_trace_synthetic_7f3a",
+        "risk_reward_ratio": 2.1,
+        "market_state": "trend"
+      }
+    }
+  ]
+}

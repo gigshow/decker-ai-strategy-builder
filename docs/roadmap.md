@@ -14,6 +14,8 @@
 
 *Note on naming: "Phase 4" in the product roadmap refers to the proactive signals feature. The "Phase 4 Context Engine" referenced in the [article series](medium/README.md) refers to the sequence labeling + state machine + operation gate architecture — a separate milestone.*
 
+**구현·배포 정본**: 공개 개념·다이어그램은 **의도·스토리**를 설명한다. 실제 플래그·엔진·API JSON 키는 모노레포 `docs/DECKER_ENGINE_STAGING.md` §6, `ENGINE_PRODUCT_INTEGRATION_ROADMAP.md` §3.5.1, `docs/PUBLIC_DOC_AND_IP_RISK_MEMO.md` 를 따른다.
+
 ---
 
 ## 비전 (Vision)

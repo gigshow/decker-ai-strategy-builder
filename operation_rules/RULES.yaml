@@ -1,8 +1,7 @@
-# Decker 오퍼레이션 룰북 (머신 파싱용)
-# 로더: app/services/operation_rules_loader.py
+# Decker 오퍼레이션 룰북 (YAML, 시그널 상태·상의 매칭용)
 # tier: basic(3~4) | standard(6~8) | premium(10+)
-# Ref: docs/시그널_리소스_스펙_오퍼레이션_20250315.md, docs/오퍼레이션_룰북_학습_레퍼런스_구조_20250315.md
-# Ref: docs/multi_tf_시장상태_분석_및_개선_20260318.md (v2.0.0: tf_alignment, swing_state 추가)
+# 공개 미러: 운영 정본·최신 변경은 Decker 플랫폼 저장소를 따른다. 본 레포에서는 docs/architecture.md,
+# docs/model.md, operation 개요를 참고한다 (내부 전용 경로·파일명은 주석에 적지 않음).
 
 version: "2.3.2"
 updated: "2026-03-21"

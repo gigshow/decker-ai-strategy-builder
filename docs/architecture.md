@@ -8,7 +8,7 @@
 
 Decker AI는 LLM이 가격을 예측하는 서비스가 아닙니다.
 
-시계열은 **시퀀스 라벨**과 **5상태 FSM**으로 읽히고, **운영 게이트(GO/WATCH/HOLD)**와 시그널 생명주기에서 **진행도(progress_pct)·상태(status)**를 **결정론적으로 계산**합니다. LLM은 그 결과를 자연어로 전달하는 선택 인터페이스(DeckerClaw·상의)입니다.
+시계열은 **시퀀스 라벨**과 **세션 FSM**(INIT·C_SET·B_FORMING·B_SET·**A_FORMING**·W_PENDING 및 런타임 브레이크 상태)으로 읽히고, **운영 게이트(GO/WATCH/HOLD)**와 시그널 생명주기에서 **진행도(progress_pct)·상태(status)**를 **결정론적으로 계산**합니다. LLM은 그 결과를 자연어로 전달하는 선택 인터페이스(DeckerClaw·상의)입니다. (전이 다이어그램: [diagrams/system_flow.md](../diagrams/system_flow.md))
 
 | 구분 | 일반 AI 트레이딩 | Decker AI |
 |------|------------------|-----------|
