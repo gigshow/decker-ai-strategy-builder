@@ -4,6 +4,13 @@ All notable changes to the Decker AI Strategy Builder are documented in this fil
 
 ---
 
+## [v1.4.7] - 2026-03-30
+
+### Changed
+
+- **`operation_rules/RULES.yaml`**: 플랫폼 정본과 동기 — **v2.3.7** (QKV 연결·merge 평면 키·서브스윙 등). 공개면 헤더는 플랫폼 `PUBLIC_RULES_REDACTION_POLICY` 기준으로 내부 경로·비공개 문서명 제거.
+- **`docs/architecture.md`**: merge·`connection.qkv`·룰 버전 정렬 한 줄 추가 (내부 구현 세부·IP 없음).
+
 ## [v1.4.6] - 2026-03-28
 
 ### Changed

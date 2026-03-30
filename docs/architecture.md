@@ -83,7 +83,7 @@ Decker는 OpenClaw 생태계에 스킬로 참여합니다. OpenClaw 사용자는
     → Web / Telegram(자체) / OpenClaw 스킬 / API
 ```
 
-*참고*: `progress_pct`·`status`는 시그널(진입·목표·손절)+현재가로 계산되는 층과, 시퀀스 라벨·FSM 층이 **합성**될 수 있다. `GET /api/v1/signals/{symbol}/state`의 `signals[].state`는 전자 중심 + DB `engine_trace_id` 등(있을 때) — 전체 엔진 스냅샷·`operation_gate` 병합은 상의·전략 경로·문서 `SIGNAL_STATE_ENGINE_MERGE`를 본다.
+*참고*: `progress_pct`·`status`는 시그널(진입·목표·손절)+현재가로 계산되는 층과, 시퀀스 라벨·FSM 층이 **합성**될 수 있다. `GET /api/v1/signals/{symbol}/state`의 `signals[].state`는 전자 중심 + DB `engine_trace_id` 등(있을 때) — 전체 엔진 스냅샷·`operation_gate` 병합은 상의·전략 경로·문서 `SIGNAL_STATE_ENGINE_MERGE`를 본다. 엔진 연결선에 대한 **QKV 승자 정책**·`connection.qkv` 평면 키는 merge 경로와 `RULES.yaml` 상위 버전(예: `engine_connection_qkv_*`)과 함께 진행된다.
 
 ```
 ┌─────────────┐     ┌─────────────────┐

@@ -42,7 +42,13 @@ python scripts/smoke_live_l1_engine_evaluate.py --exchange binance --limit 120 -
 python scripts/smoke_live_l1_engine_evaluate.py --http http://127.0.0.1:8001 --limit 120 --json-log
 ```
 
-Script reference: `scripts/smoke_live_l1_engine_evaluate.py` (docstring). Roadmap: internal `DECKER_MARKET_AGENT_LOOP_ROADMAP.md` — B1 / loop #0.
+**YAML / env overrides** (monorepo `docs/B1_LIVE_ENGINE_CONFIG.md`, `config/b1_live_engine.example.yaml` — same CLI as the Korean recipe page):
+
+```bash
+python scripts/smoke_live_l1_engine_evaluate.py --config config/b1_live_engine.example.yaml --json-log
+```
+
+Script reference: `scripts/smoke_live_l1_engine_evaluate.py` (docstring). Implementation detail: `src/decker/api/app/services/engine_core/l1_ccxt_adapter.py` (CCXT → L1 → evaluate body). Roadmap: internal `DECKER_MARKET_AGENT_LOOP_ROADMAP.md` — B1 / loop #0.
 
 ---
 
