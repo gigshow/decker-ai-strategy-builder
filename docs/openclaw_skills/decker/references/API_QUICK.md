@@ -4,6 +4,20 @@
 
 **DECKER_API_URL** = https://api.decker-ai.com
 
+## 공개 API (X-API-Key) — 개발자용
+
+키 발급: 텔레그램 `/apikey` → `dk_live_xxx` 수령. Header: `X-API-Key: dk_live_xxx`.
+
+| Method | Path | 용도 |
+|--------|------|------|
+| GET | /api/v1/public/signals/{symbol}/latest?timeframe=1h | 최신 시그널 (direction·entry·target·stop·progress_pct) |
+| GET | /api/v1/public/signals/{symbol}/narrative?timeframe=1h | 규칙 기반 서사 (LLM 비용 없음) |
+
+Rate Limit: FREE=100/day, BASIC=10k/day, PREMIUM=100k/day. 429 시 내일 리셋.  
+소스: **engine:live_l1** 단독 — 엔진 미지원 심볼/TF는 404.
+
+---
+
 ## 인증 불필요
 
 | Method | Path | 용도 |

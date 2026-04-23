@@ -19,6 +19,7 @@
 | `decker` | 2.3.8 | 시그널·포지션·주문·자동주문·뉴스·Slack·Telegram |
 | `decker-hyperliquid` | 1.2.0 | Hyperliquid DEX 거래·시세·펀딩 |
 | `decker-polymarket` | 1.1.0 | Polymarket 예측시장 주문·마켓 검색 |
+| `decker-developer` | 1.0.0 | Public API 키 발급·인증·엔드포인트·Rate Limit·Python SDK |
 
 ## 한 줄
 
