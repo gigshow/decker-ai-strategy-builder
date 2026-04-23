@@ -4,6 +4,36 @@ All notable changes to the Decker AI Strategy Builder are documented in this fil
 
 ---
 
+## [v1.5.0] - 2026-04-23
+
+### Added (Sprint 2 — Public API · Rate Limit · SDK)
+
+- **WP1 — 공개 API 인증**: `POST /api/v1/public/auth/verify` 엔드포인트 · `X-API-Key` 헤더 전용 인증 · `api_keys.tier` 스키마 (FREE / BASIC / PREMIUM, migration 070)
+- **WP2 — Rate Limit v2**: tier 기반 일일 한도 (FREE 100 · BASIC 10,000 · PREMIUM 100,000 req/day) · Redis INCR+EXPIREAT · in-memory fallback · `X-RateLimit-Limit / Remaining / Reset` 응답 헤더 · 초과 시 HTTP 429 + `Retry-After`
+- **WP3 — OpenAPI 공개**: `api.decker-ai.com/docs` 항상 접근 가능 (DEBUG 조건 제거) · 내부 라우터 `include_in_schema=False` (공개 경로 2개만 스펙 노출) · `scripts/export_openapi.py` CI 아티팩트
+- **WP4 — Python SDK `decker-client` v0.1.0**: `pip install decker-client` · `Client` / `signals.get_narrative()` / `signals.get_latest()` / `health.check()` · `RateLimitError.retry_after` · respx 테스트 11건
+- **WP5 — 개발자 문서**: `docs/DEVELOPER_API_GUIDE.md` 신규 · 인증·Rate Limit·Endpoints·SDK·FAQ 섹션
+
+---
+
+## [v1.4.9] - 2026-04-23
+
+### Fixed (문서 정합)
+
+- **`docs/roadmap.md`**: 내부 `WORK_STATUS` §1과 맞춤 — 비전 **Consultation**을 “완료=제품 없음”으로 읽히지 않게 하고, R3/R4는 **완료**가 아닌 **`## 가동·강화`**로 분리. 공개 repo에 없는 내부 문서 **절대 경로** 인용 제거. 장기 **선행 조건**을 “R3/R4 완료”가 아닌 **밀도·품질** 축으로 수정.
+- **`docs/architecture.md`**: 2026-04 절 — “2026 Q2 단일 완료” 뉘앙스 완화, SSOT는 **비공개 모노레포** 수준으로 서술(공개 방문자에게 `WORK_STATUS` 파일명 강요 없음).
+- **비공개** `docs/로드맵_통합.md`: §1·§2b·§3·§4를 위 스토리와 동기; **예정**에서 R3/R4 “미구현” 오해 제거(토큰 레이어 등만 예정).
+
+## [v1.4.8] - 2026-04-23
+
+### Changed
+
+- **`operation_rules/RULES.yaml`**: 플랫폼 정본과 동기 — **v2.4.7** (WP-5.3 / ADR-010 Tier·`engine_action_gate`·trigger lane·merge plane §2.5 연계). 공개용 상단 4줄·`updated` 갱신 (`docs/PUBLIC_RULES_REDACTION_POLICY` §3).
+- **`docs/roadmap.md`**: 룰북 버전·R3/R4·진행/예정 표를 **현재 제품**(중기 상의·엔진 통합 경로 가동)에 맞게 정리; “공개 레포” 행 → **동기 루틴**으로 명시; 2026 Q2 **엔진-퍼스트** 요약·비내부-경로-only 안내.
+- **`docs/architecture.md`**: 2026-04 **정렬 절** 추가 — 공개 RULES·Game-like 로드맵·비공개 `WORK_STATUS` SSOT.
+- **`README.md`**: Operations 표 **v2.4.7+** / 엔진 merge 조건 요약.
+- **비공개** `docs/로드맵_통합.md`: RULES·roadmap·비전 표 동기.
+
 ## [v1.4.7] - 2026-03-30
 
 ### Changed

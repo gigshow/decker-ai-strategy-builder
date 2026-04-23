@@ -17,6 +17,9 @@
         "current": 96500.0,
         "signal_at": "2026-03-01T12:00:00Z",
         "engine_trace_id": "eng_trace_synthetic_7f3a",
+        "operation_gate": "WATCH",
+        "trigger_direction": "long",
+        "transition_id": "trace-auto|2026-03-31T08:00:00Z|LABEL_NUMERIC",
         "risk_reward_ratio": 2.1,
         "market_state": "trend"
       }

@@ -3,14 +3,46 @@
 # 공개 미러: 운영 정본·최신 변경은 Decker 플랫폼 저장소를 따른다. 본 레포에서는 docs/architecture.md,
 # docs/model.md, operation 개요를 참고한다 (내부 전용 경로·파일명은 주석에 적지 않음).
 
-version: "2.3.7"
-updated: "2026-03-30"
+version: "2.4.7"
+updated: "2026-04-23"
+# v2.4.7: WP-5.3 · ADR-010 — Tier 본문 규칙 4건 추가 (갭 D 종결).
+#         `tier_t3_main_go_aligned` (engine_action_gate=GO + engine_trigger_snapshot_trigger_lane=MAIN),
+#         `tier_t2_early_swing_confirmed` (engine_swing_confirmed_early: true),
+#         `tier_t1_hold_reversal_risk` (engine_action_gate=HOLD),
+#         `tier_t1_watch_observe` (engine_action_gate=WATCH). 각 Tier 문구가 구별됨 (ADR-010 §2.2).
+#         상의 서비스는 T1/T2 를 어댑터에서 먼저 처리하므로 본 레이어는 섀도우/직접 매칭 경로용.
+# v2.4.6: FP T3.3 (cursor-fp-observation-promotion) — merge plane §2.5 observation promotion (3 keys).
+#         조건키 추가: `engine_action_gate` (scalar|list, case-insensitive — GO|WATCH|HOLD),
+#         `engine_ba_verdict` (scalar|list, case-insensitive — CONNECT|NO_CONNECT_NEW_C|TEST_RETRY),
+#         `engine_confirmed_break` (bool). Source: migration 038 (engine_action_gate) + migration 057
+#         (engine_ba_verdict, engine_confirmed_break) + merge_engine_state.py
+#         `_plane_25_fields_from_semantic_tail_row`. Ref: ENGINE_TRIGGER_CONDITION_CONTRACT_SPEC §14.1,
+#         docs/TRIGGER_FAILURE_PATTERN_PIPELINE_PHASE0_PLAN.md §4.3 T3.3.
+# v2.4.5: WU:W10 — merge plane §2.5 RULES L1 — 로더 `_rule_matches` + 프리미엄 2개
+#         (`engine_plane25_main_qkv_pass_aligned_attention`, `engine_plane25_sub_branch_qkv_fail_attention`).
+#         조건키: `engine_qkv_pass`, `engine_trigger_snapshot_trigger_lane`, `engine_swing_evaluation_dominant_layer`,
+#         `engine_sub_branch_qkv_pass`, `engine_conn_branch_qkv_pass`. Ref: ENGINE_TRIGGER_CONDITION_CONTRACT_SPEC §14.1.
+# v2.4.4: M-B2 — rules[] 프리미엄 2개 — `engine_key_change_key_signal_applied`·`engine_key_change_confirmed` (053 merge·enrich 평면).
+#         Ref: WS5_SURVEILLANCE_TRIGGER_CONTRACT.md §5.2 항목 4, SIGNAL_STATE_ENGINE_MERGE.
+# v2.4.3: WP-5.3 / SC-3 — exit_policy_ref (POLICY_EXIT_EVAL_CATALOG §2 policy_id). 로더는 여전히 rules[]만 소비; 엔진 기본 trigger_forward_exit_eval=legacy 와 정합.
+#         로더(M-B2): `engine_key_change_confirmed`, `engine_key_change_direction`, `engine_key_change_key_signal_applied` 조건키 — migration 053·merge·enrich 평면과 정합.
+# v2.4.2: migration 052 / merge·DB 평면 — engine_dominant_layer_changed (bool), engine_dominant_layer_prev,
+#         engine_manlak_shift (scalar|list, case-insensitive). Ref: operation_rules_loader, judgment_signals 052.
+# v2.4.1: migration 051 / merge·DB 평면 — _rule_matches 에 engine_main_a_cycle_id (scalar|list),
+#         engine_main_a_cycle_started_this_bar, engine_main_a_cycle_ended_this_bar (bool),
+#         engine_winner_stem_terminated_kind (scalar|list). Ref: operation_rules_loader, judgment_signals 051.
+# v2.4.0: 트리거 PnL 브릿지(W8) — merge_last_trigger_performance_into_signal_state 의 engine_trigger_exit_reason_in 등으로
+#         프리미엄 룰 engine_trigger_stop_exit_attention (시뮬 stop_hit 안내; 실주문 청산 로그 아님). Ref: NEXT_SESSION_TRIGGER_PNL_EXIT_BRIDGE §0, SIGNAL_STATE_ENGINE_MERGE.
+# v2.3.9: GAP-4 opposite_main_trigger_* — merge 평면 키 engine_opposite_main_trigger_candidate, engine_opposite_main_trigger_direction;
+#         프리미엄 룰 engine_opposite_main_trigger_skeptic_attention (스켑틱 관망·분할; 메인 확정 게이트와 별축). Ref: SIGNAL_SKEPTIC_INPUT_SPEC §2.5, SMS_GAP4_CONSUMPTION_MATRIX.
+# v2.3.8: SMS / GAP-parallel stem source — merge·DB 평면 키 engine_stem_trigger, engine_winner_stem_kind, engine_winner_stem_id (050);
+#         로더 스칼라·리스트 매칭(operation_rules_loader). 프리미엄 룰 2개: 서브·연결 줄기 출처 시 중간 진행 구간 안내.
 # v2.3.7: engine_connection_qkv_policy_reason — SUB_SWING_WINNER 시 main-line 연결 프리미엄 룰 제외; engine_connection_target_source DB persist.
 # v2.3.6: engine_connection_qkv_verdict — merge state_snapshot.connection.qkv.verdict 평면 키; premium 룰 engine_connection_qkv_connect.
 # v2.3.5: engine_sub_swing_id_min — merge engine_sub_swing_id (MODE_SEQ_V2 Facade); premium 룰 engine_sub_swing_scope_attention.
 # v2.3.4: engine_c_state — merge의 state_snapshot.c_state 평면 키; progress_66 미만 구간에서 A_FORMING 전용 룰 (#4).
 # v2.3.3: 엔진 합성 키 — merge 평면 키(engine_key_direction, engine_label_confidence_min, engine_event_name); v2.3.4에 engine_c_state 추가.
-#         (플랫폼 merge·룰 로더와 정합)
+#         Ref: app/services/engine_core/merge_engine_state.py, operation_rules_loader._rule_matches
 # v2.3.2: C2-b 배치2 — portfolio, entry_timing, tf_alignment, swing_state, portfolio_default YAML choices.
 # v2.3.1: C2-b 배치1 — progress_* / progress_80_trend / TF·range 진행도 룰 전부 YAML choices (dict는 폴백용 유지).
 # v2.3.0: C2-a — 일부 룰에 YAML choices 인라인 (target_reached, stop_hit, default). 로더·resolve_choices_for_rule YAML 우선.
@@ -23,6 +55,9 @@ updated: "2026-03-30"
 # v1.3.1: portfolio_default에 portfolio_context_required 추가
 # v1.3.0: 시그널 스펙 기반 샘플 확장 (progress 90/95, 1h/1d TF, 33/40, risk high)
 # v1.2.0: v4 포트폴리오 스킬
+
+# 청산 프리셋 거버넌스 (WP-5.3 / SC-3). 다정책·배치 루프는 본 ID를 상류 근거로 삼는다.
+exit_policy_ref: legacy
 
 rules:
 
@@ -554,6 +589,135 @@ rules:
       - action: full_close
         description: "전량 청산"
 
+  # 시그널 출처 줄기(SMS Phase 3+): label_semantic_trace tail winner_stem_* — DB 050 + merge. premium만(좁은 조건).
+  - id: engine_winner_stem_sub_lane_attention
+    tier: premium
+    progress_min: 40
+    progress_max: 65
+    engine_winner_stem_kind: ["sub"]
+    strategy: "시그널 출처가 서브 줄기(조기 확정 경로)입니다. 중간 진행 구간 — 상위 TF·메인 세션 맥락을 함께 확인하고 분할·관망을 권장합니다."
+    choices:
+      - action: hold
+        description: "목표까지 홀드"
+      - action: partial_take_profit
+        pct: 20
+        description: "20% 부분 익절"
+      - action: wait
+        description: "관망"
+
+  - id: engine_winner_stem_connector_lane_attention
+    tier: premium
+    progress_min: 30
+    progress_max: 90
+    engine_winner_stem_kind: ["connector"]
+    strategy: "시그널 출처가 연결 줄기(연결 레벨 소비 등)입니다. 진행 구간에서 연결 키·QKV·메인 정렬을 함께 확인하세요."
+    choices:
+      - action: hold
+        description: "목표까지 홀드"
+      - action: partial_take_profit
+        pct: 25
+        description: "25% 부분 익절"
+      - action: full_close
+        description: "전량 청산"
+
+  # GAP-4: break_context → merge plane keys — display_only 관측을 RULES 스켑틱 레이어로 소비 (메인 swing_confirmed 와 별축).
+  - id: engine_opposite_main_trigger_skeptic_attention
+    tier: premium
+    progress_min: 30
+    progress_max: 85
+    engine_opposite_main_trigger_candidate: true
+    strategy: "엔진이 메인 키와 반대 방향 시그널 후보를 표시했습니다(GAP-4, merge 평면 키). 메인 확정 게이트와 별축 — 상위 TF·분할·관망을 권장합니다. Ref: SIGNAL_SKEPTIC_INPUT_SPEC §2.5."
+    choices:
+      - action: hold
+        description: "목표까지 홀드"
+      - action: partial_take_profit
+        pct: 25
+        description: "25% 부분 익절"
+      - action: wait
+        description: "관망"
+
+  # WS-5b / 053: judgment merge·enrich 평면 — 키 시그널 적용이 켜진 봉(메인 스냅샷 트리거와 별축일 수 있음).
+  - id: engine_ws5_key_signal_applied_attention
+    tier: premium
+    progress_min: 20
+    progress_max: 95
+    engine_key_change_key_signal_applied: true
+    strategy: "WS-5b: 키 시그널 적용(engine_key_change_key_signal_applied)이 관측되었습니다. 메인 트리거 스냅샷과 같은 봉에서 반드시 동작한 것은 아님 — 상위 TF·분할·관망을 권장합니다. Ref: WS5_SURVEILLANCE_TRIGGER_CONTRACT.md §5."
+    choices:
+      - action: hold
+        description: "목표까지 홀드"
+      - action: partial_take_profit
+        pct: 20
+        description: "20% 부분 익절"
+      - action: wait
+        description: "관망"
+
+  # WS-5 / 053: 키 확정 관측만(키 시그널 적용 룰보다 아래 — 둘 다 참이면 위 룰이 먼저 매칭).
+  - id: engine_ws5_key_change_confirmed_attention
+    tier: premium
+    progress_min: 20
+    progress_max: 95
+    engine_key_change_confirmed: true
+    strategy: "WS-5: 키 변경 확정 관측(engine_key_change_confirmed)입니다. 스냅샷 MAIN 트리거와 별축일 수 있음 — 상위 TF·게이트·분할을 확인하세요. Ref: WS5_SURVEILLANCE_TRIGGER_CONTRACT.md §5."
+    choices:
+      - action: hold
+        description: "목표까지 홀드"
+      - action: partial_take_profit
+        pct: 15
+        description: "15% 부분 익절"
+      - action: wait
+        description: "관망"
+
+  # W8: trigger_performance tail → merge 평면 키 engine_trigger_* (RULES 로더 기존 키 사용).
+  - id: engine_trigger_stop_exit_attention
+    tier: premium
+    progress_min: 25
+    progress_max: 95
+    engine_trigger_exit_reason_in: ["stop_hit"]
+    strategy: "최신 시뮬 청산 유형이 손절(stop_hit)입니다(trigger_performance → merge 평면 키). 실제 주문 청산 로그가 아님 — 구조·리스크를 재점검하세요. Ref: NEXT_SESSION_TRIGGER_PNL_EXIT_BRIDGE_WORK_PLAN §0, SIGNAL_STATE_ENGINE_MERGE."
+    choices:
+      - action: hold
+        description: "목표까지 홀드"
+      - action: partial_take_profit
+        pct: 20
+        description: "20% 부분 익절"
+      - action: full_close
+        description: "전량 청산"
+
+  # WU:W10 — plane 2.5 스칼라를 RULES 조건으로 소비 (L1; 줄기 QKV는 관측·L2 게이트 아님 — W8 결정 A).
+  - id: engine_plane25_main_qkv_pass_aligned_attention
+    tier: premium
+    progress_min: 22
+    progress_max: 38
+    engine_trigger_snapshot_trigger_lane: MAIN
+    engine_qkv_pass: true
+    engine_swing_evaluation_dominant_layer: main
+    strategy: "MAIN 트리거 레인 + 메인 QKV 통과 + SEM dominant_layer가 MAIN으로 정렬(merge plane 2.5). 초·중진행 구간 — 상위 TF·리스크를 재확인하세요. Ref: ENGINE_TRIGGER_CONDITION_CONTRACT_SPEC §14.1."
+    choices:
+      - action: hold
+        description: "목표까지 홀드"
+      - action: partial_take_profit
+        pct: 15
+        description: "15% 부분 익절"
+      - action: wait
+        description: "관망"
+
+  - id: engine_plane25_sub_branch_qkv_fail_attention
+    tier: premium
+    progress_min: 35
+    progress_max: 70
+    engine_trigger_snapshot_trigger_lane: SUB
+    engine_sub_branch_qkv_pass: false
+    strategy: "SUB 트리거 레인에서 서브 줄기 QKV 통과가 false(관측; L2 확정 게이트 아님). 분할·관망·메인 정렬을 권장합니다. Ref: ENGINE_SUB_CONN_QKV_GATE_CONSENSUS_WU_W8.md §6, SIGNAL_STATE_ENGINE_MERGE."
+    choices:
+      - action: hold
+        description: "목표까지 홀드"
+      - action: partial_take_profit
+        pct: 20
+        description: "20% 부분 익절"
+      - action: wait
+        description: "관망"
+
   - id: progress_66
     tier: standard
     progress_min: 66
@@ -621,6 +785,63 @@ rules:
         description: "목표까지 홀드"
       - action: full_close
         description: "전량 청산"
+
+  # ══════════════════════════════════════════════════
+  # 레이어 8b: ENGINE TIER (WP-5.3 · ADR-010 갭 D)
+  # 상의(`reason_signal_state_with_choices`) 는 T1 / T2 를 어댑터가 먼저 처리하므로
+  # 이 레이어는 (a) 직접 `_find_matching_rule` 호출, (b) 섀도우 러너, (c) 프리미엄
+  # 부가 선택지 경로의 **단일 원천** 이다. Tier 별 전략 문구가 서로 구별되도록 작성.
+  # ══════════════════════════════════════════════════
+
+  # [T3 GO · 메인 레인] 본 트리거 확정 — RULES 본문에서 T3 를 대표.
+  - id: tier_t3_main_go_aligned
+    tier: standard
+    engine_action_gate: GO
+    engine_trigger_snapshot_trigger_lane: MAIN
+    strategy: "T3 확정 트리거. 본 레인 GO. 표준 포지션 진입 · 손절/목표 기준가 준수."
+    choices:
+      - action: enter
+        description: "표준 포지션 진입"
+      - action: hold
+        description: "목표까지 홀드"
+      - action: partial_take_profit
+        pct: 30
+        description: "30% 부분 익절"
+
+  # [T2 조기 레인] SUB/CONN 스윙 조기 확정 — 본 트리거 대기 소스.
+  - id: tier_t2_early_swing_confirmed
+    tier: standard
+    engine_swing_confirmed_early: true
+    strategy: "T2 조기 레인 확정. 본 트리거(T3) 대기 · 소량 분할 검토."
+    choices:
+      - action: wait
+        description: "본 트리거 대기"
+      - action: scale_in
+        description: "소규모 분할 진입 검토"
+      - action: hold
+        description: "목표까지 홀드"
+
+  # [T1 HOLD] 고위험 상태 보류.
+  - id: tier_t1_hold_reversal_risk
+    tier: basic
+    engine_action_gate: HOLD
+    strategy: "T1 상태 보류(HOLD). 역전 위험 또는 상위 TF 미정렬 — 신규 진입 금지."
+    choices:
+      - action: hold
+        description: "보류 유지"
+      - action: wait
+        description: "관망"
+
+  # [T1 WATCH] 관찰 구간.
+  - id: tier_t1_watch_observe
+    tier: basic
+    engine_action_gate: WATCH
+    strategy: "T1 상태 관찰(WATCH). 즉시 진입 지양 · 다음 봉 변화 확인."
+    choices:
+      - action: watch
+        description: "관찰 계속"
+      - action: wait
+        description: "관망"
 
   # ══════════════════════════════════════════════════
   # 레이어 9: PORTFOLIO DEFAULT + FALLBACK

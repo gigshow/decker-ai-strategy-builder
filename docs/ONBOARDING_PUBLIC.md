@@ -15,6 +15,7 @@
 | 웹 | [decker-ai.com](https://www.decker-ai.com) |
 | 카카오 진입(안내·문의) | [Kakao Channel](https://pf.kakao.com/_RxlxjVX), [usage-guide.md#kakao-channel-entry-guide](./usage-guide.md#kakao-channel-entry-guide) |
 | API 문서 | [api.decker-ai.com/docs](https://api.decker-ai.com/docs) |
+| API 연동 가이드 | [DEVELOPER_API_GUIDE.md](./DEVELOPER_API_GUIDE.md) — 인증·SDK·Rate Limit |
 | 텔레그램 봇 `/` 명령·자연어 | [TELEGRAM_AGENT_COMMANDS.md](./TELEGRAM_AGENT_COMMANDS.md) (단일 출처) |
 | 연동(예) | [decker-link-telegram](https://decker-ai.com/decker-link-telegram), [decker-link (Slack)](https://decker-ai.com/decker-link) |
 
