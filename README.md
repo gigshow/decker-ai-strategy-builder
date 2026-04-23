@@ -130,8 +130,10 @@ When the limit is exceeded → `HTTP 429` + `Retry-After` header.
 
 ## Python SDK
 
+> **New here?** If `pip install decker-client` fails, the **PyPI package may not be published yet** (roadmap: public SDK + PyPI). Use **[REST + curl](docs/quickstart.md#path-b--rest-api)** or **[samples](samples/README.md)** with your API key first — they track production today.
+
 ```bash
-pip install decker-client    # Python 3.9+
+pip install decker-client    # Python 3.9+  (when available on PyPI)
 ```
 
 ```python
@@ -162,7 +164,7 @@ with Client(api_key="dk_live_xxx") as client:
         print(f"Retry in {e.retry_after}s")
 ```
 
-SDK source: [`sdk/python/`](sdk/python/) · [PyPI](https://pypi.org/project/decker-client/)
+SDK source: private platform monorepo `sdk/python/decker_client` (not vendored in this public repo). PyPI: [decker-client](https://pypi.org/project/decker-client/) when published — see [roadmap](docs/roadmap.md).
 
 ---
 

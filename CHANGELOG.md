@@ -16,6 +16,12 @@ All notable changes to the Decker AI Strategy Builder are documented in this fil
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- **README.md**: Python SDK 절에 PyPI 미배포 시 대안(REST·samples) 안내; 공개 클론에 없는 `sdk/python/` 링크 제거.
+
 ## [v1.4.9] - 2026-04-23
 
 ### Fixed (문서 정합)
