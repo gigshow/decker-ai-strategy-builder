@@ -37,6 +37,16 @@
 
 ---
 
+## ⚡ Try it right now (no sign-up)
+
+```bash
+curl https://api.decker-ai.com/api/v1/public/demo
+```
+
+Returns live BTCUSDT 1h signal — no API key needed.
+
+---
+
 ## ⚡ Quickstart (3 steps)
 
 ### Step 1 — Get your API key (30 seconds)

@@ -20,15 +20,18 @@ All notable changes to the Decker AI Strategy Builder are documented in this fil
 
 ### Changed
 
-- **README.md**: 전면 재설계 — 페르소나 분기표(트레이더/개발자/에이전트빌더), quickstart 3단계(키발급→curl→SDK), `progress_pct` ASCII 시각화, GO/WATCH/HOLD 시나리오, 지원 심볼·TF 명시. PyPI 미배포 뱃지 제거, SDK 뱃지 `sdk/python/` 로컬 링크로 교체.
+- **README.md**: 전면 재설계 — 페르소나 분기표(트레이더/개발자/에이전트빌더), quickstart 3단계(키발급→curl→SDK), `progress_pct` ASCII 시각화, GO/WATCH/HOLD 시나리오, 지원 심볼·TF 명시. PyPI 미배포 뱃지 제거, SDK 뱃지 `sdk/python/` 로컬 링크로 교체. **"Try it right now"** 데모 curl 블록 상단 추가.
 - **docs/quickstart.md**: Step 0(키발급 Telegram) 선행, Path A(Telegram)/B(REST)/C(SDK) 명확 분리, 응답 필드 설명, 지원 심볼·TF 명시.
 - **docs/api-guide.md**: 키 발급 경로 수정 ("Settings → API Keys" → Telegram `/apikey`).
 - **sdk/python/README.md**: 키 발급 Telegram 경로 명시, `pip install` → `git clone + pip install -e` 안내.
 - **docs/signal-performance.md**: 날짜 2026-04-23 갱신, 엔진 소스(`engine:live_l1`) 명시, 실시간 API 참조 안내.
+- **docs/DEVELOPER_API_GUIDE.md**: §0 "Try it first (no sign-up)" 데모 섹션 추가; demo·stats 엔드포인트 스펙 문서화.
 
 ### Added
 
 - **sdk/python/**: Python SDK `decker-client` 공개 레포에 포함 (`decker_client/` 패키지, `pyproject.toml`, `tests/`). PyPI 배포 예정.
+- **백엔드 `GET /api/v1/public/demo`**: 인증 없이 BTCUSDT 1h 실시간 신호 + 내러티브 반환. IP당 10 req/day rate limit (Redis INCR+EXPIREAT, in-memory fallback). `public_demo.py` + `rate_limiting_v2.py` `check_demo_rate_limit()` 신규.
+- **백엔드 `GET /api/v1/public/stats`**: 인증 없이 30일 엔진 신호 활동 통계 반환. 심볼별 평가 건수·gate 분포·타임프레임 커버리지. 60초 in-memory TTL 캐시. `public_stats.py` 신규.
 
 ## [v1.4.9] - 2026-04-23
 

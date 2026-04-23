@@ -5,6 +5,37 @@ Full OpenAPI spec: [api.decker-ai.com/docs](https://api.decker-ai.com/docs)
 
 ---
 
+## 0. Try it first (no sign-up)
+
+```bash
+curl https://api.decker-ai.com/api/v1/public/demo
+```
+
+Returns live BTCUSDT 1h signal right now — no API key needed.  
+Rate limit: **10 req/IP/day**.
+
+```json
+{
+  "symbol": "BTCUSDT",
+  "timeframe": "1h",
+  "direction": "long",
+  "entry_price": 94200.0,
+  "target_price": 97500.0,
+  "stop_loss": 92800.0,
+  "progress_pct": 27.3,
+  "operation_gate": "GO",
+  "narrative": "GO — A-cycle active at 27% progress. Entry window open.",
+  "_demo": {
+    "note": "Demo endpoint — BTCUSDT 1h only, 10 req/IP/day.",
+    "get_full_access": "Telegram @deckerclawbot → /apikey"
+  }
+}
+```
+
+Once you've seen live data, follow steps 1–3 below to get your API key.
+
+---
+
 ## 1. Quickstart (3 steps)
 
 ### Step 1 — Sign up & link Telegram
@@ -149,6 +180,47 @@ curl "https://api.decker-ai.com/api/v1/public/signals/BTCUSDT/narrative?timefram
 ```
 
 **`axis`**: `bullish` | `bearish` | `observation`
+
+### `GET /api/v1/public/demo` — Live demo (no API key)
+
+Returns BTCUSDT 1h combined signal + narrative. No authentication needed.  
+Rate limited to **10 req/IP/day**. Ideal for embedding in README examples or quick experiments.
+
+```bash
+curl https://api.decker-ai.com/api/v1/public/demo
+```
+
+Response includes all fields from `/latest` plus `narrative` and `axis`.
+
+### `GET /api/v1/public/stats` — Signal activity stats (no API key)
+
+Returns 30-day engine signal evaluation counts per symbol, with GO/WATCH/HOLD distribution.  
+No authentication required. Cached for **60 seconds**.
+
+```bash
+curl https://api.decker-ai.com/api/v1/public/stats
+```
+
+```json
+{
+  "period_days": 30,
+  "engine": "engine:live_l1",
+  "total_evaluations": 8240,
+  "symbol_count": 6,
+  "updated_at": "2026-04-23T10:00:00Z",
+  "symbols": [
+    {
+      "symbol": "BTCUSDT",
+      "total_evaluations": 2160,
+      "gate_distribution": { "GO": 980, "WATCH": 720, "HOLD": 460 },
+      "timeframes": ["1h", "4h", "1d"],
+      "last_evaluated_at": "2026-04-23T09:58:00Z"
+    }
+  ]
+}
+```
+
+> `gate_distribution` shows structural bias: `GO` = favorable for entry, `WATCH` = observing transition, `HOLD` = counter-trend risk.
 
 ---
 
