@@ -5,15 +5,13 @@ Official Python SDK for the [Decker](https://decker-ai.com) crypto signal & narr
 ## Install
 
 ```bash
-pip install decker-client
-```
-
-Requires Python 3.9+. For local/editable install from source:
-
-```bash
 git clone https://github.com/gigshow/decker-ai-strategy-builder.git
 pip install -e decker-ai-strategy-builder/sdk/python/
 ```
+
+Requires Python 3.9+.
+
+> `pip install decker-client` (PyPI) — 배포 준비 중. CI/CD 파이프라인은 구성 완료, PyPI Trusted Publisher 설정 후 활성화됩니다.
 
 ## Get your API key
 

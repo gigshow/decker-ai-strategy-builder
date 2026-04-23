@@ -15,7 +15,7 @@
 
 [![GitHub Stars](https://img.shields.io/github/stars/gigshow/decker-ai-strategy-builder?style=flat-square&color=DAA520)](https://github.com/gigshow/decker-ai-strategy-builder/stargazers)
 [![API Docs](https://img.shields.io/badge/API-docs-00C853?style=flat-square)](https://api.decker-ai.com/docs)
-[![PyPI](https://img.shields.io/pypi/v/decker-client?style=flat-square&logo=python&logoColor=white&label=PyPI)](https://pypi.org/project/decker-client/)
+[![SDK](https://img.shields.io/badge/SDK-sdk%2Fpython-3775A9?style=flat-square&logo=python&logoColor=white)](sdk/python/)
 [![Telegram](https://img.shields.io/badge/Telegram-DeckerClaw-26A5E4?style=flat-square&logo=telegram&logoColor=white)](https://t.me/deckerclawbot)
 [![Kakao Channel](https://img.shields.io/badge/Kakao-Channel-FEE500?style=flat-square&logo=kakaotalk&logoColor=000000)](https://pf.kakao.com/_RxlxjVX)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
@@ -81,8 +81,11 @@ curl "https://api.decker-ai.com/api/v1/public/signals/BTCUSDT/latest?timeframe=1
 ### Step 3 — Python SDK (optional)
 
 ```bash
-pip install decker-client
+git clone https://github.com/gigshow/decker-ai-strategy-builder.git
+pip install -e decker-ai-strategy-builder/sdk/python/
 ```
+
+> `pip install decker-client` (PyPI) — 배포 준비 중.
 
 ```python
 from decker_client import Client
