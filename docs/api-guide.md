@@ -13,7 +13,12 @@ All `/api/v1/public/*` endpoints require an `X-API-Key` header.
 X-API-Key: dk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-Get your key at [decker-ai.com](https://decker-ai.com) → Settings → API Keys.
+**Get your key via Telegram:**
+1. Open [@deckerclawbot](https://t.me/deckerclawbot) → send `/start`
+2. Send `/apikey` → receive your key
+3. Lost it? `/apikey reset` revokes and reissues
+
+> Keys are issued via Telegram only. Web dashboard issuance is planned.
 
 ---
 

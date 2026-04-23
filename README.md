@@ -15,156 +15,150 @@
 
 [![GitHub Stars](https://img.shields.io/github/stars/gigshow/decker-ai-strategy-builder?style=flat-square&color=DAA520)](https://github.com/gigshow/decker-ai-strategy-builder/stargazers)
 [![API Docs](https://img.shields.io/badge/API-docs-00C853?style=flat-square)](https://api.decker-ai.com/docs)
-[![PyPI](https://img.shields.io/badge/PyPI-decker--client-3775A9?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/decker-client/)
+[![SDK](https://img.shields.io/badge/SDK-sdk%2Fpython-3775A9?style=flat-square&logo=python&logoColor=white)](sdk/python/)
 [![Telegram](https://img.shields.io/badge/Telegram-DeckerClaw-26A5E4?style=flat-square&logo=telegram&logoColor=white)](https://t.me/deckerclawbot)
 [![Kakao Channel](https://img.shields.io/badge/Kakao-Channel-FEE500?style=flat-square&logo=kakaotalk&logoColor=000000)](https://pf.kakao.com/_RxlxjVX)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
-[📖 API Docs](https://api.decker-ai.com/docs) · [🔑 Get API Key](https://decker-ai.com) · [📦 PyPI](https://pypi.org/project/decker-client/) · [🤖 Telegram Bot](https://t.me/deckerclawbot) · [🗺 Roadmap](docs/roadmap.md)
+[📖 API Docs](https://api.decker-ai.com/docs) · [🤖 Telegram Bot](https://t.me/deckerclawbot) · [📦 Python SDK](sdk/python/) · [🗺 Roadmap](docs/roadmap.md)
 
 </div>
 
 ---
 
-## ⚡ 60-second quickstart
+## Start here
+
+| You are | Best path |
+|---------|-----------|
+| **Crypto trader** — want signals on your phone | [Telegram Bot](https://t.me/deckerclawbot) → type `/btc` |
+| **Developer** — building a bot, app, or script | [3-step quickstart below](#-quickstart-3-steps) |
+| **AI agent builder** — adding Decker as a skill | [OpenClaw skills](docs/openclaw_skills/) |
+| **Self-host / deploy your own** | [turnkey/](turnkey/) — Railway one-click |
+
+---
+
+## ⚡ Quickstart (3 steps)
+
+### Step 1 — Get your API key (30 seconds)
+
+1. Open Telegram → [@deckerclawbot](https://t.me/deckerclawbot)
+2. Send `/start`
+3. Send `/apikey` → receive `dk_live_xxxxxxxxxxxxxxxxxxxxxxxx`
+
+> **Lost your key?** Run `/apikey reset` in the bot — revokes and reissues.
+
+### Step 2 — First call
 
 ```bash
-pip install decker-client
+curl "https://api.decker-ai.com/api/v1/public/signals/BTCUSDT/latest?timeframe=1h" \
+  -H "X-API-Key: dk_live_xxx"
+```
+
+```json
+{
+  "symbol": "BTCUSDT",
+  "timeframe": "1h",
+  "direction": "long",
+  "entry_price": 94200.0,
+  "target_price": 97500.0,
+  "stop_loss": 92800.0,
+  "progress_pct": 67.3,
+  "operation_gate": "GO",
+  "generated_at": "2026-04-23T05:00:00Z"
+}
+```
+
+### Step 3 — Python SDK (optional)
+
+The SDK is included in this repository:
+
+```bash
+git clone https://github.com/gigshow/decker-ai-strategy-builder.git
+pip install -e decker-ai-strategy-builder/sdk/python/
 ```
 
 ```python
 from decker_client import Client
 
-client = Client(api_key="dk_live_xxx")   # get your key → decker-ai.com
+with Client(api_key="dk_live_xxx") as client:
+    sig = client.signals.get_latest("BTCUSDT", timeframe="1h")
+    print(f"{sig.direction} | entry={sig.entry_price} | progress={sig.progress_pct}%")
 
-# Get the LLM narrative for BTCUSDT 1h
-narr = client.signals.get_narrative("BTCUSDT", "1h")
-print(narr.text)
-# → "B-leg confirmed at 66% progress. Counter-swing absorbed.
-#    Recommend: 30% partial TP or hold to target."
-
-# Latest signal
-sig = client.signals.get_latest("BTCUSDT")
-print(sig.direction, sig.entry_price, sig.target_price)
-# → long  96000  100000
+    narr = client.signals.get_narrative("BTCUSDT", "4h")
+    print(narr.text)
 ```
 
-**Or with curl:**
-```bash
-curl -X POST https://api.decker-ai.com/api/v1/public/auth/verify \
-  -H "X-API-Key: dk_live_xxx"
-# → {"valid": true, "tier": "free", "rate_limit": 100}
-
-curl https://api.decker-ai.com/api/v1/public/signals/BTCUSDT/narrative?timeframe=1h \
-  -H "X-API-Key: dk_live_xxx"
-```
-
-[**Get your API key →**](https://decker-ai.com) · [Full API reference →](https://api.decker-ai.com/docs)
+> `pip install decker-client` (PyPI) is planned — not yet published. Use the local install above until then.  
+> Full SDK docs: [sdk/python/README.md](sdk/python/README.md)
 
 ---
 
 ## What is Decker?
 
 Most signal tools ask: *"Up or down?"*  
-Decker asks: ***"Where are we in the current structural cycle — and what's the optimal next move?"***
+Decker asks: ***"Where are we in the current structural cycle — and what's the next optimal move?"***
 
 ```
 Raw OHLCV candles
-  ↓  Sequence Labeler  →  every candle: role (anchor / test / signal)
-  ↓  State Machine     →  session FSM: C_SET → B_FORMING → B_SET → A_FORMING → W_PENDING
+  ↓  Sequence Labeler  →  every candle gets a role (anchor / test / signal)
+  ↓  State Machine     →  C_SET → B_FORMING → B_SET → A_FORMING → W_PENDING
   ↓  Operation Gate    →  GO · WATCH · HOLD  (not binary — three modes)
   ↓  RULES Engine      →  9-layer YAML rulebook → strategy + ranked choices
   ↓  AI Consultation   →  LLM translates structural state → plain language
   ↓
-"66% progress. B-leg confirmed. Recommended: 30% partial TP or hold."
+"67% progress. B-leg confirmed. Recommended: 30% partial TP or hold to target."
 ```
 
 **No price prediction. No black box. Every output traces to a formal structural cause.**
 
 ---
 
-## API Reference
+## The `progress_pct` System
 
-Full OpenAPI spec at [api.decker-ai.com/docs](https://api.decker-ai.com/docs).
+Every signal has a lifecycle — from formation (0%) to target (100%).
 
-### Public endpoints (require `X-API-Key` header)
+```
+Entry                                                           Target
+  │                                                                │
+  0%──────────33%──────────50%──────────67%──────────83%────────100%
+  │           │            │            │             │            │
+ Wait       Entry        Active       Late TP      Final TP     Exit
+```
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `POST` | `/api/v1/public/auth/verify` | Verify API key + get tier info |
-| `GET` | `/api/v1/public/health` | Service liveness (no auth) |
-| `GET` | `/api/v1/public/signals/{symbol}/narrative` | LLM structural narrative |
-| `GET` | `/api/v1/public/signals/{symbol}/latest` | Latest signal (direction, entry, target, stop) |
+**Example: progress_pct = 67%**
 
-### Other endpoints (beta — key optional)
+```
+[████████████████████████████████████████████░░░░░░░░░░░░░░░░░░░] 67%
+```
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/api/v1/signals/{symbol}/state` | Signal state + `progress_pct` + `operation_gate` |
-| `GET` | `/api/v1/signals/{symbol}/strategy` | Strategy from rulebook |
-| `GET` | `/api/v1/signals/{symbol}/consultation` | AI consultation (rationale + choices) |
-| `GET` | `/api/v1/llm/opportunities` | LLM insight feed (conviction, choices, tf_alignment) |
-| `GET` | `/api/v1/judgment/coverage` | 20 symbols × 6 timeframes coverage |
+```
+Typical tool: BUY
+Decker:       BUY + 67% progress
+              → "The move is real, but 2/3 of the range is already done.
+                 Consider partial entry or wait for a pullback."
+```
+
+| progress_pct | Stage | Recommended posture |
+|---|---|---|
+| 0–32% | Early | Wait or prepare entry |
+| 33–66% | Active | Entry window, manage risk |
+| 67–89% | Late | Partial take-profit, reduce size |
+| 90–100% | At target | Prepare full exit |
 
 ---
 
-## Auth & Rate Limits
+## GO · WATCH · HOLD
 
-All `/api/v1/public/*` endpoints require:
+Unlike binary BUY/SELL signals, Decker has three operation gates:
 
-```
-X-API-Key: dk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
+| Gate | Meaning | What to do |
+|------|---------|------------|
+| **GO** | Structure confirmed, entry conditions met | Enter (if within progress window) |
+| **WATCH** | Signal forming, not yet confirmed | Monitor — no entry yet |
+| **HOLD** | Active position, no new entry signal | Hold current position |
 
-Get your key at [decker-ai.com](https://decker-ai.com) → Settings → API Keys.
-
-| Tier | Daily limit | Response headers |
-|------|------------|-----------------|
-| **FREE** | 100 req/day | `X-RateLimit-Remaining` · `X-RateLimit-Reset` |
-| **BASIC** | 10,000 req/day | same |
-| **PREMIUM** | 100,000 req/day | same |
-
-When the limit is exceeded → `HTTP 429` + `Retry-After` header.
-
----
-
-## Python SDK
-
-> **New here?** If `pip install decker-client` fails, the **PyPI package may not be published yet** (roadmap: public SDK + PyPI). Use **[REST + curl](docs/quickstart.md#path-b--rest-api)** or **[samples](samples/README.md)** with your API key first — they track production today.
-
-```bash
-pip install decker-client    # Python 3.9+  (when available on PyPI)
-```
-
-```python
-from decker_client import Client, RateLimitError
-
-with Client(api_key="dk_live_xxx") as client:
-
-    # Narrative
-    narr = client.signals.get_narrative("BTCUSDT", "1h")
-    print(narr.text, narr.generated_at)
-
-    # Latest signal
-    sig = client.signals.get_latest("ETHUSDT")
-    print(f"{sig.direction} | entry={sig.entry_price} target={sig.target_price}")
-
-    # Health
-    health = client.health.check()
-    print(health.ok)  # True
-
-    # Rate limit info after any request
-    rl = client.last_rate_limit
-    print(f"{rl.remaining}/{rl.limit} remaining today")
-
-    # Handle limits
-    try:
-        narr = client.signals.get_narrative("SOLUSDT", "4h")
-    except RateLimitError as e:
-        print(f"Retry in {e.retry_after}s")
-```
-
-SDK source: private platform monorepo `sdk/python/decker_client` (not vendored in this public repo). PyPI: [decker-client](https://pypi.org/project/decker-client/) when published — see [roadmap](docs/roadmap.md).
+> **WATCH ≠ SELL.** It means "the engine is observing — not ready to signal an entry yet."  
+> This is the gate that most signal tools skip. It's why users enter too early.
 
 ---
 
@@ -176,30 +170,109 @@ SDK source: private platform monorepo `sdk/python/decker_client` (not vendored i
 | Output | BUY / SELL | `progress_pct` + `operation_gate` + ranked choices |
 | LLM role | Makes the call | **Explains the structural state** |
 | Auditability | ❌ Black box | ✅ Every signal has a `trace_id` |
-| LLM cost per signal | High | **$0 on the rules path** |
+| LLM cost per signal | High (every call) | **$0 on the rules path** |
 | Reproducibility | ❌ | ✅ Same input → same output, always |
 
 ---
 
-## The `progress_pct` System
+## API Reference
 
-Every signal has a lifecycle — from formation (0%) to target (100%).
+Full OpenAPI spec at [api.decker-ai.com/docs](https://api.decker-ai.com/docs).
+
+**Supported symbols**: `BTCUSDT`, `ETHUSDT`, `SOLUSDT`, `BNBUSDT`, `XRPUSDT`, `DOGEUSDT`  
+**Supported timeframes**: `30m`, `1h`, `4h`, `1d`
+
+> Symbols or timeframes outside this list return `404`. More symbols expanding.
+
+### Public endpoints (require `X-API-Key` header)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `POST` | `/api/v1/public/auth/verify` | Verify API key + get tier |
+| `GET` | `/api/v1/public/health` | Liveness check (no auth) |
+| `GET` | `/api/v1/public/signals/{symbol}/latest` | Latest signal (direction, entry, target, stop, progress) |
+| `GET` | `/api/v1/public/signals/{symbol}/narrative` | LLM structural narrative |
+
+### Auth
 
 ```
-Signal birth (0%) ────── Entry zone ────── Midpoint ────── Target (100%)
-                                ↑                    ↑
-                         "GO: enter now"     "Consider partial TP"
+X-API-Key: dk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-| progress_pct | State | Recommended posture |
-|---|---|---|
-| 0–32% | Early | Wait or prepare entry |
-| 33–66% | Active | Entry window, risk management begins |
-| 67–89% | Late | Partial take-profit, reduce size |
-| 90–100% | At target | Prepare full exit |
+Keys are issued via Telegram `/apikey` — **not** from the web UI. See [DEVELOPER_API_GUIDE.md](docs/DEVELOPER_API_GUIDE.md).
 
-> Typical tool: **BUY**  
-> Decker: **BUY + 67% progress** = *"The move is real, but the easy money is already in"*
+### Rate Limits
+
+| Tier | Daily limit |
+|------|------------|
+| FREE | 100 req/day |
+| BASIC | 10,000 req/day |
+| PREMIUM | 100,000 req/day |
+
+Every response includes `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`.  
+Exceeded → HTTP 429 + `Retry-After`.
+
+---
+
+## Python SDK
+
+The SDK is included in this repository at [`sdk/python/`](sdk/python/).
+
+```bash
+git clone https://github.com/gigshow/decker-ai-strategy-builder.git
+pip install -e decker-ai-strategy-builder/sdk/python/
+```
+
+```python
+from decker_client import Client, RateLimitError, AuthError, NotFoundError
+
+with Client(api_key="dk_live_xxx") as client:
+    # Latest signal
+    sig = client.signals.get_latest("BTCUSDT", timeframe="1h")
+    print(f"{sig.direction} | entry={sig.entry_price} | target={sig.target_price}")
+    print(f"progress: {sig.progress_pct}% | gate: {sig.operation_gate}")
+
+    # Narrative
+    narr = client.signals.get_narrative("BTCUSDT", "4h")
+    print(narr.text)
+
+    # Rate limit info
+    rl = client.last_rate_limit
+    print(f"{rl.remaining}/{rl.limit} remaining today")
+```
+
+**Error handling:**
+
+```python
+try:
+    sig = client.signals.get_latest("BTCUSDT")
+except AuthError:
+    print("Invalid API key — run /apikey reset in Telegram")
+except NotFoundError:
+    print("No active signal for this symbol/timeframe")
+except RateLimitError as e:
+    print(f"Rate limited — retry in {e.retry_after}s")
+```
+
+> `pip install decker-client` (PyPI) is planned — not yet published.  
+> Full SDK reference: [sdk/python/README.md](sdk/python/README.md) · [Developer API Guide](docs/DEVELOPER_API_GUIDE.md)
+
+---
+
+## Performance
+
+*Backtest results, rules-path evaluation. Past performance does not guarantee future results.*
+
+| Metric | Result | Condition |
+|--------|--------|-----------|
+| Win Rate | 61–75% | Ranging market |
+| Win Rate | 70%+ | Trending market |
+| Avg Profit | 4–10% | Per signal |
+| Avg Loss | 1–2% | Tight stop-loss |
+| Max Drawdown | < 9% | Capital preservation |
+| Signal Frequency | 1–3 / day | Per symbol |
+
+Details: [Signal Performance](docs/signal-performance.md)
 
 ---
 
@@ -207,9 +280,9 @@ Signal birth (0%) ────── Entry zone ────── Midpoint ─�
 
 | Path | Who | How |
 |------|-----|-----|
-| **A. Python SDK** | API / backend developers | `pip install decker-client` → 60 sec start |
+| **A. Telegram Bot** | Traders | [@deckerclawbot](https://t.me/deckerclawbot) → natural language |
 | **B. REST API** | Any language | `X-API-Key` header → [api.decker-ai.com/docs](https://api.decker-ai.com/docs) |
-| **C. Telegram bot** | Traders | [@deckerclawbot](https://t.me/deckerclawbot) → natural language |
+| **C. Python SDK** | Python devs | `git clone` + `pip install -e sdk/python/` |
 | **D. OpenClaw skill** | AI agent devs | Add Decker skill → `web_fetch` → API responses |
 | **E. Self-host** | Self-hosters | [turnkey/](turnkey/) — Railway one-click |
 
@@ -220,40 +293,25 @@ Signal birth (0%) ────── Entry zone ────── Midpoint ─�
 | Document | |
 |----------|-|
 | [Developer API Guide](docs/DEVELOPER_API_GUIDE.md) | Auth · Rate Limits · SDK · FAQ — **start here if you're building** |
+| [Quick Start](docs/quickstart.md) | 3-step guide for each path |
 | [API Guide](docs/api-guide.md) | Full endpoint reference |
-| [Quick Start](docs/quickstart.md) | 3-step guide |
 | [Architecture](docs/architecture.md) | Pipeline, state engine, modules |
 | [Model & Algorithm](docs/model.md) | How the signal engine works |
 | [Operation Rules](operation_rules/RULES.yaml) | Open YAML rulebook (v2.4.7+) |
 | [Signal Performance](docs/signal-performance.md) | Backtest & live metrics |
 | [Article Series (1–15)](docs/medium/README.md) | Deep dives |
 | [Roadmap](docs/roadmap.md) | What's next |
-| [llms.txt](llms.txt) | AI/LLM discovery manifest |
+| [llms.txt](llms.txt) | LLM/AI agent discovery manifest |
 
 **Concepts:** [Sequence Engine](concept/sequence_engine.md) · [Labeling Algorithm](concept/labeling_algorithm.md) · [Market State Theory](concept/market_state_theory.md)
 
 ---
 
-## Performance
-
-| Metric | Result |
-|--------|--------|
-| Win Rate | 61–68% |
-| Avg Profit | 5–12% |
-| Max Drawdown | < 9% |
-| Range-market monthly | 20–30% |
-| Signal Frequency | 1–3 / day |
-
-*Structural cycle evaluation, not pattern matching. Past performance does not guarantee future results.*  
-Details: [Signal Performance](docs/signal-performance.md) · [Model & Algorithm](docs/model.md)
-
----
-
 ## Article Series
 
-**Part 1 — Foundations (Articles 1–10):** State Engine, signal lifecycle, YAML rulebook, multi-TF alignment, $0-LLM-cost architecture.
+**Part 1 — Foundations (1–10):** State Engine, signal lifecycle, YAML rulebook, multi-TF alignment, $0-LLM-cost architecture.
 
-**Part 2 — Context Engine (Articles 11–15):** How markets speak in sequences, session state machine, GO/WATCH/HOLD gate, AI as explainer vs decision-maker.
+**Part 2 — Context Engine (11–15):** How markets speak in sequences, session state machine, GO/WATCH/HOLD gate, AI as explainer vs decision-maker.
 
 → [Read the full series](docs/medium/README.md)
 
@@ -270,6 +328,6 @@ Details: [Signal Performance](docs/signal-performance.md) · [Model & Algorithm]
 
 ---
 
-> This repository is the public documentation, samples, SDK, and community hub for Decker AI.  
+> This repository is the public documentation, SDK, samples, and community hub for Decker AI.  
 > Production application code runs in a private monorepo.  
-> **Available here**: Python SDK, API samples, RULES.yaml, architecture docs, article series.
+> **Available here**: [Python SDK](sdk/python/) · [API samples](samples/) · [RULES.yaml](operation_rules/RULES.yaml) · [Architecture docs](docs/architecture.md) · [Article series](docs/medium/README.md)

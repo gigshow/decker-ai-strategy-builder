@@ -1,7 +1,8 @@
 # Decker 시그널 성과
 
-**업데이트**: 2025-03-17  
-**기준**: 원물 시그널, progress_pct 기반 오퍼레이션 룰북
+**업데이트**: 2026-04-23  
+**기준**: 엔진 소스(`engine:live_l1`) 시그널, progress_pct 기반 오퍼레이션 룰북 v2.4.7+  
+**참고**: 아래 수치는 백테스트 기반입니다. 실시간 시그널 현황은 [api.decker-ai.com/docs](https://api.decker-ai.com/docs) 또는 Telegram 봇에서 확인하세요.
 
 ---
 

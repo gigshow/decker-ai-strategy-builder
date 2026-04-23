@@ -20,7 +20,15 @@ All notable changes to the Decker AI Strategy Builder are documented in this fil
 
 ### Changed
 
-- **README.md**: Python SDK 절에 PyPI 미배포 시 대안(REST·samples) 안내; 공개 클론에 없는 `sdk/python/` 링크 제거.
+- **README.md**: 전면 재설계 — 페르소나 분기표(트레이더/개발자/에이전트빌더), quickstart 3단계(키발급→curl→SDK), `progress_pct` ASCII 시각화, GO/WATCH/HOLD 시나리오, 지원 심볼·TF 명시. PyPI 미배포 뱃지 제거, SDK 뱃지 `sdk/python/` 로컬 링크로 교체.
+- **docs/quickstart.md**: Step 0(키발급 Telegram) 선행, Path A(Telegram)/B(REST)/C(SDK) 명확 분리, 응답 필드 설명, 지원 심볼·TF 명시.
+- **docs/api-guide.md**: 키 발급 경로 수정 ("Settings → API Keys" → Telegram `/apikey`).
+- **sdk/python/README.md**: 키 발급 Telegram 경로 명시, `pip install` → `git clone + pip install -e` 안내.
+- **docs/signal-performance.md**: 날짜 2026-04-23 갱신, 엔진 소스(`engine:live_l1`) 명시, 실시간 API 참조 안내.
+
+### Added
+
+- **sdk/python/**: Python SDK `decker-client` 공개 레포에 포함 (`decker_client/` 패키지, `pyproject.toml`, `tests/`). PyPI 배포 예정.
 
 ## [v1.4.9] - 2026-04-23
 

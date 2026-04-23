@@ -4,76 +4,110 @@ Official Python SDK for the [Decker](https://decker-ai.com) crypto signal & narr
 
 ## Install
 
+This SDK is included in the [decker-ai-strategy-builder](https://github.com/gigshow/decker-ai-strategy-builder) repository:
+
 ```bash
-pip install decker-client
+git clone https://github.com/gigshow/decker-ai-strategy-builder.git
+pip install -e decker-ai-strategy-builder/sdk/python/
 ```
+
+> `pip install decker-client` (PyPI) is planned — not yet published. Use the local install above.
+
+## Get your API key
+
+Keys are issued via Telegram:
+
+1. Open [@deckerclawbot](https://t.me/deckerclawbot) → send `/start`
+2. Send `/apikey` → receive `dk_live_xxxxxxxxxxxxxxxxxxxxxxxx`
+3. Lost it? `/apikey reset` revokes and reissues
 
 ## Quickstart
 
 ```python
 from decker_client import Client
 
-client = Client(api_key="dk_live_xxx")
+with Client(api_key="dk_live_xxx") as client:
+    # Latest signal
+    sig = client.signals.get_latest("BTCUSDT", timeframe="1h")
+    print(f"{sig.direction} | entry={sig.entry_price} | progress={sig.progress_pct}%")
+    print(f"gate: {sig.operation_gate}")  # GO / WATCH / HOLD
 
-# Get the LLM narrative for BTCUSDT 1h
-narr = client.signals.get_narrative("BTCUSDT", "1h")
-print(narr.text)
-# → "현재 BTCUSDT 1h 는 상승 우세..."
+    # Structural narrative
+    narr = client.signals.get_narrative("BTCUSDT", "4h")
+    print(narr.text)
 
-# Latest signal
-sig = client.signals.get_latest("BTCUSDT")
-print(sig.direction, sig.entry_price)
-
-# Service health (no API key required for the underlying HTTP call)
-health = client.health.check()
-print(health.ok)  # True
+    # Health check (no API key required for underlying call)
+    health = client.health.check()
+    print(health.ok)  # True
 ```
+
+**Supported symbols**: `BTCUSDT` `ETHUSDT` `SOLUSDT` `BNBUSDT` `XRPUSDT` `DOGEUSDT`  
+**Supported timeframes**: `30m` `1h` `4h` `1d`
 
 ## Authentication
 
-All requests (except `health.check`) require a valid API key in the `X-API-Key` header.
-Obtain your key at [decker-ai.com](https://decker-ai.com).
+All requests (except `health.check`) require a valid API key passed as `X-API-Key`.
+
+```python
+client = Client(api_key="dk_live_xxx")
+# or
+with Client(api_key="dk_live_xxx") as client:
+    ...
+```
 
 ## Rate limits
 
-| Tier    | Daily limit   |
-|---------|--------------|
-| FREE    | 100 req/day  |
+| Tier    | Daily limit    |
+|---------|---------------|
+| FREE    | 100 req/day   |
 | BASIC   | 10,000 req/day |
 | PREMIUM | 100,000 req/day |
 
-When the quota is exhausted, a `RateLimitError` is raised:
+After any request, check `client.last_rate_limit`:
 
 ```python
-from decker_client import RateLimitError
-
-try:
-    narr = client.signals.get_narrative("BTCUSDT", "1h")
-except RateLimitError as e:
-    print(f"Retry after {e.retry_after}s (resets at {e.reset})")
-```
-
-After any successful request, check `client.last_rate_limit` for current quota status:
-
-```python
-client.health.check()
 rl = client.last_rate_limit
 print(f"{rl.remaining}/{rl.limit} requests remaining today")
+print(f"Resets at: {rl.reset}")
 ```
 
-## Errors
+When the quota is exhausted, a `RateLimitError` is raised.
 
-| Exception        | HTTP status | Meaning                        |
-|-----------------|-------------|-------------------------------|
-| `AuthError`     | 401         | Invalid or revoked API key     |
-| `PermissionError` | 403       | Key lacks required permissions |
-| `NotFoundError` | 404         | Symbol / resource not found    |
-| `RateLimitError` | 429        | Daily quota exhausted          |
-| `APIError`      | 5xx         | Server error                   |
+## Error handling
+
+```python
+from decker_client import Client, RateLimitError, AuthError, NotFoundError
+
+with Client(api_key="dk_live_xxx") as client:
+    try:
+        sig = client.signals.get_latest("BTCUSDT")
+    except AuthError:
+        print("Invalid or revoked key — run /apikey reset in Telegram")
+    except NotFoundError:
+        print("No active signal for this symbol/timeframe")
+    except RateLimitError as e:
+        print(f"Rate limited — retry in {e.retry_after}s")
+```
+
+| Exception         | HTTP status | Meaning                       |
+|------------------|-------------|-------------------------------|
+| `AuthError`      | 401         | Invalid or revoked API key    |
+| `NotFoundError`  | 404         | Symbol/TF not supported       |
+| `RateLimitError` | 429         | Daily quota exhausted         |
+| `APIError`       | 5xx         | Server error                  |
+
+## Local testing
+
+Override the base URL for local development:
+
+```python
+client = Client(api_key="dk_live_xxx", base_url="http://localhost:8000")
+```
 
 ## API reference
 
-Full OpenAPI spec: [api.decker-ai.com/docs](https://api.decker-ai.com/docs)
+Full OpenAPI spec: [api.decker-ai.com/docs](https://api.decker-ai.com/docs)  
+Developer guide: [docs/DEVELOPER_API_GUIDE.md](../docs/DEVELOPER_API_GUIDE.md)
 
 ## License
 
