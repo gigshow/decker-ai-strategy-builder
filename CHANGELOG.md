@@ -32,6 +32,12 @@ All notable changes to the Decker AI Strategy Builder are documented in this fil
 - **sdk/python/**: Python SDK `decker-client` 공개 레포에 포함 (`decker_client/` 패키지, `pyproject.toml`, `tests/`). PyPI 배포 예정.
 - **백엔드 `GET /api/v1/public/demo`**: 인증 없이 BTCUSDT 1h 실시간 신호 + 내러티브 반환. IP당 10 req/day rate limit (Redis INCR+EXPIREAT, in-memory fallback). `public_demo.py` + `rate_limiting_v2.py` `check_demo_rate_limit()` 신규.
 - **백엔드 `GET /api/v1/public/stats`**: 인증 없이 30일 엔진 신호 활동 통계 반환. 심볼별 평가 건수·gate 분포·타임프레임 커버리지. 60초 in-memory TTL 캐시. `public_stats.py` 신규.
+- **백엔드 `GET /signal/{symbol}`**: 서버사이드 HTML 공유 카드 (OG 메타태그). Twitter/X·Discord 링크 프리뷰 지원. `public_signal_card.py` 신규. 마운트: `api.decker-ai.com/signal/{symbol}`.
+- **Telegram 공유 링크**: 서비스 메시지(Stage A/B/C + MTF) 끝에 `📡 https://api.decker-ai.com/signal/{symbol}` 자동 추가.
+- **GitHub Actions**: `.github/workflows/publish-sdk.yml` — `sdk-v*` 태그 push → 테스트(Py 3.9/3.11) → 빌드 → PyPI Trusted Publisher 배포. `.github/workflows/ci.yml` — `sdk/python/` 변경 시 자동 테스트(Py 3.9/3.11/3.12).
+- **`sdk/python/pyproject.toml`**: URLs에 Bug Tracker·Changelog 추가. Source → 공개 레포 링크로 수정.
+- **`sdk/python/README.md`**: 설치법 `pip install decker-client` (PyPI) 기본 안내로 변경.
+- **`README.md`**: PyPI 배지 (`pypi/v/decker-client`), SDK quickstart `pip install decker-client`.
 
 ## [v1.4.9] - 2026-04-23
 

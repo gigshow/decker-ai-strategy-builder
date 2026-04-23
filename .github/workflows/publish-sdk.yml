@@ -1,0 +1,109 @@
+# Publish decker-client to PyPI on sdk-v* tag push.
+#
+# Trigger: git tag sdk-v0.1.1 && git push origin sdk-v0.1.1
+#
+# Prerequisites (one-time, do before first release):
+#   1. Register `decker-client` on PyPI (pypi.org → "Add project")
+#   2. PyPI → decker-client → Settings → "Add a new publisher"
+#      Publisher: GitHub
+#      Repository owner: gigshow
+#      Repository name:  decker-ai-strategy-builder
+#      Workflow name:    publish-sdk.yml
+#      Environment name: pypi
+#   3. Create GitHub Environment "pypi" in repo Settings → Environments
+#      (no extra protection rules required — Trusted Publisher handles auth)
+
+name: Publish SDK to PyPI
+
+on:
+  push:
+    tags:
+      - "sdk-v*"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Run SDK tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.11"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install SDK + dev deps
+        run: |
+          pip install -e "sdk/python/[dev]"
+
+      - name: Run tests
+        run: |
+          pytest sdk/python/tests/ -v
+
+  build:
+    name: Build distribution
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build backend
+        run: pip install hatchling build
+
+      - name: Verify version matches tag
+        run: |
+          TAG="${GITHUB_REF_NAME#sdk-v}"
+          SDK_VER=$(python -c "
+          import tomllib
+          with open('sdk/python/pyproject.toml', 'rb') as f:
+              d = tomllib.load(f)
+          print(d['project']['version'])
+          ")
+          echo "Tag version:     $TAG"
+          echo "pyproject version: $SDK_VER"
+          if [ "$TAG" != "$SDK_VER" ]; then
+            echo "ERROR: tag sdk-v$TAG does not match pyproject.toml version $SDK_VER"
+            exit 1
+          fi
+
+      - name: Build wheel and sdist
+        run: python -m build sdk/python/ --outdir dist/
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    name: Publish to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write  # required for OIDC Trusted Publisher
+
+    steps:
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/

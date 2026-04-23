@@ -1,0 +1,37 @@
+# SDK CI — runs on every push/PR to main that touches sdk/python/
+name: SDK CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "sdk/python/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "sdk/python/**"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install SDK + dev deps
+        run: pip install -e "sdk/python/[dev]"
+
+      - name: Run tests
+        run: pytest sdk/python/tests/ -v

@@ -31,9 +31,11 @@ dependencies = [
 dev = ["respx>=0.20", "pytest>=7", "pytest-asyncio"]
 
 [project.urls]
-Homepage    = "https://decker-ai.com"
-API-Docs    = "https://api.decker-ai.com/docs"
-Source      = "https://github.com/gigshow/decker-trading-platform"
+Homepage       = "https://decker-ai.com"
+API-Docs       = "https://api.decker-ai.com/docs"
+Source         = "https://github.com/gigshow/decker-ai-strategy-builder"
+"Bug Tracker"  = "https://github.com/gigshow/decker-ai-strategy-builder/issues"
+Changelog      = "https://github.com/gigshow/decker-ai-strategy-builder/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["decker_client"]
