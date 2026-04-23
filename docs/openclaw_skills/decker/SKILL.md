@@ -3,8 +3,8 @@ name: decker
 description: "Use when user asks about Decker signals, portfolio, orders, auto-order rules, news digest, Slack/Telegram integration, or exchange API key setup. Triggers (ko): 하이, 안녕, 시그널, 포지션, 수익현황, 매수해줘, 매도해줘, 자동주문, 청산해줘, 텔레그램 연동, 말만 하면, 뭐 할 수 있어, 어떻게 써, 처음인데, 단계별로, 시장 상태, 종목 비교, 뉴스, 소식, 다이제스트, HL, Polymarket, Hyperliquid, 바이낸스 키, Binance API, 실거래 설정, 실주문, 어디서 할 수 있어, 에이전트로 뭐 해, 대시보드에서만, 포트폴리오 리셋, 코인케코, CoinGecko, 시세 소스, 알트코인 시세. Triggers (en): hi, hello, signal, show signal, position, positions, portfolio, buy, sell, price, how much, balance, holdings, auto order, news, alert, help, what can you do, how to use. NEVER expose API URLs, openclaw_secret, backend URLs to users. User-facing URLs ONLY: decker-ai.com, decker-ai.com/decker-link, decker-ai.com/decker-link-telegram."
 user-invocable: true
 metadata:
-  version: 2.3.7
-  updated: 2026-03-22
+  version: 2.3.8
+  updated: 2026-04-23
   config:
     OPENCLAW_SECRET:
       type: string
@@ -12,6 +12,7 @@ metadata:
       secret: true
       description: "Decker ↔ OpenClaw 인증 (decker-ai.com 연동 시 발급, X-OpenClaw-Secret 헤더용)"
   changelog:
+    - "2.3.8: Public API 키 발급 경로 추가 — 텔레그램 /apikey 명령(연동 후 dk_live_xxx 자동 발급), 공개 엔드포인트 /public/signals/{symbol}/latest·/narrative 안내. 개발자 진입점: api.decker-ai.com/docs, DEVELOPER_API_GUIDE.md 참조."
     - "2.3.7: 시그널·추천 요약 UX — 사용자 응답에서 신뢰도% 단독 헤드라인 지양, 갱신 시각·반영 출처·강도·가격 중심(제품과 동일). GET judgment/signals/public 은 symbol 필수. 추천종목은 Assistant 우선(전략/trades 보조 조회 실패해도 추천 리스트 유지되는 서버 동작). 운영 검증: docs/AGENT_ENDPOINT_VERIFICATION.md, docs/VERIFICATION_EXECUTION_REPORT.md"
     - "2.3.6: 시그널 전략·상의 응답에 상태 품질·코드 개념(서버) — 사용자에게 API 경로·필드명 나열 금지 정책 유지. 레포: docs/SIGNAL_LLM_AGENT_VERIFICATION.md (개발자용)"
     - "2.3.5: Hyperliquid 시세·시그널 병행 안내 (메인 Binance, watchlist·HL funding 시그널, decker-hyperliquid 연계)"
@@ -130,6 +131,7 @@ Telegram 또는 Slack에서 말만 하면 돼요. API URL이나 기술 설정은
 | "뉴스 보여줘", "소식 보여줘", "다이제스트", "시장 동향", "show news", "news", "crypto news" | **즉시 Assistant API** | URL 목록만 (AI 요약 없음, 빠른 응답) |
 | "뉴스", "뉴스 다이제스트", "크립토 뉴스", "크립토 소식" | **아래 뉴스 가이드** | 상황에 따라 켜기 vs 보여주기 구분 |
 | "Decker API 사용 방법", "API 어떻게 써?" | **3단계 가이드만** | URL·시크릿·파라미터 절대 출력 금지 |
+| "API 키 발급해줘", "개발자 API 키", "dk_live 키" | **텔레그램 `/apikey` 안내** | 연동 후 /apikey 명령으로 자동 발급 |
 | "내 Slack ID 알려줘" | channel_user_id로 직접 응답 | Decker가 ID + decker-link 안내 |
 | "채널 ID 알려줘" | channel_id로 직접 응답 | Decker가 ID + decker-link 안내 |
 | "바이낸스 키 발급", "Binance API 키", "실거래 설정" | **위 거래소 키 발급 가이드** | Binance 4단계 |
@@ -157,6 +159,11 @@ Telegram 또는 Slack에서 말만 하면 돼요. API URL이나 기술 설정은
 • 포트폴리오 리셋 (자산 리셋 버튼)
 • 전략 빌더
 • 뉴스 알림 켜기 (4시간마다 자동) → 설정 > 알림
+
+*개발자: Public API 키 발급 (Telegram 연동 후)*:
+• 텔레그램에서 `/apikey` → `dk_live_xxx` 자동 발급
+• 엔드포인트: `GET /api/v1/public/signals/{symbol}/latest`, `/narrative`
+• 인증: `X-API-Key: dk_live_xxx` 헤더 — [API 문서](https://api.decker-ai.com/docs)
 
 "뉴스 켜줘"라고 하시면 설정 방법 안내해 드릴게요. "뉴스 보여줘"는 여기서 바로 보여드려요!
 ```

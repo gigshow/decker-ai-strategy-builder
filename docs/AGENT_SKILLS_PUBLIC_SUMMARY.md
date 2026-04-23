@@ -12,11 +12,20 @@
 | [openclaw_skills/README.md](./openclaw_skills/README.md) | OpenClaw 패키지·배포 경로 |
 | [CLAUDE.md](../CLAUDE.md) (레포 루트) | 세션 진입 요약 |
 
+## OpenClaw 스킬 현황
+
+| 스킬 | 버전 | 용도 |
+|------|------|------|
+| `decker` | 2.3.8 | 시그널·포지션·주문·자동주문·뉴스·Slack·Telegram |
+| `decker-hyperliquid` | 1.2.0 | Hyperliquid DEX 거래·시세·펀딩 |
+| `decker-polymarket` | 1.1.0 | Polymarket 예측시장 주문·마켓 검색 |
+
 ## 한 줄
 
 - **개발(IDE 스킬)**: 도메인은 `decker-signal`, `decker-execution-mode` 등 프로젝트 스킬.
-- **사용자(텔레그램)**: `/help`, `/services`, 자연어 동일 동작 — 표는 `TELEGRAM_AGENT_COMMANDS.md`.
-- **웹 PhaseD 데모 채팅**: `service-page` 내장 명령 — 텔레그램과 1:1 아님(§5).
+- **사용자(텔레그램)**: `/help`, `/services`, `/apikey`(API 키 발급), 자연어 동일 동작 — 표는 `TELEGRAM_AGENT_COMMANDS.md`.
+- **개발자(Public API)**: 텔레그램 연동 후 `/apikey` → `dk_live_xxx` 수령 → `X-API-Key` 헤더 → `api.decker-ai.com/docs`.
+- **웹 PhaseD 데모 채팅**: `service-page` 내장 명령 — 텔레그램과 1:1 아님(§6).
 
 ## 릴리즈 노트에 넣을 때
 
