@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the Decker AI Strategy Builder are documented in this file.
+All notable changes to the Decker AI are documented in this file.
 
 ---
 

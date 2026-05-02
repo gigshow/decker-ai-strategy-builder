@@ -9,7 +9,7 @@
 | 레벨 | 이름 | 용도 |
 |------|------|------|
 | **브랜드** | Decker AI | 전체 제품·서비스 |
-| **제품** | Decker AI Strategy Builder | 시그널·룰북·라이프사이클 전략 빌더 |
+| **제품** | Decker AI | 시그널·룰북·라이프사이클 전략 빌더 |
 | **에이전트** | DeckerClaw | 가재 마스코트. Decker 자체 에이전트 + OpenClaw 스킬 생태계 |
 
 ---
@@ -42,12 +42,12 @@
 
 | 상황 | 표현 |
 |------|------|
-| GitHub 레포 | `decker-ai-strategy-builder` |
-| README 첫 문장 | "Decker AI Strategy Builder — deterministic signal lifecycle engine" |
+| GitHub 레포 | `decker-ai` |
+| README 첫 문장 | "Decker AI — deterministic signal lifecycle engine" |
 | 텔레그램 | "@deckerclawbot (DeckerClaw)" — 자체 에이전트 |
 | Slack·Discord | "OpenClaw 협업 (선택 B). Slack 제한 시 Telegram 우선" |
 | API 문서 | "Decker AI API" |
-| Medium | "Decker AI" 또는 "Decker AI Strategy Builder" |
+| Medium | "Decker AI" 또는 "Decker AI" |
 | 입양 메시지 | "DeckerClaw 입양 = (A) Telegram 사용 (B) OpenClaw 스킬 연동 (C) API 직접" |
 
 ---

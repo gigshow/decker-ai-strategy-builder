@@ -7,20 +7,21 @@
 
 <img src="assets/decker_claw_mascot_v1.png" width="80" alt="DeckerClaw" />
 
-# Decker AI Strategy Builder
+# Decker AI
 
 **Crypto market state engine. Not "buy/sell" — structural context.**
 
-*Signal → State → Strategy. Every output is traceable, reproducible, $0-LLM-cost on the rules path.*
+*Signal → State → Strategy → **Skill Overlay** (per-user). Every output is traceable, reproducible, zero-LLM-cost on the rules path.*
 
-[![GitHub Stars](https://img.shields.io/github/stars/gigshow/decker-ai-strategy-builder?style=flat-square&color=DAA520)](https://github.com/gigshow/decker-ai-strategy-builder/stargazers)
+[![GitHub Stars](https://img.shields.io/github/stars/gigshow/decker-ai?style=flat-square&color=DAA520)](https://github.com/gigshow/decker-ai/stargazers)
 [![API Docs](https://img.shields.io/badge/API-docs-00C853?style=flat-square)](https://api.decker-ai.com/docs)
+[![MCP Server](https://img.shields.io/badge/MCP-server-4D9FFF?style=flat-square)](https://api.decker-ai.com/api/v1/mcp/health)
 [![SDK](https://img.shields.io/badge/SDK-sdk%2Fpython-3775A9?style=flat-square&logo=python&logoColor=white)](sdk/python/)
 [![Telegram](https://img.shields.io/badge/Telegram-DeckerClaw-26A5E4?style=flat-square&logo=telegram&logoColor=white)](https://t.me/deckerclawbot)
 [![Kakao Channel](https://img.shields.io/badge/Kakao-Channel-FEE500?style=flat-square&logo=kakaotalk&logoColor=000000)](https://pf.kakao.com/_RxlxjVX)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
-[📖 API Docs](https://api.decker-ai.com/docs) · [🤖 Telegram Bot](https://t.me/deckerclawbot) · [📦 Python SDK](sdk/python/) · [🗺 Roadmap](docs/roadmap.md)
+[📖 API Docs](https://api.decker-ai.com/docs) · [🤖 Telegram Bot](https://t.me/deckerclawbot) · [🧠 MCP Server](#mcp-server-way-e) · [📦 Python SDK](sdk/python/) · [🗺 Roadmap](docs/roadmap.md)
 
 </div>
 
@@ -32,6 +33,7 @@
 |---------|-----------|
 | **Crypto trader** — want signals on your phone | [Telegram Bot](https://t.me/deckerclawbot) → type `/btc` |
 | **Developer** — building a bot, app, or script | [3-step quickstart below](#-quickstart-3-steps) |
+| **AI agent user** — adding Decker to Claude / Cursor / Codex | [MCP Server (Way E)](#mcp-server-way-e) |
 | **AI agent builder** — adding Decker as a skill | [OpenClaw skills](docs/openclaw_skills/) |
 | **Self-host / deploy your own** | [turnkey/](turnkey/) — Railway one-click |
 
@@ -81,8 +83,8 @@ curl "https://api.decker-ai.com/api/v1/public/signals/BTCUSDT/latest?timeframe=1
 ### Step 3 — Python SDK (optional)
 
 ```bash
-git clone https://github.com/gigshow/decker-ai-strategy-builder.git
-pip install -e decker-ai-strategy-builder/sdk/python/
+git clone https://github.com/gigshow/decker-ai.git
+pip install -e decker-ai/sdk/python/
 ```
 
 > `pip install decker-client` (PyPI) — 배포 준비 중.
@@ -201,7 +203,12 @@ Full OpenAPI spec at [api.decker-ai.com/docs](https://api.decker-ai.com/docs).
 | `POST` | `/api/v1/public/auth/verify` | Verify API key + get tier |
 | `GET` | `/api/v1/public/health` | Liveness check (no auth) |
 | `GET` | `/api/v1/public/signals/{symbol}/latest` | Latest signal (direction, entry, target, stop, progress) |
-| `GET` | `/api/v1/public/signals/{symbol}/narrative` | LLM structural narrative |
+| `GET` | `/api/v1/public/signals/{symbol}/narrative` | Rule-based / LLM structural narrative |
+| `GET` | `/api/v1/public/signals/{symbol}/mtf` | MTF consumer signal + Skill Overlay applied |
+| `GET` | `/api/v1/public/state/live` | Engine state (c_state · gate · MTF) |
+| `GET` | `/api/v1/public/reading/{sym}/{tf}` | AI reading view v0.2 (8 blocks) |
+| `GET` | `/api/v1/mcp/sse` | **MCP server SSE handshake** ([Way E](#mcp-server-way-e)) |
+| `POST` | `/api/v1/mcp/messages` | MCP JSON-RPC 2.0 (4 tools) |
 
 ### Auth
 
@@ -229,8 +236,8 @@ Exceeded → HTTP 429 + `Retry-After`.
 The SDK is included in this repository at [`sdk/python/`](sdk/python/).
 
 ```bash
-git clone https://github.com/gigshow/decker-ai-strategy-builder.git
-pip install -e decker-ai-strategy-builder/sdk/python/
+git clone https://github.com/gigshow/decker-ai.git
+pip install -e decker-ai/sdk/python/
 ```
 
 ```python
@@ -286,15 +293,55 @@ Details: [Signal Performance](docs/signal-performance.md)
 
 ---
 
-## Three Ways to Use Decker
+## Five Ways to Use Decker AI
 
-| Path | Who | How |
+All five ways share the same data, auth, and **Skill Overlay** (per-user trading strategy: `conservative_v0` / `standard_v0` / `aggressive_v0` + custom). Whatever channel you use, the same skill applies — Telegram alerts, REST responses, MCP tool results stay aligned.
+
+| Way | Who | How |
 |------|-----|-----|
-| **A. Telegram Bot** | Traders | [@deckerclawbot](https://t.me/deckerclawbot) → natural language |
-| **B. REST API** | Any language | `X-API-Key` header → [api.decker-ai.com/docs](https://api.decker-ai.com/docs) |
-| **C. Python SDK** | Python devs | `git clone` + `pip install -e sdk/python/` |
-| **D. OpenClaw skill** | AI agent devs | Add Decker skill → `web_fetch` → API responses |
-| **E. Self-host** | Self-hosters | [turnkey/](turnkey/) — Railway one-click |
+| **Way 1. Telegram Bot** | Traders | [@deckerclawbot](https://t.me/deckerclawbot) → natural language |
+| **Way 2. OpenClaw skill** | AI agent devs | Add Decker skill → `web_fetch` → API responses |
+| **Way C. REST API + SDK** | Any language / Python | `X-API-Key` header → [api.decker-ai.com/docs](https://api.decker-ai.com/docs) · `pip install -e sdk/python/` |
+| **Way D. Self-host** | Self-hosters | [turnkey/](turnkey/) — Railway one-click |
+| **Way E. MCP Server** ⭐ NEW | Claude / Cursor / Codex users | [MCP handshake](#mcp-server-way-e) → 4 tools, JSON-RPC 2.0, SSE transport |
+
+---
+
+## MCP Server (Way E)
+
+Add Decker AI to any [MCP-compatible](https://modelcontextprotocol.io/) AI agent (Claude Desktop, Cursor, Codex). Same `X-API-Key`, same Skill Overlay, same rulebook.
+
+**Endpoint** (live · 2026-05-02):
+
+```
+GET  https://api.decker-ai.com/api/v1/mcp/sse           (SSE handshake)
+POST https://api.decker-ai.com/api/v1/mcp/messages      (JSON-RPC 2.0)
+GET  https://api.decker-ai.com/api/v1/mcp/health        (monitoring)
+```
+
+**4 tools** (auto-includes per-user Skill Overlay):
+
+| Tool | Purpose |
+|------|---------|
+| `decker.get_signals` | Active MTF consumer signals (filter by symbol / min progress / gate) |
+| `decker.get_reading` | AI reading view v0.2 (8 blocks: state · MTF · risk · narrative) |
+| `decker.get_user_skills` | Catalog of trading skills + currently active overlay |
+| `decker.set_skill_overlay` | Switch overlay on the fly (`conservative_v0` → `aggressive_v0`) |
+
+**Quick test** (Claude Desktop config snippet):
+
+```json
+{
+  "mcpServers": {
+    "decker-ai": {
+      "url": "https://api.decker-ai.com/api/v1/mcp/sse",
+      "headers": { "X-API-Key": "dk_live_xxx" }
+    }
+  }
+}
+```
+
+Spec: [docs/mcp-server.md](docs/mcp-server.md) (in monorepo: `docs/MCP_SERVER_SPEC_2026-05-02.md`)
 
 ---
 

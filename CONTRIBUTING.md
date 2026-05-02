@@ -1,4 +1,4 @@
-# Contributing to Decker AI Strategy Builder
+# Contributing to Decker AI
 
 기여해 주셔서 감사합니다.
 

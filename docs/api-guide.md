@@ -68,13 +68,14 @@ curl -X POST https://api.decker-ai.com/api/v1/public/auth/verify \
 
 ---
 
-### Structural Narrative (LLM)
+### Structural Narrative
 
 ```
 GET /api/v1/public/signals/{symbol}/narrative?timeframe=1h
 ```
 
-Returns the LLM-generated explanation of the current structural state.
+Returns a rule-based plain-language summary of the current structural state.  
+Powered by the deterministic state machine — $0 LLM cost.
 
 ```bash
 curl "https://api.decker-ai.com/api/v1/public/signals/BTCUSDT/narrative?timeframe=1h" \
@@ -119,6 +120,237 @@ curl "https://api.decker-ai.com/api/v1/public/signals/BTCUSDT/latest" \
 
 ---
 
+### MTF Signal — 멀티 타임프레임 조합
+
+```
+GET /api/v1/public/signals/{symbol}/mtf
+```
+
+Returns the multi-timeframe signal combination from the latest snapshot.  
+Shows 4h (structure) × 1h (judgment) × 30m (entry) state plus the final assembled decision.  
+Source: `consumer_signal_snapshot` (DB-cached, updated every 4h boundary).
+
+```bash
+curl "https://api.decker-ai.com/api/v1/public/signals/BTCUSDT/mtf" \
+  -H "X-API-Key: dk_live_xxx"
+```
+
+```json
+{
+  "symbol": "BTCUSDT",
+  "symbol_trait": "trending",
+  "generated_at": "2026-04-27T12:00:00Z",
+  "decision": "ENTER",
+  "direction": "+",
+  "size_factor": 0.8,
+  "mtf_quality_by_tf": {
+    "4h": "ENTER",
+    "1h": "WAIT",
+    "30m": "ENTER"
+  },
+  "entry_price": 94200.0,
+  "entry_basis": "close",
+  "target_t1": 97500.0,
+  "stop_price": 92800.0,
+  "stop_note": "structural reference only — not an exchange stop order",
+  "risk_reward_ratio": 2.18,
+  "progress_pct": 75.0,
+  "status": "ACTIVE",
+  "current_pnl_pct": 1.24,
+  "by_tf": {
+    "4h": {
+      "timeframe": "4h",
+      "direction": "+",
+      "action_gate": "GO",
+      "c_state": "A_FORMING",
+      "signal_quality": "ENTER",
+      "cba_energy": "FULL",
+      "entry_price": 94200.0,
+      "trigger_ts": "2026-04-27T08:00:00Z"
+    },
+    "1h": {
+      "timeframe": "1h",
+      "direction": "+",
+      "action_gate": "WATCH",
+      "c_state": "B_SET",
+      "signal_quality": "WAIT",
+      "cba_energy": "LOW",
+      "entry_price": null,
+      "trigger_ts": null
+    },
+    "30m": {
+      "timeframe": "30m",
+      "direction": "+",
+      "action_gate": "GO",
+      "c_state": "A_FORMING",
+      "signal_quality": "ENTER",
+      "cba_energy": "HIGH",
+      "entry_price": 94350.0,
+      "trigger_ts": "2026-04-27T11:30:00Z"
+    }
+  }
+}
+```
+
+**Fields:**
+
+| Field | Meaning |
+|---|---|
+| `decision` | Final MTF assembly result: `ENTER` / `WAIT` / `SKIP` |
+| `size_factor` | Position size hint: 0.0–1.0. **Contract**: `qty = size_factor × base_qty(symbol)` where `base_qty` is the SDK-defined per-symbol default (BTCUSDT=0.001, ETHUSDT=0.05, SOLUSDT=0.5, BNBUSDT=0.05, XRPUSDT=50.0, default=0.01). `size_factor ≤ 0` → no order. `size_factor > 1` is clamped to 1.0. |
+| `mtf_quality_by_tf` | Per-TF signal quality summary |
+| `progress_pct` | Lifecycle progress 0–100%: PENDING=CBA stage, ACTIVE=(current−entry)/(target−entry)×100 |
+| `stop_price` | Structural reference stop — **not** an exchange stop order |
+| `by_tf[tf].c_state` | CBA cycle state: `C_SET` / `B_FORMING` / `B_SET` / `A_FORMING` / `BREAK_±` |
+| `by_tf[tf].cba_energy` | Remaining cycle energy: `FULL` / `HIGH` / `MEDIUM` / `LOW` |
+| `by_tf[tf].signal_quality` | TF-level decision: `ENTER` / `WAIT` / `SKIP` |
+
+**`progress_pct` interpretation:**
+
+| Range | Stage | Meaning |
+|---|---|---|
+| 0–32% | Early | Signal just fired, full range ahead |
+| 33–66% | Active | Entry window open |
+| 67–89% | Late | Consider partial take-profit |
+| 90–100% | Target | Near full exit |
+
+---
+
+### Engine State (Live)
+
+```
+GET /api/v1/public/state/live?symbol=BTCUSDT&timeframe=1h
+```
+
+Returns the raw engine structural state for a symbol and timeframe.  
+Includes `c_state`, `action_gate`, `key_direction`, `key_price`, `break_state`, and an optional MTF snapshot.
+
+```bash
+curl "https://api.decker-ai.com/api/v1/public/state/live?symbol=BTCUSDT&timeframe=1h" \
+  -H "X-API-Key: dk_live_xxx"
+```
+
+```json
+{
+  "symbol": "BTCUSDT",
+  "timeframe": "1h",
+  "c_state": "A_FORMING",
+  "action_gate": "GO",
+  "key_direction": "+",
+  "key_price": 95800,
+  "break_state": "BREAK_PLUS",
+  "active_trigger": {
+    "direction": "+",
+    "entry_price": 96000,
+    "target_price": 100000,
+    "stop_loss": 92000
+  },
+  "mtf_snapshot": {
+    "4h": { "c_state": "B_FORMING", "action_gate": "GO", "key_direction": "+" },
+    "1h": { "c_state": "A_FORMING", "action_gate": "GO", "key_direction": "+" },
+    "15m": { "c_state": "C_SET",    "action_gate": "WATCH", "key_direction": "+" }
+  },
+  "generated_at": "2026-04-23T10:00:00Z"
+}
+```
+
+**MTF query params**: `?include_tfs=15m,1h,4h` (comma-separated, default: 15m,1h,4h)
+
+---
+
+### Market Reading (AI Synthesis)
+
+```
+GET /api/v1/public/reading/{symbol}/{primary_tf}?include_tfs=1h,4h,1d
+```
+
+Returns a structured AI-readable synthesis view (`reading_view_v0.2`) combining directional bias, bidirectional targets, momentum signals, MTF alignment, execution hint, and engine anomalies.  
+Engine core unchanged — read-only synthesis layer above `/state/live`.
+
+```bash
+curl "https://api.decker-ai.com/api/v1/public/reading/BTCUSDT/4h?include_tfs=1h,1d" \
+  -H "X-API-Key: dk_live_xxx"
+```
+
+```json
+{
+  "schema_version": "reading_view_v0.2",
+  "symbol": "BTCUSDT",
+  "primary_tf": "4h",
+  "bar_ts": "2026-04-23T08:00:00Z",
+  "close": 96500,
+  "narrative": "BTCUSDT·4h — MTF 정합 · 매수 강",
+  "current_state": {
+    "c_state": "A_FORMING",
+    "key_direction": "+",
+    "key_price": 95800,
+    "action_gate": "GO"
+  },
+  "directional_bias": {
+    "long_score": 0.72,
+    "short_score": 0.18,
+    "dominant": "long_strong",
+    "confidence": 0.72,
+    "reasons": ["4h_structural_+_CONFIRMED", "1d_key_+"]
+  },
+  "bidirectional_targets": {
+    "on_plus_break": { "trigger_close": 97000, "t1": 100000, "distance_pct_t1": 3.63 },
+    "on_minus_break": { "trigger_close": 94000, "t1": 90000, "distance_pct_t1": 6.74 }
+  },
+  "mtf_view": {
+    "verdict": "ALIGNED",
+    "alignment_score": 0.85,
+    "tfs": {
+      "4h": { "c_state": "A_FORMING", "key": "+", "bias": "bullish_confirmed" },
+      "1h": { "c_state": "B_FORMING", "key": "+", "bias": "bullish_probe" },
+      "1d": { "c_state": "C_SET",     "key": "+", "bias": "bullish_continuation" }
+    }
+  },
+  "execution_hint": {
+    "stance": "ENTER_LONG",
+    "preferred_direction": "long",
+    "long_setup": { "entry_trigger": "close > 97000", "t1": 100000, "stop": 94200, "rr": 1.9 },
+    "rationale": "MTF 정합 + directional_bias long_strong"
+  },
+  "engine_anomalies_detected": []
+}
+```
+
+**Valid timeframes**: `15m` `30m` `1h` `4h` `8h` `1d` `1w`
+
+---
+
+### Market Reading — LLM Explain
+
+```
+GET /api/v1/public/reading/{symbol}/{primary_tf}/explain?provider=claude
+```
+
+Passes `reading_view_v0.2` to an LLM (Claude or OpenAI) and returns a Korean-language Q1–Q4 narrative.  
+Falls back to rule-based rendering if LLM is unavailable.
+
+```bash
+curl "https://api.decker-ai.com/api/v1/public/reading/BTCUSDT/4h/explain" \
+  -H "X-API-Key: dk_live_xxx"
+```
+
+```json
+{
+  "reading_view": { "...": "reading_view_v0.2 전체" },
+  "narrative": "BTCUSDT 4h — MTF 정합, 매수 우세...\n\n**Q1 매수/매도**: ...\n**Q4 권장 행동**: ...",
+  "source": "claude",
+  "model": "claude-opus-4-7",
+  "cache_hit": true
+}
+```
+
+**Query params**:
+- `provider`: `claude` | `openai` | `auto` (default: `auto` — prefers Claude if available)
+- `include_tfs`: comma-separated TFs for MTF context
+- `extra`: additional instructions appended to the prompt
+
+---
+
 ### Health Check
 
 ```
@@ -134,17 +366,62 @@ curl https://api.decker-ai.com/api/v1/public/health
 
 ---
 
-## Additional Endpoints (Beta)
+### Signal Stats (No Auth)
 
-These endpoints are available for exploration. API key optional.
+```
+GET /api/v1/public/stats
+```
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/api/v1/signals/{symbol}/state` | Signal state + `progress_pct` + `operation_gate` |
-| `GET` | `/api/v1/signals/{symbol}/strategy` | Strategy from YAML rulebook |
-| `GET` | `/api/v1/signals/{symbol}/consultation` | AI rationale + ranked choices |
-| `GET` | `/api/v1/llm/opportunities` | LLM insight feed (conviction, tf_alignment, choices) |
-| `GET` | `/api/v1/judgment/coverage` | 20 symbols × 6 timeframes coverage |
+No auth required. Returns 30-day engine signal activity across symbols and timeframes.  
+60-second cache.
+
+```bash
+curl https://api.decker-ai.com/api/v1/public/stats
+```
+
+```json
+{
+  "period_days": 30,
+  "symbols": [
+    {
+      "symbol": "BTCUSDT",
+      "total_evaluations": 720,
+      "action_gate_distribution": { "GO": 312, "WATCH": 264, "HOLD": 144 },
+      "last_evaluation": "2026-04-23T10:00:00Z"
+    }
+  ],
+  "covered_combinations": 12
+}
+```
+
+---
+
+### Demo (No Auth)
+
+```
+GET /api/v1/public/demo
+```
+
+No API key required. IP rate limit: 10 req/IP/day.  
+Returns live BTCUSDT 1h signal for quick exploration.
+
+```bash
+curl https://api.decker-ai.com/api/v1/public/demo
+```
+
+```json
+{
+  "symbol": "BTCUSDT",
+  "timeframe": "1h",
+  "direction": "long",
+  "entry_price": 96000,
+  "target_price": 100000,
+  "stop_loss": 92000,
+  "progress_pct": 66,
+  "operation_context": { "action_gate": "GO" },
+  "narrative": "B-leg confirmed. Structural bias long."
+}
+```
 
 ---
 
@@ -158,7 +435,7 @@ pip install decker-client    # Python 3.9+
 from decker_client import Client, RateLimitError
 
 with Client(api_key="dk_live_xxx") as client:
-    # Structural narrative
+    # Structural narrative (rule-based)
     narr = client.signals.get_narrative("BTCUSDT", "1h")
     print(narr.text)
 
@@ -203,7 +480,7 @@ Every signal has a lifecycle from formation (0%) to target (100%).
 | `expired` | Signal timed out |
 | `unknown` | Insufficient data to determine |
 
-### `operation_gate`
+### `action_gate`
 
 Three modes from the structural state machine:
 
@@ -213,44 +490,27 @@ Three modes from the structural state machine:
 | `WATCH` | Transition — wait for confirmation |
 | `HOLD` | Counter-trend risk — reduce or exit |
 
----
+### `c_state` (CBA cycle)
 
-## LLM Insight Feed
+The engine tracks a C → B → A cycle for each structural swing:
 
-```
-GET /api/v1/llm/opportunities?symbol=BTC&minConfidence=0.6&limit=5
-```
+| c_state | Meaning |
+|---------|---------|
+| `C_SET` | New cycle started — C leg set |
+| `B_FORMING` | B leg forming |
+| `B_SET` | B leg complete |
+| `A_FORMING` | A leg forming — trigger zone |
+| `BREAK_PLUS` | Upward structural break confirmed |
+| `BREAK_MINUS` | Downward structural break confirmed |
 
-Optimized for agent/chatbot use. Each entry contains `conviction`, `progress_pct`, `rationale`, and ranked `choices`.
+### `mtf_view.verdict`
 
-```json
-{
-  "opportunities": [
-    {
-      "symbol": "BTCUSDT",
-      "timeframe": "4h",
-      "direction": "long",
-      "conviction": 0.72,
-      "progress_pct": 66,
-      "status": "in_progress",
-      "rationale": "B-leg at 66% — counter-swing absorbed. 30% partial TP suggested.",
-      "choices": [
-        { "action": "hold", "description": "Hold to target" },
-        { "action": "partial_take_profit", "pct": 30, "description": "30% partial TP" },
-        { "action": "full_close", "description": "Close full position" }
-      ],
-      "tf_alignment": "fully_aligned",
-      "entry_price": 96000,
-      "target_price": 100000,
-      "stop_loss": 92000
-    }
-  ]
-}
-```
-
-`tf_alignment` values: `fully_aligned` · `lower_aligned` · `counter_trend` · `transition` · `mixed`
-
-**Cost**: Rule-based path — $0 LLM tokens.
+| verdict | Meaning |
+|---------|---------|
+| `ALIGNED` | All TFs in same key direction |
+| `CONFLICT` | Upper and lower TFs in opposite directions |
+| `MIXED` | Partial agreement across TFs |
+| `NEUTRAL` | Insufficient data |
 
 ---
 

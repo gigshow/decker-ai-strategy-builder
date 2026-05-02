@@ -209,7 +209,7 @@ curl -s -X POST "https://api.decker-ai.com/api/v1/signals/push" \
 - **#4** — How I Replaced 17 Trading Rules with a Single YAML File
 
 The full architecture, API docs, and samples:
-- **GitHub**: [decker-ai-strategy-builder](https://github.com/gigshow/decker-ai-strategy-builder)
+- **GitHub**: [decker-ai](https://github.com/gigshow/decker-ai)
 - **Telegram**: [@deckerclawbot](https://t.me/deckerclawbot)
 - **API**: [api.decker-ai.com/docs](https://api.decker-ai.com/docs)
 - **Web**: [decker-ai.com](https://decker-ai.com)

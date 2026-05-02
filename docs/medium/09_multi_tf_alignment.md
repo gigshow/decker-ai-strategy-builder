@@ -277,7 +277,7 @@ To implement this in your own system, you need:
 
 That's it. Four steps. No ML pipeline. No new model. No training data.
 
-The utility is [open source](https://github.com/gigshow/decker-ai-strategy-builder/blob/main/utils/tf_alignment_utils.py) in the repo.
+The utility is [open source](https://github.com/gigshow/decker-ai/blob/main/utils/tf_alignment_utils.py) in the repo.
 
 ---
 
@@ -303,4 +303,4 @@ State machine + learning loop. Still no ML. Still deterministic. But now the rul
 
 ---
 
-*If this resonated, the full rulebook, utils, and signal format are documented at the [Decker AI Strategy Builder repo](https://github.com/gigshow/decker-ai-strategy-builder). The Telegram bot is at [@DeckerClawBot](https://t.me/deckerclawbot).*
+*If this resonated, the full rulebook, utils, and signal format are documented at the [Decker AI repo](https://github.com/gigshow/decker-ai). The Telegram bot is at [@DeckerClawBot](https://t.me/deckerclawbot).*

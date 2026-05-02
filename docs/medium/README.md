@@ -43,4 +43,4 @@ English Medium articles. State Engine, sequence labeling, progress_pct, Target鈫
 
 - **Medium**: Each article published to Medium (Towards Data Science / The Startup / Better Programming)
 - **GitHub**: Full drafts available here
-- **CTA**: [GitHub](https://github.com/gigshow/decker-ai-strategy-builder) 路 [Telegram (DeckerClaw)](https://t.me/deckerclawbot) 路 [API Docs](https://api.decker-ai.com/docs)
+- **CTA**: [GitHub](https://github.com/gigshow/decker-ai) 路 [Telegram (DeckerClaw)](https://t.me/deckerclawbot) 路 [API Docs](https://api.decker-ai.com/docs)

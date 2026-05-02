@@ -7,7 +7,7 @@
 #   2. PyPI → decker-client → Settings → "Add a new publisher"
 #      Publisher: GitHub
 #      Repository owner: gigshow
-#      Repository name:  decker-ai-strategy-builder
+#      Repository name:  decker-ai
 #      Workflow name:    publish-sdk.yml
 #      Environment name: pypi
 #   3. Create GitHub Environment "pypi" in repo Settings → Environments

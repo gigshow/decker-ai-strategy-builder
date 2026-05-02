@@ -41,7 +41,7 @@ git sparse-checkout add docs
 ### 이 레포(문서·샘플·스킬 패키지)만 클론
 
 ```bash
-git clone https://github.com/gigshow/decker-ai-strategy-builder.git
+git clone https://github.com/gigshow/decker-ai.git
 ```
 
 ---

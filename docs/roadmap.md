@@ -75,7 +75,7 @@
 
 | 항목         | 내용                                                                                                                        |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------- |
-| 공개 레포 동기   | `decker_ai_strategy_builder_sync` → GitHub `decker-ai-strategy-builder` (rsync); **RULES·roadmap·아키텍처** 주기 갱신             |
+| 공개 레포 동기   | `decker_ai_strategy_builder_sync` → GitHub `decker-ai` (rsync); **RULES·roadmap·아키텍처** 주기 갱신             |
 | 투웨이 모델 공식화 | Way 1(자체 에이전트) + Way 2(OpenClaw 스킬) 문서·온보딩 — [ONBOARDING_PUBLIC](ONBOARDING_PUBLIC.md) 기준 **대부분 정리됨**; 잔여는 생태·ClawHub 후순위 |
 | 엔진-퍼스트 본선  | 2026 Q2 내부: 트리거 계약·청산 정책 v1.1·크로스-TF 원장·관측/성과 UI·운영 품질 — **공개 요약은 본 문서·architecture만**                                    |
 
@@ -129,7 +129,7 @@
 | **로컬 Docker** | Postgres 초기화 시 HL 테이블 부트스트랩 스크립트 포함(신규 볼륨 기준)                                                          |
 
 
-동기화: 비공개 작업 트리 `decker_ai_strategy_builder_sync/` → 스크립트 `scripts/sync_decker_ai_strategy_builder.sh`로 공개 레포 `decker-ai-strategy-builder` 반영.
+동기화: 비공개 작업 트리 `decker_ai_strategy_builder_sync/` → 스크립트 `scripts/sync_decker_ai_strategy_builder.sh`로 공개 레포 `decker-ai` 반영.
 
 ---
 

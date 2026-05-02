@@ -203,7 +203,7 @@ Push a signal. Watch its progress change over hours. See the strategy adapt. It'
 - **#5** — Building a Crypto Signal API in 5 Minutes — No ML Degree Required
 
 Explore the full system:
-- **GitHub**: [decker-ai-strategy-builder](https://github.com/gigshow/decker-ai-strategy-builder) — architecture, concept docs, RULES.yaml
+- **GitHub**: [decker-ai](https://github.com/gigshow/decker-ai) — architecture, concept docs, RULES.yaml
 - **Telegram**: [@deckerclawbot](https://t.me/deckerclawbot) — talk to it live
 - **API**: [api.decker-ai.com/docs](https://api.decker-ai.com/docs)
 - **Web**: [decker-ai.com](https://decker-ai.com)

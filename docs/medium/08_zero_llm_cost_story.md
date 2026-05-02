@@ -127,7 +127,7 @@ The important part was not development speed as a bragging point. It was that th
 
 ## Phase 5: The Open Repo
 
-I eventually published the architecture, docs, samples, and rulebook as an open repository: [decker-ai-strategy-builder](https://github.com/gigshow/decker-ai-strategy-builder).
+I eventually published the architecture, docs, samples, and rulebook as an open repository: [decker-ai](https://github.com/gigshow/decker-ai).
 
 Not the production code — that stays private. But everything a developer needs to understand, integrate, and build on the system:
 
@@ -212,7 +212,7 @@ This series was 8 articles about a single idea: **trading signals have lifecycle
 
 If it resonated:
 
-- **Star the repo**: [github.com/gigshow/decker-ai-strategy-builder](https://github.com/gigshow/decker-ai-strategy-builder)
+- **Star the repo**: [github.com/gigshow/decker-ai](https://github.com/gigshow/decker-ai)
 - **Try the bot**: [@deckerclawbot](https://t.me/deckerclawbot) on Telegram
 - **Hit the API**: [api.decker-ai.com/docs](https://api.decker-ai.com/docs)
 - **Read the docs**: Architecture, performance, risk management — all public

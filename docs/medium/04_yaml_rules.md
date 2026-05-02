@@ -235,7 +235,7 @@ The entire RULES.yaml is open source. You can:
 
 ```bash
 # See the full rulebook
-curl -s "https://raw.githubusercontent.com/gigshow/decker-ai-strategy-builder/main/operation_rules/RULES.yaml"
+curl -s "https://raw.githubusercontent.com/gigshow/decker-ai/main/operation_rules/RULES.yaml"
 
 # Test it live — what strategy does BTCUSDT get right now?
 curl -s "https://api.decker-ai.com/api/v1/signals/BTCUSDT/strategy?timeframe=4h&risk_appetite=medium"
@@ -251,7 +251,7 @@ The goal is to build a community-driven rulebook. The public rulebook is a start
 - **#6** — What the Public Backtest Summary Suggests About `progress_pct`
 
 Full resources:
-- **GitHub**: [decker-ai-strategy-builder](https://github.com/gigshow/decker-ai-strategy-builder)
+- **GitHub**: [decker-ai](https://github.com/gigshow/decker-ai)
 - **Telegram**: [@deckerclawbot](https://t.me/deckerclawbot)
 - **API**: [api.decker-ai.com/docs](https://api.decker-ai.com/docs)
 - **Web**: [decker-ai.com](https://decker-ai.com)

@@ -193,9 +193,9 @@ Your signal source can be anything. The state machine doesn't care where the sig
 - **#8** — From Side Project to Signal Engine: Building Around an LLM-Optional Core
 
 Full technical docs:
-- **GitHub**: [decker-ai-strategy-builder](https://github.com/gigshow/decker-ai-strategy-builder)
-- **Architecture**: [architecture.md](https://github.com/gigshow/decker-ai-strategy-builder/blob/main/docs/architecture.md)
-- **Concepts**: [labeling_algorithm](https://github.com/gigshow/decker-ai-strategy-builder/blob/main/concept/labeling_algorithm.md), [market_state_theory](https://github.com/gigshow/decker-ai-strategy-builder/blob/main/concept/market_state_theory.md)
+- **GitHub**: [decker-ai](https://github.com/gigshow/decker-ai)
+- **Architecture**: [architecture.md](https://github.com/gigshow/decker-ai/blob/main/docs/architecture.md)
+- **Concepts**: [labeling_algorithm](https://github.com/gigshow/decker-ai/blob/main/concept/labeling_algorithm.md), [market_state_theory](https://github.com/gigshow/decker-ai/blob/main/concept/market_state_theory.md)
 - **Telegram**: [@deckerclawbot](https://t.me/deckerclawbot)
 
 ---

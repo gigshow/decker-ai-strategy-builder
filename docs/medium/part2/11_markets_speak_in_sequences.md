@@ -169,6 +169,6 @@ The next article goes one layer up: **how those tokens drive a 5-state session m
 
 ---
 
-*Decker AI Strategy Builder is open for exploration. API: [api.decker-ai.com/docs](https://api.decker-ai.com/docs) · GitHub: [decker-ai-strategy-builder](https://github.com/gigshow/decker-ai-strategy-builder) · Telegram: [@deckerclawbot](https://t.me/deckerclawbot)*
+*Decker AI is open for exploration. API: [api.decker-ai.com/docs](https://api.decker-ai.com/docs) · GitHub: [decker-ai](https://github.com/gigshow/decker-ai) · Telegram: [@deckerclawbot](https://t.me/deckerclawbot)*
 
 *← [Article 10: How I Built a Trading Rulebook That Improves Itself](../10_self_improving_rulebook.md) · [Article 12: I Replaced a Chart Pattern Library →](12_five_state_machine.md)*

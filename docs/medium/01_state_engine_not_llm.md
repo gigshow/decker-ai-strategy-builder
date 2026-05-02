@@ -219,7 +219,7 @@ This is the first article in a series about building Decker AI. Coming up:
 
 If you want to explore the engine:
 
-- **GitHub**: [decker-ai-strategy-builder](https://github.com/gigshow/decker-ai-strategy-builder) — architecture, samples, RULES.yaml
+- **GitHub**: [decker-ai](https://github.com/gigshow/decker-ai) — architecture, samples, RULES.yaml
 - **Telegram Bot**: [@deckerclawbot](https://t.me/deckerclawbot) — try it live
 - **API Docs**: [api.decker-ai.com/docs](https://api.decker-ai.com/docs)
 - **Website**: [decker-ai.com](https://decker-ai.com)

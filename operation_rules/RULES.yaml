@@ -16,33 +16,31 @@ updated: "2026-04-23"
 #         `engine_ba_verdict` (scalar|list, case-insensitive — CONNECT|NO_CONNECT_NEW_C|TEST_RETRY),
 #         `engine_confirmed_break` (bool). Source: migration 038 (engine_action_gate) + migration 057
 #         (engine_ba_verdict, engine_confirmed_break) + merge_engine_state.py
-#         `_plane_25_fields_from_semantic_tail_row`. Ref: ENGINE_TRIGGER_CONDITION_CONTRACT_SPEC §14.1,
-#         docs/TRIGGER_FAILURE_PATTERN_PIPELINE_PHASE0_PLAN.md §4.3 T3.3.
-# v2.4.5: WU:W10 — merge plane §2.5 RULES L1 — 로더 `_rule_matches` + 프리미엄 2개
+#         `_plane_25_fields_from_semantic_tail_row`.
+# v2.4.5: WU:W10 — merge plane §2.5 RULES L1 — 프리미엄 2개
 #         (`engine_plane25_main_qkv_pass_aligned_attention`, `engine_plane25_sub_branch_qkv_fail_attention`).
 #         조건키: `engine_qkv_pass`, `engine_trigger_snapshot_trigger_lane`, `engine_swing_evaluation_dominant_layer`,
 #         `engine_sub_branch_qkv_pass`, `engine_conn_branch_qkv_pass`. Ref: ENGINE_TRIGGER_CONDITION_CONTRACT_SPEC §14.1.
 # v2.4.4: M-B2 — rules[] 프리미엄 2개 — `engine_key_change_key_signal_applied`·`engine_key_change_confirmed` (053 merge·enrich 평면).
 #         Ref: WS5_SURVEILLANCE_TRIGGER_CONTRACT.md §5.2 항목 4, SIGNAL_STATE_ENGINE_MERGE.
 # v2.4.3: WP-5.3 / SC-3 — exit_policy_ref (POLICY_EXIT_EVAL_CATALOG §2 policy_id). 로더는 여전히 rules[]만 소비; 엔진 기본 trigger_forward_exit_eval=legacy 와 정합.
-#         로더(M-B2): `engine_key_change_confirmed`, `engine_key_change_direction`, `engine_key_change_key_signal_applied` 조건키 — migration 053·merge·enrich 평면과 정합.
+#         조건키: `engine_key_change_confirmed`, `engine_key_change_direction`, `engine_key_change_key_signal_applied` — migration 053 평면과 정합.
 # v2.4.2: migration 052 / merge·DB 평면 — engine_dominant_layer_changed (bool), engine_dominant_layer_prev,
-#         engine_manlak_shift (scalar|list, case-insensitive). Ref: operation_rules_loader, judgment_signals 052.
-# v2.4.1: migration 051 / merge·DB 평면 — _rule_matches 에 engine_main_a_cycle_id (scalar|list),
+#         engine_manlak_shift (scalar|list, case-insensitive).
+# v2.4.1: migration 051 / merge·DB 평면 — engine_main_a_cycle_id (scalar|list),
 #         engine_main_a_cycle_started_this_bar, engine_main_a_cycle_ended_this_bar (bool),
-#         engine_winner_stem_terminated_kind (scalar|list). Ref: operation_rules_loader, judgment_signals 051.
+#         engine_winner_stem_terminated_kind (scalar|list).
 # v2.4.0: 트리거 PnL 브릿지(W8) — merge_last_trigger_performance_into_signal_state 의 engine_trigger_exit_reason_in 등으로
 #         프리미엄 룰 engine_trigger_stop_exit_attention (시뮬 stop_hit 안내; 실주문 청산 로그 아님). Ref: NEXT_SESSION_TRIGGER_PNL_EXIT_BRIDGE §0, SIGNAL_STATE_ENGINE_MERGE.
 # v2.3.9: GAP-4 opposite_main_trigger_* — merge 평면 키 engine_opposite_main_trigger_candidate, engine_opposite_main_trigger_direction;
 #         프리미엄 룰 engine_opposite_main_trigger_skeptic_attention (스켑틱 관망·분할; 메인 확정 게이트와 별축). Ref: SIGNAL_SKEPTIC_INPUT_SPEC §2.5, SMS_GAP4_CONSUMPTION_MATRIX.
 # v2.3.8: SMS / GAP-parallel stem source — merge·DB 평면 키 engine_stem_trigger, engine_winner_stem_kind, engine_winner_stem_id (050);
-#         로더 스칼라·리스트 매칭(operation_rules_loader). 프리미엄 룰 2개: 서브·연결 줄기 출처 시 중간 진행 구간 안내.
+#         스칼라·리스트 매칭. 프리미엄 룰 2개: 서브·연결 줄기 출처 시 중간 진행 구간 안내.
 # v2.3.7: engine_connection_qkv_policy_reason — SUB_SWING_WINNER 시 main-line 연결 프리미엄 룰 제외; engine_connection_target_source DB persist.
 # v2.3.6: engine_connection_qkv_verdict — merge state_snapshot.connection.qkv.verdict 평면 키; premium 룰 engine_connection_qkv_connect.
 # v2.3.5: engine_sub_swing_id_min — merge engine_sub_swing_id (MODE_SEQ_V2 Facade); premium 룰 engine_sub_swing_scope_attention.
 # v2.3.4: engine_c_state — merge의 state_snapshot.c_state 평면 키; progress_66 미만 구간에서 A_FORMING 전용 룰 (#4).
 # v2.3.3: 엔진 합성 키 — merge 평면 키(engine_key_direction, engine_label_confidence_min, engine_event_name); v2.3.4에 engine_c_state 추가.
-#         Ref: app/services/engine_core/merge_engine_state.py, operation_rules_loader._rule_matches
 # v2.3.2: C2-b 배치2 — portfolio, entry_timing, tf_alignment, swing_state, portfolio_default YAML choices.
 # v2.3.1: C2-b 배치1 — progress_* / progress_80_trend / TF·range 진행도 룰 전부 YAML choices (dict는 폴백용 유지).
 # v2.3.0: C2-a — 일부 룰에 YAML choices 인라인 (target_reached, stop_hit, default). 로더·resolve_choices_for_rule YAML 우선.

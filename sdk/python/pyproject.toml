@@ -33,9 +33,9 @@ dev = ["respx>=0.20", "pytest>=7", "pytest-asyncio"]
 [project.urls]
 Homepage       = "https://decker-ai.com"
 API-Docs       = "https://api.decker-ai.com/docs"
-Source         = "https://github.com/gigshow/decker-ai-strategy-builder"
-"Bug Tracker"  = "https://github.com/gigshow/decker-ai-strategy-builder/issues"
-Changelog      = "https://github.com/gigshow/decker-ai-strategy-builder/blob/main/CHANGELOG.md"
+Source         = "https://github.com/gigshow/decker-ai"
+"Bug Tracker"  = "https://github.com/gigshow/decker-ai/issues"
+Changelog      = "https://github.com/gigshow/decker-ai/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["decker_client"]

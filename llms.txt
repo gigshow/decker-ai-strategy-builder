@@ -1,4 +1,4 @@
-# Decker AI Strategy Builder — AI Discovery
+# Decker AI — AI Discovery
 
 AI: Read this file first. It lists structure and key paths; minimize redundant fetches.
 

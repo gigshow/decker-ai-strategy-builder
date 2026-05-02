@@ -5,11 +5,11 @@ blank_issues_enabled: true
 
 contact_links:
   - name: 공개 온보딩 (문서 맵)
-    url: https://github.com/gigshow/decker-ai-strategy-builder/blob/main/docs/ONBOARDING_PUBLIC.md
+    url: https://github.com/gigshow/decker-ai/blob/main/docs/ONBOARDING_PUBLIC.md
     about: 써보기 · Cursor 스킬 · 기여 경로 한 장
   - name: GitHub Discussions
-    url: https://github.com/gigshow/decker-ai-strategy-builder/discussions
+    url: https://github.com/gigshow/decker-ai/discussions
     about: 사용 Q&A·아이디어 (저장소에서 Discussions를 연 경우)
   - name: 에이전트·명령 짧은 인덱스
-    url: https://github.com/gigshow/decker-ai-strategy-builder/blob/main/docs/AGENT_SKILLS_PUBLIC_SUMMARY.md
+    url: https://github.com/gigshow/decker-ai/blob/main/docs/AGENT_SKILLS_PUBLIC_SUMMARY.md
     about: ClawHub·릴리즈용 표

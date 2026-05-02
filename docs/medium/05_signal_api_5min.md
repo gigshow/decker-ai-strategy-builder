@@ -297,7 +297,7 @@ The main point is not "APIs beat ML in every case." It's that you can prototype 
 - **#7** — State Machines in Trading: Why Deterministic Beats Probabilistic
 
 All code from this article:
-- **GitHub**: [decker-ai-strategy-builder/samples](https://github.com/gigshow/decker-ai-strategy-builder/tree/main/samples)
+- **GitHub**: [decker-ai/samples](https://github.com/gigshow/decker-ai/tree/main/samples)
 - **Telegram**: [@deckerclawbot](https://t.me/deckerclawbot)
 - **API**: [api.decker-ai.com/docs](https://api.decker-ai.com/docs)
 - **Web**: [decker-ai.com](https://decker-ai.com)

@@ -1,6 +1,6 @@
 # Decker AI Architecture
 
-**Decker AI Strategy Builder — 시퀀스·상태머신·게이트로 읽는 시장 구조 엔진** (progress_pct 생명주기 + RULES; DeckerClaw / API)
+**Decker AI — 시퀀스·상태머신·게이트로 읽는 시장 구조 엔진** (progress_pct 생명주기 + RULES; DeckerClaw / API)
 
 ---
 

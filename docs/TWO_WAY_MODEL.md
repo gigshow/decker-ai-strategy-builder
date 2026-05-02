@@ -51,7 +51,7 @@
 
 | 시간 | 행동 | 기대 결과 |
 |------|------|-----------|
-| ~30초 | `curl`로 시그널 state 조회 ([Try It Now](https://github.com/gigshow/decker-ai-strategy-builder#-try-it-now) 예시) | JSON에 `progress_pct` 등 |
+| ~30초 | `curl`로 시그널 state 조회 ([Try It Now](https://github.com/gigshow/decker-ai#-try-it-now) 예시) | JSON에 `progress_pct` 등 |
 | ~3분 | 레포 [samples/](../samples/) 스크립트 (예: `signal-push-strategy.sh`) | 로컬에서 전략·시그널 흐름 확인 |
 | ~5분 | Telegram에서 "비트코인 시그널 알려줘" | Way 1 응답 |
 | (선택) | Railway에 turnkey 배포 | 선택 D — 자가 호스팅 경량 봇 |

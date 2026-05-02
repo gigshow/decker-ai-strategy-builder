@@ -21,7 +21,7 @@ This is the drift problem. And it's particularly acute for an engine that lives 
 The Decker engine exists in two locations:
 
 1. **Private monorepo** — alongside the API, database migrations, frontend, and operational tooling. All development happens here.
-2. **Public repository** (`decker-ai-strategy-builder`) — open-source documentation, samples, concepts, and the RULES.yaml rulebook.
+2. **Public repository** (`decker-ai`) — open-source documentation, samples, concepts, and the RULES.yaml rulebook.
 
 Both must present a consistent view of the engine's capabilities. Any drift between them means external users are working with an outdated picture.
 
@@ -173,6 +173,6 @@ That's the engineering goal. Everything else is implementation detail.
 
 *The full RULES.yaml rulebook is open-source: [operation_rules/RULES.yaml](../../../operation_rules/RULES.yaml)*  
 *Try the engine live: [api.decker-ai.com/docs](https://api.decker-ai.com/docs)*  
-*GitHub: [decker-ai-strategy-builder](https://github.com/gigshow/decker-ai-strategy-builder)*
+*GitHub: [decker-ai](https://github.com/gigshow/decker-ai)*
 
 *← [Article 14: AI Explains, Engine Decides](14_ai_explains_engine_decides.md) · [Back to Series Index →](README.md)*

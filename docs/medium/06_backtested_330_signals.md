@@ -165,7 +165,7 @@ These are the numbers currently reflected in the public docs.
 
 There may be stronger internal observations, but the right public standard is simple: publish what readers can inspect today, and label anything else as unpublished.
 
-When the data is ready for public release, it will appear in the [signal-performance docs](https://github.com/gigshow/decker-ai-strategy-builder/blob/main/docs/signal-performance.md).
+When the data is ready for public release, it will appear in the [signal-performance docs](https://github.com/gigshow/decker-ai/blob/main/docs/signal-performance.md).
 
 ---
 
@@ -197,9 +197,9 @@ The `RULES.yaml` is open source and the API surface is public. Track a signal fr
 - **#8** — From Side Project to Signal Engine: How We Built Decker AI with $0 in LLM Costs
 
 Full data and methodology:
-- **GitHub**: [decker-ai-strategy-builder](https://github.com/gigshow/decker-ai-strategy-builder)
-- **Performance docs**: [signal-performance.md](https://github.com/gigshow/decker-ai-strategy-builder/blob/main/docs/signal-performance.md)
-- **Risk management**: [risk-management.md](https://github.com/gigshow/decker-ai-strategy-builder/blob/main/docs/risk-management.md)
+- **GitHub**: [decker-ai](https://github.com/gigshow/decker-ai)
+- **Performance docs**: [signal-performance.md](https://github.com/gigshow/decker-ai/blob/main/docs/signal-performance.md)
+- **Risk management**: [risk-management.md](https://github.com/gigshow/decker-ai/blob/main/docs/risk-management.md)
 - **Telegram**: [@deckerclawbot](https://t.me/deckerclawbot)
 
 ---

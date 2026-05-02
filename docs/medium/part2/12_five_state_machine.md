@@ -183,4 +183,4 @@ Why three? Because binary is a lie.
 
 *← [Article 11: Markets Speak in Sequences](11_markets_speak_in_sequences.md) · [Article 13: GO, WATCH, or HOLD →](13_go_watch_hold.md)*
 
-*API: [api.decker-ai.com/docs](https://api.decker-ai.com/docs) · GitHub: [decker-ai-strategy-builder](https://github.com/gigshow/decker-ai-strategy-builder)*
+*API: [api.decker-ai.com/docs](https://api.decker-ai.com/docs) · GitHub: [decker-ai](https://github.com/gigshow/decker-ai)*

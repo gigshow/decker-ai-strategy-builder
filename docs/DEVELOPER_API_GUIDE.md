@@ -238,8 +238,8 @@ Any symbol/TF outside this list returns **404**.
 The SDK is included in this repository at [`sdk/python/`](../sdk/python/).
 
 ```bash
-git clone https://github.com/gigshow/decker-ai-strategy-builder.git
-pip install -e decker-ai-strategy-builder/sdk/python/
+git clone https://github.com/gigshow/decker-ai.git
+pip install -e decker-ai/sdk/python/
 ```
 
 > `pip install decker-client` (PyPI) is planned — not yet published.

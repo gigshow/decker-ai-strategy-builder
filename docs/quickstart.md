@@ -76,8 +76,8 @@ All `/public/*` endpoints require `X-API-Key`. Rate limit headers are returned o
 The SDK is included in this repository:
 
 ```bash
-git clone https://github.com/gigshow/decker-ai-strategy-builder.git
-pip install -e decker-ai-strategy-builder/sdk/python/
+git clone https://github.com/gigshow/decker-ai.git
+pip install -e decker-ai/sdk/python/
 ```
 
 ```python
