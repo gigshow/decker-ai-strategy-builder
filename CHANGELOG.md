@@ -4,6 +4,18 @@ All notable changes to the Decker AI are documented in this file.
 
 ---
 
+## [v1.6.0] - 2026-05-02
+
+### Added (Sprint 3 — MCP server · Skill Overlay · Pricing 정책)
+
+- **MCP server (Way E)**: `/api/v1/mcp/sse` (SSE handshake) + `/api/v1/mcp/messages` (JSON-RPC 2.0) · 4 tools (decker.get_signals / get_reading / get_user_skills / set_skill_overlay) · X-API-Key 인증 · Skill Overlay 자동 적용 · Claude Desktop / Cursor / Codex 직접 호출 가능
+- **Skill Overlay** (per-user customization): `conservative_v0` / `standard_v0` / `aggressive_v0` · 한 곳 변경 → Telegram · REST · MCP · 자동주문 모두 자동 적용
+- **Pricing 정책 v0.2 — 3 tier**: FREE $0 (30 calls/day) / **PRO $20/mo** (10,000 calls/day, 7d trial, MCP full, 자동주문) / **ENTERPRISE 문의** (100,000+ calls/day, 우선 SLA, custom). Legacy BASIC = PRO alias, PREMIUM = ENTERPRISE alias (rate limit 동일).
+- **Beta**: 베타 기간 `BETA_TIER_OVERRIDE=PRO` ENV 운영 — 모든 인증 사용자 PRO 풀 액세스 무료.
+- **Repo rename**: `decker-ai-strategy-builder` → `decker-ai` (GitHub 자동 redirect 1년 활성).
+
+---
+
 ## [v1.5.0] - 2026-04-23
 
 ### Added (Sprint 2 — Public API · Rate Limit · SDK)

@@ -106,11 +106,13 @@ with Client(api_key="dk_live_xxx") as client:
 
 ## Rate Limits
 
-| Tier | Limit | How to upgrade |
-|------|-------|----------------|
-| FREE | 100 req/day | Contact via Telegram bot |
-| BASIC | 10,000 req/day | Contact via Telegram bot |
-| PREMIUM | 100,000 req/day | Contact via Telegram bot |
+| Tier | Price | Limit | How to upgrade |
+|------|-------|-------|----------------|
+| FREE | $0 (forever) | 30 calls/day | Default on `/apikey` |
+| PRO | $20 / month · 7d trial | 10,000 calls/day | Telegram bot · auto-charge after trial |
+| ENTERPRISE | Contact us | 100,000+ calls/day · custom | Contact via Telegram bot |
+
+> **Beta** (current): all users get **PRO full access** for free (`BETA_TIER_OVERRIDE=PRO`).
 
 Headers on every response: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`  
 Exceeded → HTTP 429 + `Retry-After`

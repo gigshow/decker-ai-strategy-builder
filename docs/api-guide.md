@@ -24,11 +24,13 @@ X-API-Key: dk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 ## Rate Limits
 
-| Tier | Limit | Headers |
-|------|-------|---------|
-| **FREE** | 100 req/day | `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset` |
-| **BASIC** | 10,000 req/day | same |
-| **PREMIUM** | 100,000 req/day | same |
+| Tier | Price | Daily Limit | Headers |
+|------|-------|-------------|---------|
+| **FREE** | $0 (forever) | 30 calls/day | `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset` |
+| **PRO** | $20 / month · 7d trial | 10,000 calls/day | same |
+| **ENTERPRISE** | Contact us | 100,000+ calls/day · custom | same |
+
+> **Beta**: all authenticated users get **PRO full access** for free during beta (`BETA_TIER_OVERRIDE=PRO`).
 
 Limit exceeded → `HTTP 429` with `Retry-After` header.
 

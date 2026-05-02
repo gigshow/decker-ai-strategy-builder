@@ -218,13 +218,16 @@ X-API-Key: dk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 Keys are issued via Telegram `/apikey` — **not** from the web UI. See [DEVELOPER_API_GUIDE.md](docs/DEVELOPER_API_GUIDE.md).
 
-### Rate Limits
+### Pricing & Rate Limits
 
-| Tier | Daily limit |
-|------|------------|
-| FREE | 100 req/day |
-| BASIC | 10,000 req/day |
-| PREMIUM | 100,000 req/day |
+| Tier | Price | Daily limit | MCP server | Auto-trade |
+|------|-------|------------|------------|------------|
+| **FREE** | $0 (forever) | 30 calls/day | read-only (1d cache) | ❌ |
+| **PRO** | $20 / month · 7d trial | 10,000 calls/day | full (4 tools) | virtual + real |
+| **ENTERPRISE** | Contact us | 100,000+ calls/day · custom | full + per-org skill catalog | + custom integration |
+
+> **Beta** (current): all authenticated users get **PRO full access** for free
+> via `BETA_TIER_OVERRIDE=PRO` env. No payment required during beta.
 
 Every response includes `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`.  
 Exceeded → HTTP 429 + `Retry-After`.

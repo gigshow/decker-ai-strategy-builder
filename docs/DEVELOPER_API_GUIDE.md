@@ -115,11 +115,13 @@ curl -X POST https://api.decker-ai.com/api/v1/public/auth/verify \
 
 Quota resets daily at **UTC midnight**.
 
-| Tier | Daily Limit | How to upgrade |
-|------|------------|----------------|
-| FREE | 100 req/day | Contact via Telegram bot |
-| BASIC | 10,000 req/day | Contact via Telegram bot |
-| PREMIUM | 100,000 req/day | Contact via Telegram bot |
+| Tier | Price | Daily Limit | How to upgrade |
+|------|-------|------------|----------------|
+| FREE | $0 (forever) | 30 calls/day | Default on `/apikey` |
+| PRO | $20 / month · 7d trial | 10,000 calls/day | Telegram bot · auto-charge after trial |
+| ENTERPRISE | Contact us | 100,000+ calls/day · custom SLA | Contact via Telegram bot |
+
+> **Beta** (current): all authenticated users get **PRO full access** for free (`BETA_TIER_OVERRIDE=PRO` env on backend).
 
 Every response includes:
 
