@@ -13,11 +13,12 @@
 | 단계 | 링크 |
 |------|------|
 | 웹 | [decker-ai.com](https://www.decker-ai.com) |
-| 카카오 진입(안내·문의) | [Kakao Channel](https://pf.kakao.com/_RxlxjVX), [usage-guide.md#kakao-channel-entry-guide](./usage-guide.md#kakao-channel-entry-guide) |
 | API 문서 | [api.decker-ai.com/docs](https://api.decker-ai.com/docs) |
 | API 연동 가이드 | [DEVELOPER_API_GUIDE.md](./DEVELOPER_API_GUIDE.md) — 인증·SDK·Rate Limit |
 | 텔레그램 봇 `/` 명령·자연어 | [TELEGRAM_AGENT_COMMANDS.md](./TELEGRAM_AGENT_COMMANDS.md) (단일 출처) |
 | 연동(예) | [decker-link-telegram](https://decker-ai.com/decker-link-telegram), [decker-link (Slack)](https://decker-ai.com/decker-link) |
+
+**시그널 용어 (한눈에)**: Decker는 **`winner_layer`**(차트·디버그에서 “지금 어느 축이 모니터상 우세하게 보이는지”를 가리키는 표시)와 **`winner_stem_*`**(푸시·운영 룰에 쓰는 “승자 줄기”, 메인·서브·연결 중 실제로 귀속된 줄기)를 **구분**합니다. 같은 봉에서 둘이 **다를 수** 있으니, 알림·자동화 해석은 **`winner_stem_*`**(및 엔진이 노출하는 stem·레인 필드)를 기준으로 보는 것이 맞습니다. 기술적 배경·호환 일정은 [ADR-002 — winner_layer vs winner_stem](adr/ADR-002-winner-layer-vs-winner-stem-deprecation.md)을 참고하세요.
 
 ---
 
@@ -25,9 +26,17 @@
 
 상세 표·우선순위는 [DECKER_AGENT_SKILLS.md](./DECKER_AGENT_SKILLS.md)가 단일 출처다.
 
-### 최소 경로 (전체 플랫폼 monorepo)
+### 최소 경로 (레포 안에서)
 
-IDE 스킬·`.cursor/rules`는 **비공개 메인 레포**에 있다. 아래로 필요한 디렉터리만 받는다:
+| 경로 | 역할 |
+|------|------|
+| `.cursor/skills/decker-signal/` | 시그널·Signal LLM·룰북·tier |
+| `.cursor/skills/decker-execution-mode/` | `execution_mode`, ExecutionRouter, 모의/실 |
+| `.cursor/rules/decker-agent-skills.mdc` | 프로젝트 규칙 → 위 스킬 표 참조 |
+
+함께 두면 좋은 문서: `docs/DECKER_AGENT_SKILLS.md`, `docs/TELEGRAM_AGENT_COMMANDS.md`(제품 봇과 혼동 시), [openclaw_skills/README.md](./openclaw_skills/README.md).
+
+### 레포 전체 없이 디렉터리만 받기 (선택)
 
 ```bash
 git clone --filter=blob:none --sparse https://github.com/gigshow/decker-trading-platform.git decker-skills
@@ -36,13 +45,7 @@ git sparse-checkout set .cursor/skills/decker-signal .cursor/skills/decker-execu
 git sparse-checkout add docs
 ```
 
-함께 두면 좋은 문서: `docs/DECKER_AGENT_SKILLS.md`, `docs/TELEGRAM_AGENT_COMMANDS.md`, 이 레포의 [openclaw_skills/README.md](./openclaw_skills/README.md).
-
-### 이 레포(문서·샘플·스킬 패키지)만 클론
-
-```bash
-git clone https://github.com/gigshow/decker-ai.git
-```
+`docs/`는 위 명령으로 상위 폴더만 포함되며, 필요 시 `docs/DECKER_AGENT_SKILLS.md` 등만 골라 쓰면 된다. 원격·브랜치는 포크에 맞게 바꾼다.
 
 ---
 
@@ -50,10 +53,9 @@ git clone https://github.com/gigshow/decker-ai.git
 
 | 단계 | 문서 |
 |------|------|
-| 이 레포 빠른 시작 | [README.md](../README.md) **Quick Start** |
-| 로드맵 (이 레포) | [roadmap.md](./roadmap.md) |
-| 전체 플랫폼 상태·로드맵 | 비공개 [decker-trading-platform](https://github.com/gigshow/decker-trading-platform) 의 `docs/WORK_STATUS_AND_ROADMAP.md` (접근 가능한 경우) |
-| 엔지니어링 워크플로 스킬 표 | [DECKER_AGENT_SKILLS.md](./DECKER_AGENT_SKILLS.md) §3 — 일부 번들(`.agents/skills/gstack`)은 monorepo에만 존재 |
+| 클론·Docker·로컬 포트 | [README.md](../README.md)의 **빠른 시작** |
+| 상태·로드맵 | [WORK_STATUS_AND_ROADMAP.md](./WORK_STATUS_AND_ROADMAP.md) |
+| 엔지니어링 워크플로 스킬(리뷰·QA·배포 등) | [DECKER_AGENT_SKILLS.md](./DECKER_AGENT_SKILLS.md) §3, 동봉 `.agents/skills/gstack/` |
 | 이슈·Discussions | [GITHUB_COMMUNITY.md](./GITHUB_COMMUNITY.md), [`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/) |
 | 릴리즈 시 공개 문서 | [RELEASE_CHECKLIST_PUBLIC_DOCS.md](./RELEASE_CHECKLIST_PUBLIC_DOCS.md) |
 | 기여·문서 톤 | [CONTRIBUTING.md](../CONTRIBUTING.md) (루트) |
@@ -72,9 +74,10 @@ git clone https://github.com/gigshow/decker-ai.git
 | [GITHUB_COMMUNITY.md](./GITHUB_COMMUNITY.md) | Discussions·이슈 템플릿 |
 | [RELEASE_CHECKLIST_PUBLIC_DOCS.md](./RELEASE_CHECKLIST_PUBLIC_DOCS.md) | 태그·대외 릴리즈 전 문서 |
 | [CONTRIBUTING.md](../CONTRIBUTING.md) (루트) | 기여·공개 문서 톤 |
+| [ADR-002 — winner_layer vs winner_stem](adr/ADR-002-winner-layer-vs-winner-stem-deprecation.md) | 시그널 해석: 모니터 표시 축 vs 승자 줄기(stem) |
 
 ---
 
 ## 5. 메타
 
-공개 내러티브·구조는 README, [architecture.md](./architecture.md), [concept/sequence_engine.md](../concept/sequence_engine.md), [docs/medium/part2/README.md](./medium/part2/README.md)에 정리되어 있습니다. 내부용 기획 초안은 공개 레포에 두지 않습니다.
+공개 레포 개선 제안·체크리스트: [PUBLIC_REPO_REBUILD_PROPOSAL.md](./PUBLIC_REPO_REBUILD_PROPOSAL.md).

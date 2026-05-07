@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "decker-client"
-version = "0.1.0"
+version = "0.2.0"
 description = "Official Python SDK for the Decker Public API — crypto signal & narrative engine"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -31,11 +31,9 @@ dependencies = [
 dev = ["respx>=0.20", "pytest>=7", "pytest-asyncio"]
 
 [project.urls]
-Homepage       = "https://decker-ai.com"
-API-Docs       = "https://api.decker-ai.com/docs"
-Source         = "https://github.com/gigshow/decker-ai"
-"Bug Tracker"  = "https://github.com/gigshow/decker-ai/issues"
-Changelog      = "https://github.com/gigshow/decker-ai/blob/main/CHANGELOG.md"
+Homepage    = "https://decker-ai.com"
+API-Docs    = "https://api.decker-ai.com/docs"
+Source      = "https://github.com/gigshow/decker-trading-platform"
 
 [tool.hatch.build.targets.wheel]
 packages = ["decker_client"]
