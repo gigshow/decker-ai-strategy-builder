@@ -224,14 +224,66 @@ curl https://api.decker-ai.com/api/v1/public/stats
 
 > `gate_distribution` shows structural bias: `GO` = favorable for entry, `WATCH` = observing transition, `HOLD` = counter-trend risk.
 
+### `GET /api/v1/public/krx/signals` — KRX Korean stocks (Beta)
+
+KOSPI + KOSDAQ universe with **portfolio actions** (ADD/HOLD/REDUCE/EXIT) — not buy/sell. Daily 16:30 KST evaluation. **Beta tier free**.
+
+```bash
+curl -H "X-API-Key: $KEY" \
+  'https://api.decker-ai.com/api/v1/public/krx/signals?gate=GO&market=KOSPI&limit=10'
+```
+
+**Query**: `gate` (GO/WATCH/HOLD) · `action` (ADD/HOLD/REDUCE/EXIT) · `sector` · `market` (KOSPI/KOSDAQ/ALL) · `timeframe` (1d/1w) · `limit` (≤500)
+
+**Response signal fields**:
+```typescript
+{
+  ticker:           string                // "005930"
+  company_name:     string                // "삼성전자"
+  market:           "KOSPI" | "KOSDAQ"
+  sector:           string                // KSIC 33-classification
+  action_gate:      "GO" | "WATCH" | "HOLD"
+  portfolio_action: "ADD" | "HOLD" | "REDUCE" | "EXIT"
+  entry_krw:        number | null         // entry price (KRW)
+  target_krw:       number | null
+  stop_krw:         number | null
+  key_direction:    "+" | "-" | "0"
+  c_state:          string                // engine FSM state
+  user_state:       "DRIVE" | "FORMING" | "PENDING" | "WATCH" | "IDLE"
+  krx_context: {
+    foreign_streak:        number | null  // foreign net-buy days (KIS API integration pending)
+    kospi200_rs_pct:       number | null
+    dart_recency_days:     number | null
+    limit_lock_state:      "normal" | "upper_limit_locked" | "lower_limit_locked"
+  }
+}
+```
+
+Response meta: `gate_counts` · `action_counts` · `data_freshness` (fresh/stale/danger).
+
+### `GET /api/v1/public/krx/market` — KRX market macro (Beta)
+
+Market header — USD/KRW · base rate · KOSPI200 · signal distribution + sector breakdown + data_freshness.
+
+```bash
+curl -H "X-API-Key: $KEY" 'https://api.decker-ai.com/api/v1/public/krx/market'
+```
+
+> **KRX beta limits**: Foreign net-buy / market cap / fundamentals require KIS Open API integration (Q3-Q4 2026). KIS automated trading is on the Q4 roadmap. Source of truth: [`docs/krx/KRX_BUSINESS_MODEL_AND_ROADMAP_2026-05-09.md`](krx/KRX_BUSINESS_MODEL_AND_ROADMAP_2026-05-09.md).
+
 ---
 
 ## 5. Supported Symbols & Timeframes
 
-Engine-evaluated symbols: `BTCUSDT`, `ETHUSDT`, `SOLUSDT`, `BNBUSDT`, `XRPUSDT`, `DOGEUSDT`  
-Supported timeframes: `30m`, `1h`, `4h`, `1d` (expanding)
+### Crypto (GA)
+Engine-evaluated symbols: `BTCUSDT`, `ETHUSDT`, `SOLUSDT`, `BNBUSDT`, `XRPUSDT`, `DOGEUSDT`
+Timeframes: `30m`, `1h`, `4h`, `1d` (expanding)
 
 Any symbol/TF outside this list returns **404**.
+
+### KRX Korean stocks (Beta)
+**KOSPI 948 + KOSDAQ 1,822 = 2,770 tickers** with daily OHLCV. Evaluation universe = top 200 by trading value ∪ user watchlist ∪ momentum spike ∪ volume spike (`/krx/signals` returns universe top 200 by default).
+Ticker format: 6-digit numeric (`005930` Samsung Electronics, `010170` Daehan Optic, etc). Timeframe `1d` (1w expanding).
 
 ---
 

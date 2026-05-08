@@ -22,20 +22,23 @@ from .exceptions import (
     RateLimitError,
 )
 from .health import HealthResource, HealthResult
-from .reading import ReadingResource, ReadingResult
-from .signals import ConsumerSignal, NarrativeResult, SignalLatest, SignalsResource
-from .state import StateResource, StateLive, TfStateSnapshot
+from .signals import NarrativeResult, SignalLatest, SignalsResource
 
-__version__ = "0.2.0"
+__version__ = "0.1.0"
 __all__ = [
     "Client",
     "__version__",
     # exceptions
-    "DeckerError", "AuthError", "PermissionError",
-    "RateLimitError", "APIError", "NotFoundError",
+    "DeckerError",
+    "AuthError",
+    "PermissionError",
+    "RateLimitError",
+    "APIError",
+    "NotFoundError",
     # result types
-    "HealthResult", "SignalLatest", "NarrativeResult",
-    "ConsumerSignal", "StateLive", "TfStateSnapshot", "ReadingResult",
+    "HealthResult",
+    "SignalLatest",
+    "NarrativeResult",
 ]
 
 
@@ -51,17 +54,6 @@ class Client:
     Resources:
         client.health   — :class:`~decker_client.health.HealthResource`
         client.signals  — :class:`~decker_client.signals.SignalsResource`
-        client.state    — :class:`~decker_client.state.StateResource`
-        client.reading  — :class:`~decker_client.reading.ReadingResource`
-
-    Example::
-
-        with Client(api_key="dk_live_xxx") as client:
-            state = client.state.get_live("BTCUSDT", tf="4h")
-            if state.action_gate == "GO":
-                sig = client.signals.get_consumer("BTCUSDT")
-                reading = client.reading.explain("BTCUSDT", "4h")
-                print(reading.narrative)
     """
 
     def __init__(
@@ -73,8 +65,6 @@ class Client:
         self._transport = Transport(api_key=api_key, base_url=base_url, timeout=timeout)
         self.health = HealthResource(self._transport)
         self.signals = SignalsResource(self._transport)
-        self.state = StateResource(self._transport)
-        self.reading = ReadingResource(self._transport)
 
     @property
     def last_rate_limit(self):

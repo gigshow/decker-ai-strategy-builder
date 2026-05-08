@@ -51,6 +51,36 @@ python bot.py
 
 ---
 
+## 데이터 소스 계약 (Way D)
+
+turnkey 인스턴스는 자체 엔진 없음. 모든 데이터는 Decker 공개 API에서:
+
+| 엔드포인트 | 용도 |
+|-----------|------|
+| `GET /public/signals/{sym}/latest` | 최신 시그널 (방향·진입가) |
+| `GET /public/signals/{sym}/consumer` | 진입가·목표가·손절가 + overlay |
+| `GET /public/state/live?symbol={sym}` | 엔진 상태 (c_state, action_gate) |
+| `GET /public/reading/{sym}/{tf}` | AI 판독 |
+| `GET /public/signals/{sym}/narrative` | 자연어 요약 |
+
+**API Key** — `https://app.decker-ai.com/settings/apikey` 에서 발급  
+환경변수 `DECKER_API_KEY`로 주입 (기존 `DECKER_API_URL`과 함께)
+
+**Python SDK 연동 (선택)**:
+```python
+pip install decker-client  # 또는 pip install ./sdk/python
+```
+```python
+from decker_client import Client
+client = Client(api_key=os.environ["DECKER_API_KEY"])
+
+state   = client.state.get_live("BTCUSDT", tf="4h")
+sig     = client.signals.get_consumer("BTCUSDT")
+reading = client.reading.explain("BTCUSDT", "4h")
+```
+
+---
+
 ## 아키텍처
 
 ```
@@ -58,12 +88,13 @@ python bot.py
        │
        ▼
 [DeckerClaw Turnkey]  ← 이 봇 (Railway 또는 로컬)
-       │
+       │ X-API-Key: dk_live_xxx
        │ HTTPS
        ▼
-[Decker API]  api.decker-ai.com
-  - 시그널, progress_pct, 전략
-  - RULES.yaml 룰북
+[Decker 공개 API]  api.decker-ai.com
+  /public/signals/{sym}/consumer   ← 진입가·목표가·손절가
+  /public/state/live               ← 엔진 상태
+  /public/reading/{sym}/{tf}       ← AI 판독
 ```
 
 ---
@@ -71,4 +102,5 @@ python bot.py
 ## 참고
 
 - [Decker API Guide](../docs/api-guide.md)
+- [Python SDK README](../../sdk/python/README.md)
 - [선택 기반 아키텍처](../docs/architecture.md) — 턴키 = 선택 D

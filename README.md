@@ -191,8 +191,10 @@ Unlike binary BUY/SELL signals, Decker has three operation gates:
 
 Full OpenAPI spec at [api.decker-ai.com/docs](https://api.decker-ai.com/docs).
 
-**Supported symbols**: `BTCUSDT`, `ETHUSDT`, `SOLUSDT`, `BNBUSDT`, `XRPUSDT`, `DOGEUSDT`  
-**Supported timeframes**: `30m`, `1h`, `4h`, `1d`
+**Supported symbols (Crypto, GA)**: `BTCUSDT`, `ETHUSDT`, `SOLUSDT`, `BNBUSDT`, `XRPUSDT`, `DOGEUSDT`
+**Timeframes**: `30m`, `1h`, `4h`, `1d`
+
+**KRX Korean stocks (Beta, free)**: KOSPI 948 + KOSDAQ 1,822 = **2,770 tickers**. Universe = top 200 by trading value ∪ user watchlist ∪ momentum spike ∪ volume spike. Timeframe `1d` only (1w expanding). Daily evaluation at 16:30 KST.
 
 > Symbols or timeframes outside this list return `404`. More symbols expanding.
 
@@ -207,8 +209,25 @@ Full OpenAPI spec at [api.decker-ai.com/docs](https://api.decker-ai.com/docs).
 | `GET` | `/api/v1/public/signals/{symbol}/mtf` | MTF consumer signal + Skill Overlay applied |
 | `GET` | `/api/v1/public/state/live` | Engine state (c_state · gate · MTF) |
 | `GET` | `/api/v1/public/reading/{sym}/{tf}` | AI reading view v0.2 (8 blocks) |
+| `GET` | `/api/v1/public/krx/signals` | **KRX (Beta)** — KOSPI+KOSDAQ batch with 4 actions (ADD/HOLD/REDUCE/EXIT) |
+| `GET` | `/api/v1/public/krx/market` | **KRX (Beta)** — market macro + signal summary |
 | `GET` | `/api/v1/mcp/sse` | **MCP server SSE handshake** ([Way E](#mcp-server-way-e)) |
 | `POST` | `/api/v1/mcp/messages` | MCP JSON-RPC 2.0 (4 tools) |
+
+### KRX 한국주식 (Beta · 무료)
+
+Same deterministic engine — now on Korean equities. Portfolio actions instead of buy/sell.
+
+```bash
+curl -H "X-API-Key: $KEY" \
+  'https://api.decker-ai.com/api/v1/public/krx/signals?gate=GO&market=KOSPI&limit=10'
+```
+
+**4 actions**: ADD (accumulate) / HOLD (hold) / REDUCE (trim) / EXIT (close).
+**Korean market context**: DART filing recency · KOSPI200 RS · price limit lock state · foreign net-buy*.
+*Foreign / market-cap / fundamentals = KIS Open API integration in Q3-Q4 2026.
+
+Beta details + roadmap (Q2 → Q3 → Q4 → GA): [`docs/krx/KRX_BUSINESS_MODEL_AND_ROADMAP_2026-05-09.md`](docs/krx/KRX_BUSINESS_MODEL_AND_ROADMAP_2026-05-09.md).
 
 ### Auth
 
