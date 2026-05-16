@@ -5,7 +5,7 @@
 -->
 <div align="center">
 
-<img src="assets/decker_claw_mascot_v1.png" width="80" alt="DeckerClaw" />
+<img src="assets/decker_claw_owl_v1.svg" width="80" alt="DeckerClaw — Owl with Claw mascot" />
 
 # Decker AI
 

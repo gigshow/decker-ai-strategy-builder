@@ -10,7 +10,7 @@
 |------|------|------|
 | **브랜드** | Decker AI | 전체 제품·서비스 |
 | **제품** | Decker AI | 시그널·룰북·라이프사이클 전략 빌더 |
-| **에이전트** | DeckerClaw | 가재 마스코트. Decker 자체 에이전트 + OpenClaw 스킬 생태계 |
+| **에이전트** | DeckerClaw | 올빼미 + Claw 마스코트 (지혜·야행성·시야·정확한 결정). Decker 자체 에이전트 + OpenClaw 스킬 생태계 |
 
 ---
 
@@ -62,8 +62,15 @@
 
 | 용도 | 파일 | 컨셉 |
 |------|------|------|
-| **에이전트** | `assets/decker_claw_mascot_v1.png` | DeckerClaw, Decker와 협업 |
+| **공식 마스코트 v1 (2026-05-16~)** | `assets/decker_claw_owl_v1.svg` | DeckerClaw — Geometric flat Owl with Claw (지혜·야행성·시야·정확한 결정). dark feather + accent green eye/claw |
 | **클라이언트** | `assets/decker_client_claw_*.png` | DeckerClaw + progress_pct (시그널 라이프사이클) |
+| **legacy (~2026-05)** | `assets/decker_claw_mascot_v1.png` (가재) / `_v2.png` (로봇) / `_v3.png` (초기 올빼미) | 이전 iteration. 참고용 |
+
+### 컨셉 ref
+
+- 이름 `DeckerClaw` = 유지 (Telegram bot `@deckerclawbot`, 카카오 채널, brand asset 이름 정합)
+- 시각 = **올빼미 (Owl) with Claw** — 2026-05-16 v1 확정 (이전 가재 mascot → owl 진화)
+- 색 = `--accent #00d97e` (eye + claw + outline) + `--bg2 #0b0f14` (feather)
 
 ---
 
