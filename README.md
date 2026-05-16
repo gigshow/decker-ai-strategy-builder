@@ -46,8 +46,8 @@
 | 📱 **Web app** | Most people — full dashboard, mock trading, KRX watchlist | **[decker-ai.com](https://decker-ai.com)** — sign up free |
 | 🤖 **Telegram bot** | Quick signal checks on your phone | **[@deckerclawbot](https://t.me/deckerclawbot)** — `/start` |
 | 💛 **Kakao channel** | 한국 사용자, KRX 시그널 알림 | **[pf.kakao.com/_RxlxjVX](https://pf.kakao.com/_RxlxjVX)** |
-| 🧠 **MCP server** | Claude / Cursor / Codex users | [MCP setup](#mcp-server-claude--cursor--codex) |
-| 🛠 **REST API** | Developers building bots & apps | [API quickstart](#api-quickstart-3-steps) |
+| 🧠 **MCP server** | Claude / Cursor / Codex users | [DEVELOPER_README.md](DEVELOPER_README.md#mcp-server-way-e) |
+| 🛠 **REST API** | Developers building bots & apps | [DEVELOPER_README.md](DEVELOPER_README.md#api-quickstart-3-steps) |
 
 > Free tier is generous (30 calls/day on the API; Web + Telegram included). During Beta, signed-up users get **PRO access for free**.
 
@@ -140,61 +140,29 @@ Web sign-up and Telegram bot are always free for the basics.
 
 ---
 
-## ⚡ Try the API right now (no sign-up)
+## For developers
+
+Building a bot, app, or agent on top of Decker? Everything you need — REST endpoints, MCP server (Claude / Cursor / Codex), Python SDK, OpenClaw skill, self-host — lives in one place:
+
+### → **[DEVELOPER_README.md](DEVELOPER_README.md)**
 
 ```bash
+# 60-second smoke test (no auth needed)
 curl https://api.decker-ai.com/api/v1/public/demo
 ```
 
-Returns a live BTCUSDT 1h signal — no API key needed.
-
----
-
-## API quickstart (3 steps)
-
-**1. Get your API key** — open [@deckerclawbot](https://t.me/deckerclawbot) → `/start` → `/apikey`.
-
-**2. First call**
 ```bash
+# With an API key (get one in Telegram: @deckerclawbot → /apikey)
 curl "https://api.decker-ai.com/api/v1/public/signals/BTCUSDT/latest?timeframe=1h" \
   -H "X-API-Key: dk_live_xxx"
 ```
 
 ```json
-{
-  "symbol": "BTCUSDT",
-  "timeframe": "1h",
-  "direction": "long",
-  "entry_price": 94200.0,
-  "target_price": 97500.0,
-  "stop_loss": 92800.0,
-  "progress_pct": 67.3,
-  "operation_gate": "GO",
-  "generated_at": "2026-04-23T05:00:00Z"
-}
+{ "symbol": "BTCUSDT", "direction": "long", "entry_price": 94200.0,
+  "target_price": 97500.0, "progress_pct": 67.3, "operation_gate": "GO" }
 ```
 
-**3. Python SDK (optional)**
-```bash
-git clone https://github.com/gigshow/decker-ai.git
-pip install -e decker-ai/sdk/python/
-```
-
-```python
-from decker_client import Client
-
-with Client(api_key="dk_live_xxx") as client:
-    sig = client.signals.get_latest("BTCUSDT", timeframe="1h")
-    print(f"{sig.direction} | entry={sig.entry_price} | progress={sig.progress_pct}%")
-```
-
-> Full developer reference: **[DEVELOPER_API_GUIDE.md](docs/DEVELOPER_API_GUIDE.md)** — auth, rate limits, SDK, FAQ.
-
----
-
-## MCP Server (Claude / Cursor / Codex)
-
-Add Decker to any [MCP-compatible](https://modelcontextprotocol.io/) AI agent.
+**Add to Claude Desktop / Cursor (MCP):**
 
 ```json
 {
@@ -207,16 +175,7 @@ Add Decker to any [MCP-compatible](https://modelcontextprotocol.io/) AI agent.
 }
 ```
 
-**4 tools** (auto-applies your Skill Overlay):
-
-| Tool | Purpose |
-|------|---------|
-| `decker.get_signals` | Active MTF consumer signals (filter by symbol / min progress / gate) |
-| `decker.get_reading` | AI reading view (state · MTF · risk · narrative) |
-| `decker.get_user_skills` | Catalog of trading skills + active overlay |
-| `decker.set_skill_overlay` | Switch overlay on the fly |
-
-Spec: [docs/mcp-server.md](docs/mcp-server.md).
+Full guide → **[DEVELOPER_README.md](DEVELOPER_README.md)** (endpoints · auth · rate limits · MCP 4 tools · SDK · OpenClaw · self-host).
 
 ---
 
@@ -270,15 +229,14 @@ Details: [Signal Performance](docs/signal-performance.md).
 
 | | |
 |--|--|
-| **[Developer API Guide](docs/DEVELOPER_API_GUIDE.md)** | Auth · rate limits · SDK · FAQ — **start here if you're building** |
-| [Quick Start](docs/quickstart.md) | 3-step guide per path |
-| [API Guide](docs/api-guide.md) | Full endpoint reference |
+| **[DEVELOPER_README.md](DEVELOPER_README.md)** | API · MCP · SDK · OpenClaw · self-host — **start here if you're building** |
+| [Developer API Guide](docs/DEVELOPER_API_GUIDE.md) | Auth · rate limits · FAQ (long form) |
 | [Architecture](docs/architecture.md) | Pipeline, state engine, modules |
 | [Model & Algorithm](docs/model.md) | How the signal engine works |
 | [Operation Rules](operation_rules/RULES.yaml) | Open YAML rulebook (v2.4.7+) |
 | [Article Series (1–15)](docs/medium/README.md) | Deep dives on Medium |
 | [Roadmap](docs/roadmap.md) | What's next |
-| [llms.txt](llms.txt) | LLM/AI agent discovery manifest |
+| [llms.txt](llms.txt) | LLM / AI agent discovery manifest |
 
 ---
 
