@@ -1,66 +1,160 @@
 <!--
   Keywords: AI trading signal, crypto market state engine, structural analysis,
   algorithmic trading API, Telegram trading bot, Python SDK, decker-client,
-  deterministic signal, progress_pct, operation rules, GO WATCH HOLD
+  deterministic signal, progress_pct, operation rules, GO WATCH HOLD, KRX, KOSPI
 -->
 <div align="center">
 
-<img src="assets/decker_claw_owl_v1.svg" width="80" alt="DeckerClaw — Owl with Claw mascot" />
+<img src="assets/decker_claw_owl_v1.svg" width="96" alt="DeckerClaw — Owl with Claw mascot" />
 
 # Decker AI
 
-**Crypto market state engine. Not "buy/sell" — structural context.**
+### A market structure engine — not another buy/sell bot.
 
-*Signal → State → Strategy → **Skill Overlay** (per-user). Every output is traceable, reproducible, zero-LLM-cost on the rules path.*
+**Crypto + Korean equities (KRX).** Every signal is deterministic, traceable, and explained in plain language.
 
-[![GitHub Stars](https://img.shields.io/github/stars/gigshow/decker-ai?style=flat-square&color=DAA520)](https://github.com/gigshow/decker-ai/stargazers)
-[![API Docs](https://img.shields.io/badge/API-docs-00C853?style=flat-square)](https://api.decker-ai.com/docs)
-[![MCP Server](https://img.shields.io/badge/MCP-server-4D9FFF?style=flat-square)](https://api.decker-ai.com/api/v1/mcp/health)
-[![SDK](https://img.shields.io/badge/SDK-sdk%2Fpython-3775A9?style=flat-square&logo=python&logoColor=white)](sdk/python/)
-[![Telegram](https://img.shields.io/badge/Telegram-DeckerClaw-26A5E4?style=flat-square&logo=telegram&logoColor=white)](https://t.me/deckerclawbot)
+[Open the app](https://decker-ai.com) · [Telegram bot](https://t.me/deckerclawbot) · [Kakao channel](https://pf.kakao.com/_RxlxjVX) · [API docs](https://api.decker-ai.com/docs)
+
+[![Open App](https://img.shields.io/badge/Open_App-decker--ai.com-00C853?style=flat-square)](https://decker-ai.com)
+[![Telegram](https://img.shields.io/badge/Telegram-@deckerclawbot-26A5E4?style=flat-square&logo=telegram&logoColor=white)](https://t.me/deckerclawbot)
 [![Kakao Channel](https://img.shields.io/badge/Kakao-Channel-FEE500?style=flat-square&logo=kakaotalk&logoColor=000000)](https://pf.kakao.com/_RxlxjVX)
+[![API Docs](https://img.shields.io/badge/API-docs-4D9FFF?style=flat-square)](https://api.decker-ai.com/docs)
+[![MCP Server](https://img.shields.io/badge/MCP-server-9C27B0?style=flat-square)](https://api.decker-ai.com/api/v1/mcp/health)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
-[📖 API Docs](https://api.decker-ai.com/docs) · [🤖 Telegram Bot](https://t.me/deckerclawbot) · [🧠 MCP Server](#mcp-server-way-e) · [📦 Python SDK](sdk/python/) · [🗺 Roadmap](docs/roadmap.md)
+<img src="assets/screenshots/01_hero_mobile.jpg" width="280" alt="Decker AI mobile hero — Korean tagline: 매매는 룰이. 설명은 LLM이." />
 
 </div>
 
 ---
 
-## Start here
+## What you get
 
-| You are | Best path |
-|---------|-----------|
-| **Crypto trader** — want signals on your phone | [Telegram Bot](https://t.me/deckerclawbot) → type `/btc` |
-| **Developer** — building a bot, app, or script | [3-step quickstart below](#-quickstart-3-steps) |
-| **AI agent user** — adding Decker to Claude / Cursor / Codex | [MCP Server (Way E)](#mcp-server-way-e) |
-| **AI agent builder** — adding Decker as a skill | [OpenClaw skills](docs/openclaw_skills/) |
-| **Self-host / deploy your own** | [turnkey/](turnkey/) — Railway one-click |
+- **Signals you can act on, with context.** Not "BUY" — `GO / WATCH / HOLD` + `progress_pct` (0–100% lifecycle) + entry / stop / target.
+- **It explains itself.** Every signal has a structural cause (multi-timeframe alignment, state machine phase) that an LLM translates into plain language.
+- **Same engine, two markets.** Crypto (24/7) + Korean equities (KOSPI + KOSDAQ, Beta).
+- **Use it your way.** Web app, Telegram, Kakao channel, REST API, or MCP server inside Claude / Cursor.
+
+> *"Where are we in the current structural cycle — and what's the next optimal move?"*
 
 ---
 
-## ⚡ Try it right now (no sign-up)
+## Get started in 60 seconds
+
+| Path | Best for | Start |
+|------|---------|-------|
+| 📱 **Web app** | Most people — full dashboard, mock trading, KRX watchlist | **[decker-ai.com](https://decker-ai.com)** — sign up free |
+| 🤖 **Telegram bot** | Quick signal checks on your phone | **[@deckerclawbot](https://t.me/deckerclawbot)** — `/start` |
+| 💛 **Kakao channel** | 한국 사용자, KRX 시그널 알림 | **[pf.kakao.com/_RxlxjVX](https://pf.kakao.com/_RxlxjVX)** |
+| 🧠 **MCP server** | Claude / Cursor / Codex users | [MCP setup](#mcp-server-claude--cursor--codex) |
+| 🛠 **REST API** | Developers building bots & apps | [API quickstart](#api-quickstart-3-steps) |
+
+> Free tier is generous (30 calls/day on the API; Web + Telegram included). During Beta, signed-up users get **PRO access for free**.
+
+---
+
+## See it in action
+
+### Live signals — multi-timeframe, with a plain-language reading
+
+<div align="center">
+<img src="assets/screenshots/04_signal_detail.jpg" width="220" alt="Signal detail — ETH GO ALIGNED, entry / stop / target, MTF matrix" />
+<img src="assets/screenshots/05_signal_chart.jpg" width="220" alt="Signal chart — ETH/USDT 1h with entry / target / stop overlays" />
+<img src="assets/screenshots/06_signal_ai_reading.jpg" width="220" alt="AI reading view — MTF alignment summary, confidence, market context" />
+</div>
+
+You get the structural state (state machine phase), the multi-timeframe alignment, the entry / stop / target, and a short reading that explains *why* — not just *what*.
+
+### Korean equities (KRX) — Beta, free
+
+<div align="center">
+<img src="assets/screenshots/13_krx_hot.jpg" width="220" alt="KRX — today's hot market, ADD / EXIT actions on KOSPI tickers" />
+<img src="assets/screenshots/14_krx_signals.jpg" width="220" alt="KRX signals — KOSPI200 GO 109 / WATCH 4 / HOLD 94 across 207 tickers" />
+</div>
+
+Same deterministic engine, applied to KOSPI + KOSDAQ. Portfolio actions instead of buy/sell: **ADD / HOLD / REDUCE / EXIT**. Universe = top 200 by trading value ∪ your watchlist ∪ momentum / volume spikes.
+
+### Telegram channels — alerts that show the *whole picture*
+
+<div align="center">
+<img src="assets/screenshots/16_telegram_deckerclaw.jpg" width="220" alt="@deckerclawbot — crypto signal status briefing for 6 majors" />
+<img src="assets/screenshots/17_telegram_krx.jpg" width="220" alt="@krxdeckerbot — KRX end-of-day portfolio briefing with ADD candidates" />
+</div>
+
+Not a stream of single-symbol alerts — a periodic briefing across all symbols you care about. Crypto majors via [@deckerclawbot](https://t.me/deckerclawbot), KRX end-of-day via [@krxdeckerbot](https://t.me/krxdeckerbot).
+
+### Strategy presets + review your own performance
+
+<div align="center">
+<img src="assets/screenshots/11_strategy_preset.jpg" width="220" alt="Strategy presets — conservative / standard / aggressive, applied across all channels" />
+<img src="assets/screenshots/12_review_performance.jpg" width="220" alt="Review — 30-day P&L trend, per-symbol stats, 22 trades" />
+</div>
+
+Pick a **Skill Overlay** (`conservative` / `standard` / `aggressive`) — it applies everywhere (Web, Telegram, API, MCP). Review your own trades against the engine's signals to see what worked.
+
+---
+
+## Three things that make it different
+
+**1. `progress_pct` — every signal has a lifecycle.**
+A signal at 25% progress is a different trade than the same signal at 80%. Most tools just say "BUY"; Decker tells you *where in the move you are*.
+
+```
+Entry                                                           Target
+  0%──────────33%──────────50%──────────67%──────────83%────────100%
+ Wait       Entry        Active       Late TP      Final TP     Exit
+```
+
+**2. `GO / WATCH / HOLD` — three gates, not binary.**
+| Gate | Meaning |
+|------|---------|
+| **GO** | Structure confirmed — entry conditions met |
+| **WATCH** | Signal forming — monitor, no entry yet |
+| **HOLD** | Active position — no new entry signal |
+
+> `WATCH` is the gate most tools skip. It's why users enter too early.
+
+**3. Deterministic + traceable. LLM explains, doesn't decide.**
+| | Typical AI signal | Decker |
+|---|---|---|
+| Source | ML / LLM price prediction | Deterministic state machine |
+| Output | BUY / SELL | `progress_pct` + `operation_gate` + ranked choices |
+| LLM role | Makes the call | **Explains the structural state** |
+| Auditability | ❌ Black box | ✅ Every signal has a `trace_id` |
+| Cost per signal | High | **$0 on the rules path** |
+| Reproducibility | ❌ | ✅ Same input → same output, always |
+
+---
+
+## Pricing
+
+| Tier | Price | Daily API limit | MCP | Auto-trade |
+|------|-------|-----------------|-----|------------|
+| **FREE** | $0 forever | 30 calls/day | read-only (1d cache) | ❌ |
+| **PRO** | $20 / mo · 7-day trial | 10,000 / day | full (4 tools) | virtual + real |
+| **ENTERPRISE** | Contact us | 100,000+ / day · custom | full + per-org skill catalog | + custom integration |
+
+> **Beta (now):** all authenticated users get **PRO for free** via `BETA_TIER_OVERRIDE=PRO`. No payment required.
+
+Web sign-up and Telegram bot are always free for the basics.
+
+---
+
+## ⚡ Try the API right now (no sign-up)
 
 ```bash
 curl https://api.decker-ai.com/api/v1/public/demo
 ```
 
-Returns live BTCUSDT 1h signal — no API key needed.
+Returns a live BTCUSDT 1h signal — no API key needed.
 
 ---
 
-## ⚡ Quickstart (3 steps)
+## API quickstart (3 steps)
 
-### Step 1 — Get your API key (30 seconds)
+**1. Get your API key** — open [@deckerclawbot](https://t.me/deckerclawbot) → `/start` → `/apikey`.
 
-1. Open Telegram → [@deckerclawbot](https://t.me/deckerclawbot)
-2. Send `/start`
-3. Send `/apikey` → receive `dk_live_xxxxxxxxxxxxxxxxxxxxxxxx`
-
-> **Lost your key?** Run `/apikey reset` in the bot — revokes and reissues.
-
-### Step 2 — First call
-
+**2. First call**
 ```bash
 curl "https://api.decker-ai.com/api/v1/public/signals/BTCUSDT/latest?timeframe=1h" \
   -H "X-API-Key: dk_live_xxx"
@@ -80,14 +174,11 @@ curl "https://api.decker-ai.com/api/v1/public/signals/BTCUSDT/latest?timeframe=1
 }
 ```
 
-### Step 3 — Python SDK (optional)
-
+**3. Python SDK (optional)**
 ```bash
 git clone https://github.com/gigshow/decker-ai.git
 pip install -e decker-ai/sdk/python/
 ```
-
-> `pip install decker-client` (PyPI) — 배포 준비 중.
 
 ```python
 from decker_client import Client
@@ -95,262 +186,15 @@ from decker_client import Client
 with Client(api_key="dk_live_xxx") as client:
     sig = client.signals.get_latest("BTCUSDT", timeframe="1h")
     print(f"{sig.direction} | entry={sig.entry_price} | progress={sig.progress_pct}%")
-
-    narr = client.signals.get_narrative("BTCUSDT", "4h")
-    print(narr.text)
 ```
 
-> `pip install decker-client` (PyPI) is planned — not yet published. Use the local install above until then.  
-> Full SDK docs: [sdk/python/README.md](sdk/python/README.md)
+> Full developer reference: **[DEVELOPER_API_GUIDE.md](docs/DEVELOPER_API_GUIDE.md)** — auth, rate limits, SDK, FAQ.
 
 ---
 
-## What is Decker?
+## MCP Server (Claude / Cursor / Codex)
 
-Most signal tools ask: *"Up or down?"*  
-Decker asks: ***"Where are we in the current structural cycle — and what's the next optimal move?"***
-
-```
-Raw OHLCV candles
-  ↓  Sequence Labeler  →  every candle gets a role (anchor / test / signal)
-  ↓  State Machine     →  C_SET → B_FORMING → B_SET → A_FORMING → W_PENDING
-  ↓  Operation Gate    →  GO · WATCH · HOLD  (not binary — three modes)
-  ↓  RULES Engine      →  9-layer YAML rulebook → strategy + ranked choices
-  ↓  AI Consultation   →  LLM translates structural state → plain language
-  ↓
-"67% progress. B-leg confirmed. Recommended: 30% partial TP or hold to target."
-```
-
-**No price prediction. No black box. Every output traces to a formal structural cause.**
-
----
-
-## The `progress_pct` System
-
-Every signal has a lifecycle — from formation (0%) to target (100%).
-
-```
-Entry                                                           Target
-  │                                                                │
-  0%──────────33%──────────50%──────────67%──────────83%────────100%
-  │           │            │            │             │            │
- Wait       Entry        Active       Late TP      Final TP     Exit
-```
-
-**Example: progress_pct = 67%**
-
-```
-[████████████████████████████████████████████░░░░░░░░░░░░░░░░░░░] 67%
-```
-
-```
-Typical tool: BUY
-Decker:       BUY + 67% progress
-              → "The move is real, but 2/3 of the range is already done.
-                 Consider partial entry or wait for a pullback."
-```
-
-| progress_pct | Stage | Recommended posture |
-|---|---|---|
-| 0–32% | Early | Wait or prepare entry |
-| 33–66% | Active | Entry window, manage risk |
-| 67–89% | Late | Partial take-profit, reduce size |
-| 90–100% | At target | Prepare full exit |
-
----
-
-## GO · WATCH · HOLD
-
-Unlike binary BUY/SELL signals, Decker has three operation gates:
-
-| Gate | Meaning | What to do |
-|------|---------|------------|
-| **GO** | Structure confirmed, entry conditions met | Enter (if within progress window) |
-| **WATCH** | Signal forming, not yet confirmed | Monitor — no entry yet |
-| **HOLD** | Active position, no new entry signal | Hold current position |
-
-> **WATCH ≠ SELL.** It means "the engine is observing — not ready to signal an entry yet."  
-> This is the gate that most signal tools skip. It's why users enter too early.
-
----
-
-## What Makes Decker Different
-
-| | Typical AI Signal | Decker |
-|---|---|---|
-| Signal source | ML / LLM price prediction | **Deterministic state machine** |
-| Output | BUY / SELL | `progress_pct` + `operation_gate` + ranked choices |
-| LLM role | Makes the call | **Explains the structural state** |
-| Auditability | ❌ Black box | ✅ Every signal has a `trace_id` |
-| LLM cost per signal | High (every call) | **$0 on the rules path** |
-| Reproducibility | ❌ | ✅ Same input → same output, always |
-
----
-
-## API Reference
-
-Full OpenAPI spec at [api.decker-ai.com/docs](https://api.decker-ai.com/docs).
-
-**Supported symbols (Crypto, GA)**: `BTCUSDT`, `ETHUSDT`, `SOLUSDT`, `BNBUSDT`, `XRPUSDT`, `DOGEUSDT`
-**Timeframes**: `30m`, `1h`, `4h`, `1d`
-
-**KRX Korean stocks (Beta, free)**: KOSPI 948 + KOSDAQ 1,822 = **2,770 tickers**. Universe = top 200 by trading value ∪ user watchlist ∪ momentum spike ∪ volume spike. Timeframe `1d` only (1w expanding). Daily evaluation at 16:30 KST.
-
-> Symbols or timeframes outside this list return `404`. More symbols expanding.
-
-### Public endpoints (require `X-API-Key` header)
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `POST` | `/api/v1/public/auth/verify` | Verify API key + get tier |
-| `GET` | `/api/v1/public/health` | Liveness check (no auth) |
-| `GET` | `/api/v1/public/signals/{symbol}/latest` | Latest signal (direction, entry, target, stop, progress) |
-| `GET` | `/api/v1/public/signals/{symbol}/narrative` | Rule-based / LLM structural narrative |
-| `GET` | `/api/v1/public/signals/{symbol}/mtf` | MTF consumer signal + Skill Overlay applied |
-| `GET` | `/api/v1/public/state/live` | Engine state (c_state · gate · MTF) |
-| `GET` | `/api/v1/public/reading/{sym}/{tf}` | AI reading view v0.2 (8 blocks) |
-| `GET` | `/api/v1/public/krx/signals` | **KRX (Beta)** — KOSPI+KOSDAQ batch with 4 actions (ADD/HOLD/REDUCE/EXIT) |
-| `GET` | `/api/v1/public/krx/market` | **KRX (Beta)** — market macro + signal summary |
-| `GET` | `/api/v1/mcp/sse` | **MCP server SSE handshake** ([Way E](#mcp-server-way-e)) |
-| `POST` | `/api/v1/mcp/messages` | MCP JSON-RPC 2.0 (4 tools) |
-
-### KRX 한국주식 (Beta · 무료)
-
-Same deterministic engine — now on Korean equities. Portfolio actions instead of buy/sell.
-
-```bash
-curl -H "X-API-Key: $KEY" \
-  'https://api.decker-ai.com/api/v1/public/krx/signals?gate=GO&market=KOSPI&limit=10'
-```
-
-**4 actions**: ADD (accumulate) / HOLD (hold) / REDUCE (trim) / EXIT (close).
-**Korean market context**: DART filing recency · KOSPI200 RS · price limit lock state · foreign net-buy*.
-*Foreign / market-cap / fundamentals = KIS Open API integration in Q3-Q4 2026.
-
-Beta details + roadmap (Q2 → Q3 → Q4 → GA): [`docs/krx/KRX_BUSINESS_MODEL_AND_ROADMAP_2026-05-09.md`](docs/krx/KRX_BUSINESS_MODEL_AND_ROADMAP_2026-05-09.md).
-
-### Auth
-
-```
-X-API-Key: dk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
-
-Keys are issued via Telegram `/apikey` — **not** from the web UI. See [DEVELOPER_API_GUIDE.md](docs/DEVELOPER_API_GUIDE.md).
-
-### Pricing & Rate Limits
-
-| Tier | Price | Daily limit | MCP server | Auto-trade |
-|------|-------|------------|------------|------------|
-| **FREE** | $0 (forever) | 30 calls/day | read-only (1d cache) | ❌ |
-| **PRO** | $20 / month · 7d trial | 10,000 calls/day | full (4 tools) | virtual + real |
-| **ENTERPRISE** | Contact us | 100,000+ calls/day · custom | full + per-org skill catalog | + custom integration |
-
-> **Beta** (current): all authenticated users get **PRO full access** for free
-> via `BETA_TIER_OVERRIDE=PRO` env. No payment required during beta.
-
-Every response includes `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`.  
-Exceeded → HTTP 429 + `Retry-After`.
-
----
-
-## Python SDK
-
-The SDK is included in this repository at [`sdk/python/`](sdk/python/).
-
-```bash
-git clone https://github.com/gigshow/decker-ai.git
-pip install -e decker-ai/sdk/python/
-```
-
-```python
-from decker_client import Client, RateLimitError, AuthError, NotFoundError
-
-with Client(api_key="dk_live_xxx") as client:
-    # Latest signal
-    sig = client.signals.get_latest("BTCUSDT", timeframe="1h")
-    print(f"{sig.direction} | entry={sig.entry_price} | target={sig.target_price}")
-    print(f"progress: {sig.progress_pct}% | gate: {sig.operation_gate}")
-
-    # Narrative
-    narr = client.signals.get_narrative("BTCUSDT", "4h")
-    print(narr.text)
-
-    # Rate limit info
-    rl = client.last_rate_limit
-    print(f"{rl.remaining}/{rl.limit} remaining today")
-```
-
-**Error handling:**
-
-```python
-try:
-    sig = client.signals.get_latest("BTCUSDT")
-except AuthError:
-    print("Invalid API key — run /apikey reset in Telegram")
-except NotFoundError:
-    print("No active signal for this symbol/timeframe")
-except RateLimitError as e:
-    print(f"Rate limited — retry in {e.retry_after}s")
-```
-
-> `pip install decker-client` (PyPI) is planned — not yet published.  
-> Full SDK reference: [sdk/python/README.md](sdk/python/README.md) · [Developer API Guide](docs/DEVELOPER_API_GUIDE.md)
-
----
-
-## Performance
-
-*Backtest results, rules-path evaluation. Past performance does not guarantee future results.*
-
-| Metric | Result | Condition |
-|--------|--------|-----------|
-| Win Rate | 61–75% | Ranging market |
-| Win Rate | 70%+ | Trending market |
-| Avg Profit | 4–10% | Per signal |
-| Avg Loss | 1–2% | Tight stop-loss |
-| Max Drawdown | < 9% | Capital preservation |
-| Signal Frequency | 1–3 / day | Per symbol |
-
-Details: [Signal Performance](docs/signal-performance.md)
-
----
-
-## Five Ways to Use Decker AI
-
-All five ways share the same data, auth, and **Skill Overlay** (per-user trading strategy: `conservative_v0` / `standard_v0` / `aggressive_v0` + custom). Whatever channel you use, the same skill applies — Telegram alerts, REST responses, MCP tool results stay aligned.
-
-| Way | Who | How |
-|------|-----|-----|
-| **Way 1. Telegram Bot** | Traders | [@deckerclawbot](https://t.me/deckerclawbot) → natural language |
-| **Way 2. OpenClaw skill** | AI agent devs | Add Decker skill → `web_fetch` → API responses |
-| **Way C. REST API + SDK** | Any language / Python | `X-API-Key` header → [api.decker-ai.com/docs](https://api.decker-ai.com/docs) · `pip install -e sdk/python/` |
-| **Way D. Self-host** | Self-hosters | [turnkey/](turnkey/) — Railway one-click |
-| **Way E. MCP Server** ⭐ NEW | Claude / Cursor / Codex users | [MCP handshake](#mcp-server-way-e) → 4 tools, JSON-RPC 2.0, SSE transport |
-
----
-
-## MCP Server (Way E)
-
-Add Decker AI to any [MCP-compatible](https://modelcontextprotocol.io/) AI agent (Claude Desktop, Cursor, Codex). Same `X-API-Key`, same Skill Overlay, same rulebook.
-
-**Endpoint** (live · 2026-05-02):
-
-```
-GET  https://api.decker-ai.com/api/v1/mcp/sse           (SSE handshake)
-POST https://api.decker-ai.com/api/v1/mcp/messages      (JSON-RPC 2.0)
-GET  https://api.decker-ai.com/api/v1/mcp/health        (monitoring)
-```
-
-**4 tools** (auto-includes per-user Skill Overlay):
-
-| Tool | Purpose |
-|------|---------|
-| `decker.get_signals` | Active MTF consumer signals (filter by symbol / min progress / gate) |
-| `decker.get_reading` | AI reading view v0.2 (8 blocks: state · MTF · risk · narrative) |
-| `decker.get_user_skills` | Catalog of trading skills + currently active overlay |
-| `decker.set_skill_overlay` | Switch overlay on the fly (`conservative_v0` → `aggressive_v0`) |
-
-**Quick test** (Claude Desktop config snippet):
+Add Decker to any [MCP-compatible](https://modelcontextprotocol.io/) AI agent.
 
 ```json
 {
@@ -363,36 +207,78 @@ GET  https://api.decker-ai.com/api/v1/mcp/health        (monitoring)
 }
 ```
 
-Spec: [docs/mcp-server.md](docs/mcp-server.md) (in monorepo: `docs/MCP_SERVER_SPEC_2026-05-02.md`)
+**4 tools** (auto-applies your Skill Overlay):
+
+| Tool | Purpose |
+|------|---------|
+| `decker.get_signals` | Active MTF consumer signals (filter by symbol / min progress / gate) |
+| `decker.get_reading` | AI reading view (state · MTF · risk · narrative) |
+| `decker.get_user_skills` | Catalog of trading skills + active overlay |
+| `decker.set_skill_overlay` | Switch overlay on the fly |
+
+Spec: [docs/mcp-server.md](docs/mcp-server.md).
+
+---
+
+## How the engine works (one diagram)
+
+```
+Raw OHLCV candles
+  ↓  Sequence Labeler  →  every candle gets a role (anchor / test / signal)
+  ↓  State Machine     →  C_SET → B_FORMING → B_SET → A_FORMING → W_PENDING
+  ↓  Operation Gate    →  GO · WATCH · HOLD
+  ↓  RULES Engine      →  9-layer YAML rulebook → strategy + ranked choices
+  ↓  AI Consultation   →  LLM translates structural state → plain language
+  ↓
+"67% progress. B-leg confirmed. Recommended: 30% partial TP or hold to target."
+```
+
+**No price prediction. No black box. Every output traces to a formal structural cause.**
+
+Deep dives: [Sequence Engine](concept/sequence_engine.md) · [Labeling Algorithm](concept/labeling_algorithm.md) · [Market State Theory](concept/market_state_theory.md)
+
+---
+
+## Supported symbols
+
+**Crypto (GA):** `BTCUSDT` · `ETHUSDT` · `SOLUSDT` · `BNBUSDT` · `XRPUSDT` · `DOGEUSDT` — timeframes `30m`, `1h`, `4h`, `1d`.
+
+**KRX (Beta, free):** KOSPI 948 + KOSDAQ 1,822 = **2,770 tickers**. Universe = top 200 by trading value ∪ user watchlist ∪ momentum spike ∪ volume spike. Timeframe `1d` only (1w expanding). Daily evaluation at 16:30 KST.
+
+KRX details: [`docs/krx/KRX_BUSINESS_MODEL_AND_ROADMAP_2026-05-09.md`](docs/krx/KRX_BUSINESS_MODEL_AND_ROADMAP_2026-05-09.md).
+
+---
+
+## Performance
+
+*Backtest results on the rules path. Past performance does not guarantee future results.*
+
+| Metric | Result | Condition |
+|--------|--------|-----------|
+| Win Rate | 61–75% | Ranging market |
+| Win Rate | 70%+ | Trending market |
+| Avg Profit | 4–10% | Per signal |
+| Avg Loss | 1–2% | Tight stop-loss |
+| Max Drawdown | < 9% | Capital preservation |
+| Signal Frequency | 1–3 / day | Per symbol |
+
+Details: [Signal Performance](docs/signal-performance.md).
 
 ---
 
 ## Docs
 
-| Document | |
-|----------|-|
-| [Developer API Guide](docs/DEVELOPER_API_GUIDE.md) | Auth · Rate Limits · SDK · FAQ — **start here if you're building** |
-| [Quick Start](docs/quickstart.md) | 3-step guide for each path |
+| | |
+|--|--|
+| **[Developer API Guide](docs/DEVELOPER_API_GUIDE.md)** | Auth · rate limits · SDK · FAQ — **start here if you're building** |
+| [Quick Start](docs/quickstart.md) | 3-step guide per path |
 | [API Guide](docs/api-guide.md) | Full endpoint reference |
 | [Architecture](docs/architecture.md) | Pipeline, state engine, modules |
 | [Model & Algorithm](docs/model.md) | How the signal engine works |
 | [Operation Rules](operation_rules/RULES.yaml) | Open YAML rulebook (v2.4.7+) |
-| [Signal Performance](docs/signal-performance.md) | Backtest & live metrics |
-| [Article Series (1–15)](docs/medium/README.md) | Deep dives |
+| [Article Series (1–15)](docs/medium/README.md) | Deep dives on Medium |
 | [Roadmap](docs/roadmap.md) | What's next |
 | [llms.txt](llms.txt) | LLM/AI agent discovery manifest |
-
-**Concepts:** [Sequence Engine](concept/sequence_engine.md) · [Labeling Algorithm](concept/labeling_algorithm.md) · [Market State Theory](concept/market_state_theory.md)
-
----
-
-## Article Series
-
-**Part 1 — Foundations (1–10):** State Engine, signal lifecycle, YAML rulebook, multi-TF alignment, $0-LLM-cost architecture.
-
-**Part 2 — Context Engine (11–15):** How markets speak in sequences, session state machine, GO/WATCH/HOLD gate, AI as explainer vs decision-maker.
-
-→ [Read the full series](docs/medium/README.md)
 
 ---
 
@@ -400,13 +286,14 @@ Spec: [docs/mcp-server.md](docs/mcp-server.md) (in monorepo: `docs/MCP_SERVER_SP
 
 | | |
 |-|-|
-| **Service** | https://decker-ai.com |
-| **API Docs** | https://api.decker-ai.com/docs |
-| **Telegram bot** | https://t.me/deckerclawbot |
+| **Web app** | https://decker-ai.com |
+| **API docs** | https://api.decker-ai.com/docs |
+| **Telegram bot (crypto)** | https://t.me/deckerclawbot |
+| **Telegram bot (KRX)** | https://t.me/krxdeckerbot |
 | **Kakao channel** | https://pf.kakao.com/_RxlxjVX |
+| **X / Twitter** | https://x.com/blockoceandev |
 
 ---
 
-> This repository is the public documentation, SDK, samples, and community hub for Decker AI.  
-> Production application code runs in a private monorepo.  
-> **Available here**: [Python SDK](sdk/python/) · [API samples](samples/) · [RULES.yaml](operation_rules/RULES.yaml) · [Architecture docs](docs/architecture.md) · [Article series](docs/medium/README.md)
+> This repository is the **public hub** for Decker AI — SDK, samples, rulebook, architecture docs, OpenClaw skill packages.
+> Production application code runs in a private monorepo. All listed endpoints, channels, and the web app are live.
