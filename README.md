@@ -255,3 +255,5 @@ Details: [Signal Performance](docs/signal-performance.md).
 
 > This repository is the **public hub** for Decker AI — SDK, samples, rulebook, architecture docs, OpenClaw skill packages.
 > Production application code runs in a private monorepo. All listed endpoints, channels, and the web app are live.
+>
+> Built by **[gigshow](https://github.com/gigshow)** (Dohyung Kim · 김도형) — founder. *Open to investor / partnership conversations.*
